@@ -1,4 +1,5 @@
 import com.google.common.collect.Range;
+import io.vavr.control.Option;
 
 import java.time.LocalDate;
 
@@ -62,10 +63,16 @@ public class X {
                 Case($(isNotNull()), it -> LocalDate.parse(it)));
     }
 
-    /*
-     Case($(isNull()), ), 
-      Case($(isNotNull()), )); date conversion
-     */
+    static Option<LocalDate> dateMapper2(String date) {
+        return Match(date).of(
+                Case($(isNull()), Option.none()),
+                Case($(isNotNull()), it -> Option.some(LocalDate.parse(it))));
+    }
+
+    static Option<LocalDate> dateMapper3(String date) {
+        return Match(date).option(
+                Case($(isNotNull()), it -> LocalDate.parse(it)));
+    }
 
     public static void main(String[] args) {
         System.out.println(LocalDate.parse("2014-10-12"));
