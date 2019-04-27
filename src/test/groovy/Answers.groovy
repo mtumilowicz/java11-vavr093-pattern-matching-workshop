@@ -1,4 +1,6 @@
-import spock.lang.Specification 
+import spock.lang.Specification
+import xxx.X
+
 /**
  * Created by mtumilowicz on 2019-04-10.
  */
