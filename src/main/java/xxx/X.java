@@ -1,5 +1,8 @@
+package xxx;
+
 import com.google.common.collect.Range;
 import com.google.common.math.IntMath;
+import io.vavr.collection.List;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
@@ -138,6 +141,14 @@ public class X {
         return new Person2();
     }
 
+    static void listDecomposition() {
+        List x = List.of(1, 2, 3, 4, 5);
+        
+        Match(x).of(
+                Case($Cons($(), $()), (a, tail) -> run(() -> System.out.println(a + " " + tail)))
+        );
+    }
+
     static Either<String, Person> patch(BadRequest badRequest) {
         return Either.right(new Person());
     }
@@ -150,6 +161,7 @@ public class X {
         System.out.println(LocalDate.parse("2014-10-12"));
         System.out.println(dateMapper("2014-10-12"));
         System.out.println(dateMapper(null));
+        listDecomposition();
     }
 }
 
