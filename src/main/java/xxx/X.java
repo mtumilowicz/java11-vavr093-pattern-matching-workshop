@@ -280,10 +280,9 @@ class CreditAssessSubjects {
 /*
 TO-DO predicates
 
-allOf
+allOf (vs noneOf)
 anyOf
 exists
 forAll
-instanceOf
-noneOf
+instanceOf // exceptions vs catch (returns)
  */
