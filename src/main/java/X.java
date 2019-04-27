@@ -185,4 +185,10 @@ instanceOf
 is
 isIn
 noneOf
+
+http://blog.vavr.io/pattern-matching-starter/ - objects decomposition
+    LocalDate - $(x -> x < 2015) $(x -> x >= 2015)
+    Person(Account, Address), deconstructor: (balance, country, salary) -> assess(creditAssessSubjects(balance, country, salary))
+    
+    List.of(assess(balance), assess(country), assess(salary)).sum()
  */
