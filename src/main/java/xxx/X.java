@@ -14,6 +14,7 @@ import static io.vavr.API.*;
 import static io.vavr.Patterns.*;
 import static io.vavr.Predicates.isNotNull;
 import static io.vavr.Predicates.isNull;
+import static xxx.DemoPatterns.*;
 
 /**
  * Created by mtumilowicz on 2019-04-27.
@@ -148,6 +149,23 @@ public class X {
                 Case($Cons($(), $()), (a, tail) -> run(() -> System.out.println(a + " " + tail)))
         );
     }
+    
+    static void localDateDecompose() {
+        LocalDate date = LocalDate.of(2017, 2, 13);
+
+        String result = Match(date).of(
+                Case($LocalDate($(2016), $(3), $(13)),
+                        () -> "2016-02-13"),
+                Case($LocalDate($(2016), $(), $()),
+                        (y, m, d) -> "month " + m + " in 2016"),
+                Case($LocalDate($(), $(), $()),
+                        (y, m, d) -> "month " + m + " in " + y),
+                Case($(),
+                        () -> "(catch all)")
+        );
+
+        System.out.println(result);
+    }
 
     static Either<String, Person> patch(BadRequest badRequest) {
         return Either.right(new Person());
@@ -162,6 +180,7 @@ public class X {
         System.out.println(dateMapper("2014-10-12"));
         System.out.println(dateMapper(null));
         listDecomposition();
+        localDateDecompose();
     }
 }
 
