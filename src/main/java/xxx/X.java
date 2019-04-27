@@ -151,17 +151,11 @@ public class X {
     }
     
     static void localDateDecompose() {
-        LocalDate date = LocalDate.of(2017, 2, 13);
+        LocalDate date = LocalDate.of(2014, 2, 13);
 
         String result = Match(date).of(
-                Case($LocalDate($(2016), $(3), $(13)),
-                        () -> "2016-02-13"),
-                Case($LocalDate($(2016), $(), $()),
-                        (y, m, d) -> "month " + m + " in 2016"),
-                Case($LocalDate($(), $(), $()),
-                        (y, m, d) -> "month " + m + " in " + y),
-                Case($(),
-                        () -> "(catch all)")
+                Case($LocalDate($(year -> year < 2015), $(), $()), () -> "old"),
+                Case($LocalDate($(year -> year > 2015), $(), $()), (y, m, d) -> "month " + m + " in 2016")
         );
 
         System.out.println(result);
@@ -218,7 +212,6 @@ isIn
 noneOf
 
 http://blog.vavr.io/pattern-matching-starter/ - objects decomposition
-    LocalDate - $(x -> x < 2015) $(x -> x >= 2015)
     Person(Account, Address), deconstructor: (balance, country, salary) -> assess(creditAssessSubjects(balance, country, salary))
     
     List.of(assess(balance), assess(country), assess(salary)).sum()
