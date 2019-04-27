@@ -6,6 +6,8 @@ import io.vavr.collection.List;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
+import lombok.AllArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -161,6 +163,28 @@ public class X {
         System.out.println(result);
     }
 
+
+    static void person3Destructor() {
+        Person3 p3 = new Person3(new Account(1, 5), new Address("a", "b"));
+
+        Match(p3).of(
+                Case($Person3($(), $()), (account, address) -> run(() -> System.out.println(account + " " + address)))
+        );
+    }
+
+    static void person3Destructor2() {
+        Person3 p3 = new Person3(new Account(1, 5), new Address("a", "b"));
+
+        Match(p3).of(
+                Case($Person3($(), $()), (account, address) -> assess(new CreditAssessSubjects(account.balance, account.salary, address.country)))
+        );
+    }
+    
+    static int assess(CreditAssessSubjects subjects) {
+        return 5;
+    }
+
+
     static Either<String, Person> patch(BadRequest badRequest) {
         return Either.right(new Person());
     }
@@ -175,6 +199,7 @@ public class X {
         System.out.println(dateMapper(null));
         listDecomposition();
         localDateDecompose();
+        person3Destructor();
     }
 }
 
@@ -184,6 +209,27 @@ class Person {
 
 class Person2 {
     boolean active;
+}
+
+@AllArgsConstructor
+@ToString
+class Person3 {
+    Account account;
+    Address address;
+}
+
+@AllArgsConstructor
+@ToString
+class Account {
+    int balance;
+    int salary;
+}
+
+@AllArgsConstructor
+@ToString
+class Address {
+    String city;
+    String country;
 }
 
 enum Type {
@@ -197,6 +243,13 @@ class BadRequest {
 
 class Request {
 
+}
+
+@AllArgsConstructor
+class CreditAssessSubjects {
+    int balance;
+    int salary;
+    String country;
 }
 
 /*
