@@ -176,28 +176,28 @@ public class X {
         Person3 p3 = new Person3(new Account(1, 5), new Address("a", "b"));
 
         Match(p3).of(
-                Case($Person3($(), $()), (account, address) -> assess(new CreditAssessSubjects(account.balance, account.salary, address.country)))
+                Case($Person3($(), $()), (account, address) -> serviceMethodAssess(new CreditAssessSubjects(account.balance, account.salary, address.country)))
         );
     }
 
-    static int assess(CreditAssessSubjects subjects) {
+    static int serviceMethodAssess(CreditAssessSubjects subjects) {
         return Match(subjects).of(
                 Case($CreditAssessSubjects($(), $(), $()),
-                        (salary, balance, country) -> 5 * assessBalance(balance) +
-                                3 * assessSalary(salary) +
-                                2 * assessCountry(country))
+                        (salary, balance, country) -> 5 * serviceMethodAssessBalance(balance) +
+                                3 * serviceMethodAssessSalary(salary) +
+                                2 * serviceMethodAssessCountry(country))
         );
     }
 
-    static int assessBalance(int balance) {
+    static int serviceMethodAssessBalance(int balance) {
         return 5;
     }
 
-    static int assessSalary(int salary) {
+    static int serviceMethodAssessSalary(int salary) {
         return 5;
     }
 
-    static int assessCountry(String country) {
+    static int serviceMethodAssessCountry(String country) {
         return 5;
     }
 
@@ -282,7 +282,7 @@ isIn
 noneOf
 
 http://blog.vavr.io/pattern-matching-starter/ - objects decomposition
-    Person(Account, Address), deconstructor: (balance, country, salary) -> assess(creditAssessSubjects(balance, country, salary))
+    Person(Account, Address), deconstructor: (balance, country, salary) -> serviceMethodAssess(creditAssessSubjects(balance, country, salary))
     
-    List.of(assess(balance), assess(country), assess(salary)).sum()
+    List.of(serviceMethodAssess(balance), serviceMethodAssess(country), serviceMethodAssess(salary)).sum()
  */
