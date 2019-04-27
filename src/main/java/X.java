@@ -70,7 +70,7 @@ public class X {
     }
 
     static Option<LocalDate> dateMapper3(String date) {
-        return Match(date).option(
+        return Match(date).option( // Because we can’t perform exhaustiveness checks like the Scala compiler, we provide the possibility to return an optional result
                 Case($(isNotNull()), it -> LocalDate.parse(it)));
     }
 
