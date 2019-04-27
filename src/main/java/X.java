@@ -173,3 +173,16 @@ class BadRequest {
 class Request {
 
 }
+
+/*
+TO-DO predicates
+
+allOf
+anyOf
+exists
+forAll
+instanceOf
+is
+isIn
+noneOf
+ */
