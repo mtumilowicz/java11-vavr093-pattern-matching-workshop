@@ -23,4 +23,9 @@ class Demo {
     static Tuple2<Account, Address> Person3(Person3 person) {
         return Tuple.of(person.account, person.address);
     }
+
+    @Unapply
+    static Tuple3<Integer, Integer, String> CreditAssessSubjects(CreditAssessSubjects subjects) {
+        return Tuple.of(subjects.balance, subjects.salary, subjects.country);
+    }
 }

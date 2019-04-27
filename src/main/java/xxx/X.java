@@ -146,12 +146,12 @@ public class X {
 
     static void listDecomposition() {
         List x = List.of(1, 2, 3, 4, 5);
-        
+
         Match(x).of(
                 Case($Cons($(), $()), (a, tail) -> run(() -> System.out.println(a + " " + tail)))
         );
     }
-    
+
     static void localDateDecompose() {
         LocalDate date = LocalDate.of(2014, 2, 13);
 
@@ -179,8 +179,25 @@ public class X {
                 Case($Person3($(), $()), (account, address) -> assess(new CreditAssessSubjects(account.balance, account.salary, address.country)))
         );
     }
-    
+
     static int assess(CreditAssessSubjects subjects) {
+        return Match(subjects).of(
+                Case($CreditAssessSubjects($(), $(), $()),
+                        (salary, balance, country) -> 5 * assessBalance(balance) +
+                                3 * assessSalary(salary) +
+                                2 * assessCountry(country))
+        );
+    }
+
+    static int assessBalance(int balance) {
+        return 5;
+    }
+
+    static int assessSalary(int salary) {
+        return 5;
+    }
+
+    static int assessCountry(String country) {
         return 5;
     }
 
