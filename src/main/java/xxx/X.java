@@ -14,8 +14,7 @@ import java.util.ArrayList;
 
 import static io.vavr.API.*;
 import static io.vavr.Patterns.*;
-import static io.vavr.Predicates.isNotNull;
-import static io.vavr.Predicates.isNull;
+import static io.vavr.Predicates.*;
 import static xxx.DemoPatterns.*;
 
 /**
@@ -210,6 +209,15 @@ public class X {
         return Either.right(new Person());
     }
 
+    static void isInTest() {
+        Person person = new Person();
+
+        Match(person).of(
+                Case($Person($(isIn(Type.VIP, Type.ORDINARY))), ""),
+                Case($Person($(is(Type.TEMPORARY))), "")
+                );
+    }
+    
     public static void main(String[] args) {
         System.out.println(LocalDate.parse("2014-10-12"));
         System.out.println(dateMapper("2014-10-12"));
@@ -277,7 +285,5 @@ anyOf
 exists
 forAll
 instanceOf
-is
-isIn
 noneOf
  */

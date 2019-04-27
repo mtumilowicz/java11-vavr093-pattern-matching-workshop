@@ -1,6 +1,7 @@
 package xxx;
 
 import io.vavr.Tuple;
+import io.vavr.Tuple1;
 import io.vavr.Tuple2;
 import io.vavr.Tuple3;
 import io.vavr.match.annotation.Patterns;
@@ -17,6 +18,11 @@ class Demo {
     static Tuple3<Integer, Integer, Integer> LocalDate(LocalDate date) {
         return Tuple.of(
                 date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+    }
+
+    @Unapply
+    static Tuple1<Type> Person(Person person) {
+        return Tuple.of(person.type);
     }
 
     @Unapply
