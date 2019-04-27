@@ -280,9 +280,4 @@ instanceOf
 is
 isIn
 noneOf
-
-http://blog.vavr.io/pattern-matching-starter/ - objects decomposition
-    Person(Account, Address), deconstructor: (balance, country, salary) -> serviceMethodAssess(creditAssessSubjects(balance, country, salary))
-    
-    List.of(serviceMethodAssess(balance), serviceMethodAssess(country), serviceMethodAssess(salary)).sum()
  */
