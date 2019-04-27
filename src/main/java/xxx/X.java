@@ -215,9 +215,49 @@ public class X {
         Match(person).of(
                 Case($Person($(isIn(Type.VIP, Type.ORDINARY))), ""),
                 Case($Person($(is(Type.TEMPORARY))), "")
-                );
+        );
     }
-    
+
+    static void existsTest() {
+        List<Try<Integer>> list = List.of(Try.success(1),
+                Try.success(2),
+                Try.success(3),
+                Try.failure(new IllegalArgumentException("a")),
+                Try.failure(new IllegalStateException("b")));
+        Either<List<Throwable>, List<Integer>> a = Match(list).of(
+                Case($(exists(Try::isFailure)),
+                        tries -> Either.left(tries
+                                .filter(Try::isFailure)
+                                .map(Try::getCause)
+                                .toList())),
+                Case($(),
+                        tries -> Either.right(tries
+                                .filter(Try::isSuccess)
+                                .map(Try::get)
+                                .toList()))
+        );
+    }
+
+    static void forAllTest() {
+        List<Try<Integer>> list = List.of(Try.success(1),
+                Try.success(2),
+                Try.success(3),
+                Try.failure(new IllegalArgumentException("a")),
+                Try.failure(new IllegalStateException("b")));
+        Either<List<Throwable>, List<Integer>> a = Match(list).of(
+                Case($(forAll(Try::isSuccess)),
+                        tries -> Either.right(tries
+                                .filter(Try::isSuccess)
+                                .map(Try::get)
+                                .toList())),
+                Case($(),
+                        tries -> Either.left(tries
+                                .filter(Try::isFailure)
+                                .map(Try::getCause)
+                                .toList()))
+        );
+    }
+
     public static void main(String[] args) {
         System.out.println(LocalDate.parse("2014-10-12"));
         System.out.println(dateMapper("2014-10-12"));
@@ -282,7 +322,5 @@ TO-DO predicates
 
 allOf (vs noneOf)
 anyOf
-exists
-forAll
 instanceOf // exceptions vs catch (returns)
  */
