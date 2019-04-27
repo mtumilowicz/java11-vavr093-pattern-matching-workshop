@@ -1,9 +1,12 @@
 import com.google.common.collect.Range;
+import io.vavr.control.Either;
 import io.vavr.control.Option;
+import io.vavr.control.Try;
 
 import java.time.LocalDate;
 
 import static io.vavr.API.*;
+import static io.vavr.Patterns.*;
 import static io.vavr.Predicates.isNotNull;
 import static io.vavr.Predicates.isNull;
 
@@ -74,6 +77,27 @@ public class X {
                 Case($(isNotNull()), it -> LocalDate.parse(it)));
     }
 
+    static void eitherDecompose(Either<BadRequest, Person> either) {
+        Match(either).of(
+                Case($Left($()), badRequest -> patch(badRequest)),
+                Case($Right($()), person -> processPerson(person))
+        );
+
+        Try<Integer> _try = Try.success(1);
+        Match(_try).of(
+                Case($Success($()), value -> value),
+                Case($Failure($()), x -> x)
+        );
+    }
+    
+    static Either<String, Person> patch(BadRequest badRequest) {
+        return Either.right(new Person());
+    }
+
+    static Either<String, Person> processPerson(Person person) {
+        return Either.right(new Person());
+    }
+
     public static void main(String[] args) {
         System.out.println(LocalDate.parse("2014-10-12"));
         System.out.println(dateMapper("2014-10-12"));
@@ -87,4 +111,13 @@ class Person {
 
 enum Type {
     ORDINARY, VIP, TEMPORARY
+}
+
+class BadRequest {
+    Request request;
+    String message;
+}
+
+class Request {
+
 }
