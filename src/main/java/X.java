@@ -1,9 +1,11 @@
 import com.google.common.collect.Range;
+import com.google.common.math.IntMath;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import static io.vavr.API.*;
 import static io.vavr.Patterns.*;
@@ -89,7 +91,23 @@ public class X {
                 Case($Failure($()), x -> x)
         );
     }
-    
+
+
+    static void optionDecompose(Option<Integer> option) {
+        ArrayList<String> logfile = new ArrayList<>();
+        option.onEmpty(() -> logfile.add("empty"))
+                .map(value -> IntMath.pow(value, 2))
+                .getOrElse(0);
+
+        Integer i = Match(option).of(
+                Case($None(), () -> {
+                    logfile.add("empty");
+                    return 0;
+                }),
+                Case($Some($()), value -> IntMath.pow(value, 2))
+        );
+    }
+
     static Either<String, Person> patch(BadRequest badRequest) {
         return Either.right(new Person());
     }
