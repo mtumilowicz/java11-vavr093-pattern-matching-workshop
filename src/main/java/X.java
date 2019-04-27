@@ -1,6 +1,10 @@
 import com.google.common.collect.Range;
 
+import java.time.LocalDate;
+
 import static io.vavr.API.*;
+import static io.vavr.Predicates.isNotNull;
+import static io.vavr.Predicates.isNull;
 
 /**
  * Created by mtumilowicz on 2019-04-27.
@@ -42,9 +46,31 @@ public class X {
         }
     }
 
+    static void ads33(Person person) {
+        Match(person.type).of(
+                Case($(Type.VIP), type -> run(() -> System.out.println("VIP"))),
+                Case($(Type.ORDINARY), type -> run(() -> System.out.println("ORDINARY"))),
+                Case($(Type.TEMPORARY), type -> run(() -> System.out.println("TEMPORARY"))),
+                Case($(), ignore -> {
+                    throw new IllegalStateException("value not supported");
+                }));
+    }
+
+    static LocalDate dateMapper(String date) {
+        return Match(date).of(
+                Case($(isNull()), () -> null),
+                Case($(isNotNull()), it -> LocalDate.parse(it)));
+    }
+
+    /*
+     Case($(isNull()), ), 
+      Case($(isNotNull()), )); date conversion
+     */
+
     public static void main(String[] args) {
-        int input = 2;
-        System.out.println(X.ads(input));
+        System.out.println(LocalDate.parse("2014-10-12"));
+        System.out.println(dateMapper("2014-10-12"));
+        System.out.println(dateMapper(null));
     }
 }
 
