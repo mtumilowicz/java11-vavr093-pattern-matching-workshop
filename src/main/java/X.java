@@ -108,6 +108,36 @@ public class X {
         );
     }
 
+    static void ifSyntax() {
+        boolean a = true;
+
+        Match(a).of(
+                Case($(true), () -> run(X::doIfTrue)),
+                Case($(false), () -> run(X::doIfNot))
+        );
+
+        Person2 person = Match(new Person2()).of(
+                Case($(p -> p.active), p -> X.doIfTrue2(p)),
+                Case($(p -> p.active), p -> X.doIfNot2(p))
+        );
+    }
+
+    static void doIfTrue() {
+
+    }
+
+    static void doIfNot() {
+
+    }
+
+    static Person2 doIfTrue2(Person2 person2) {
+        return new Person2();
+    }
+
+    static Person2 doIfNot2(Person2 person2) {
+        return new Person2();
+    }
+
     static Either<String, Person> patch(BadRequest badRequest) {
         return Either.right(new Person());
     }
@@ -125,6 +155,10 @@ public class X {
 
 class Person {
     Type type;
+}
+
+class Person2 {
+    boolean active;
 }
 
 enum Type {
