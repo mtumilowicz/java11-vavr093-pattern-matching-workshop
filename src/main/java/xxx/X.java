@@ -309,6 +309,18 @@ public class X {
         );
     }
 
+    static void anyOfTest() {
+        Person4 p4 = new Person4(Type.VIP, true, 1);
+
+        Predicate<Person4> isVIP = p -> p.type == Type.VIP;
+        Predicate<Person4> hasBigSalary = p -> p.salary > 1000;
+
+        Match(p4).of(
+                Case($(anyOf(isVIP, hasBigSalary)), "handle special"),
+                Case($(), "handle rest")
+        );
+    }
+
     public static void main(String[] args) {
         System.out.println(LocalDate.parse("2014-10-12"));
         System.out.println(dateMapper("2014-10-12"));
@@ -375,9 +387,3 @@ class CreditAssessSubjects {
     int salary;
     String country;
 }
-
-/*
-TO-DO predicates
-
-anyOf
- */
