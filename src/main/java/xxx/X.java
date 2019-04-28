@@ -9,9 +9,11 @@ import io.vavr.control.Try;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import static io.vavr.API.*;
 import static io.vavr.Patterns.*;
@@ -258,16 +260,16 @@ public class X {
                                 .toList()))
         );
     }
-    
+
     static void allOfTest() {
         Person4 p4 = new Person4(Type.VIP, true, 1);
-        
+
         Predicate<Person4> isActive = p -> p.active;
         Predicate<Person4> isVIP = p -> p.type == Type.VIP;
         Predicate<Person4> isOrdinary = p -> p.type == Type.ORDINARY;
         Predicate<Person4> isTemporary = p -> p.type == Type.TEMPORARY;
-        
-        
+
+
         Match(p4).of(
                 Case($(allOf(isVIP, isActive)), "handle 1"),
                 Case($(allOf(isVIP, isActive.negate())), "handle 2"),
@@ -278,12 +280,29 @@ public class X {
         );
     }
 
+    static String instanceOfTest() {
+        Supplier<Exception> ex = () -> {throw new RuntimeException();};
+
+        try {
+            ex.get();
+        } catch (Exception exx) {
+            return Match(exx).of(
+                    Case($(instanceOf(IllegalArgumentException.class)), "handle exception"),
+                    Case($(instanceOf(RuntimeException.class)), "handle exception"),
+                    Case($(instanceOf(IOException.class)), "handle exception"),
+                    Case($(), "handle rest")
+            );
+        }
+        
+        return "";
+    }
+
     static void noneOfTest() {
         Person4 p4 = new Person4(Type.VIP, true, 1);
-        
+
         Predicate<Person4> isVIP = p -> p.type == Type.VIP;
         Predicate<Person4> hasBigSalary = p -> p.salary > 1000;
-        
+
         Match(p4).of(
                 Case($(noneOf(isVIP, hasBigSalary)), "handle special"),
                 Case($(), "handle rest")
@@ -361,5 +380,4 @@ class CreditAssessSubjects {
 TO-DO predicates
 
 anyOf
-instanceOf // exceptions vs catch (returns)
  */
