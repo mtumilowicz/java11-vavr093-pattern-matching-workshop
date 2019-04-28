@@ -11,6 +11,7 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
 import static io.vavr.API.*;
 import static io.vavr.Patterns.*;
@@ -257,6 +258,37 @@ public class X {
                                 .toList()))
         );
     }
+    
+    static void allOfTest() {
+        Person4 p4 = new Person4(Type.VIP, true, 1);
+        
+        Predicate<Person4> isActive = p -> p.active;
+        Predicate<Person4> isVIP = p -> p.type == Type.VIP;
+        Predicate<Person4> isOrdinary = p -> p.type == Type.ORDINARY;
+        Predicate<Person4> isTemporary = p -> p.type == Type.TEMPORARY;
+        
+        
+        Match(p4).of(
+                Case($(allOf(isVIP, isActive)), "handle 1"),
+                Case($(allOf(isVIP, isActive.negate())), "handle 2"),
+                Case($(allOf(isOrdinary, isActive)), "handle 1"),
+                Case($(allOf(isOrdinary, isActive.negate())), "handle 2"),
+                Case($(allOf(isTemporary, isActive)), "handle 1"),
+                Case($(allOf(isTemporary, isActive.negate())), "handle 2")
+        );
+    }
+
+    static void noneOfTest() {
+        Person4 p4 = new Person4(Type.VIP, true, 1);
+        
+        Predicate<Person4> isVIP = p -> p.type == Type.VIP;
+        Predicate<Person4> hasBigSalary = p -> p.salary > 1000;
+        
+        Match(p4).of(
+                Case($(noneOf(isVIP, hasBigSalary)), "handle special"),
+                Case($(), "handle rest")
+        );
+    }
 
     public static void main(String[] args) {
         System.out.println(LocalDate.parse("2014-10-12"));
@@ -281,6 +313,14 @@ class Person2 {
 class Person3 {
     Account account;
     Address address;
+}
+
+@AllArgsConstructor
+@ToString
+class Person4 {
+    Type type;
+    boolean active;
+    int salary;
 }
 
 @AllArgsConstructor
@@ -320,7 +360,6 @@ class CreditAssessSubjects {
 /*
 TO-DO predicates
 
-allOf (vs noneOf)
 anyOf
 instanceOf // exceptions vs catch (returns)
  */
