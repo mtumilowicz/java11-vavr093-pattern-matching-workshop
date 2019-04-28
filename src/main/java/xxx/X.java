@@ -271,10 +271,10 @@ public class X {
         Match(p4).of(
                 Case($(allOf(isVIP, isActive)), "handle 1"),
                 Case($(allOf(isVIP, isActive.negate())), "handle 2"),
-                Case($(allOf(isOrdinary, isActive)), "handle 1"),
-                Case($(allOf(isOrdinary, isActive.negate())), "handle 2"),
-                Case($(allOf(isTemporary, isActive)), "handle 1"),
-                Case($(allOf(isTemporary, isActive.negate())), "handle 2")
+                Case($(allOf(isOrdinary, isActive)), "handle 3"),
+                Case($(allOf(isOrdinary, isActive.negate())), "handle 4"),
+                Case($(allOf(isTemporary, isActive)), "handle 5"),
+                Case($(allOf(isTemporary, isActive.negate())), "handle 6")
         );
     }
 
