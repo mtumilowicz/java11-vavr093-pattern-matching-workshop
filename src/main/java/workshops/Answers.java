@@ -116,7 +116,7 @@ public class Answers {
     public static Try<Integer> tryDecompose(String number) {
         Try<Integer> _try = Try.of(() -> Integer.parseInt(number));
 
-        return Match(_try).of(
+        return Match(_try).of( // try with exceptions
                 Case($Success($()), value -> Try.success(value * value)),
                 Case($Failure($()), Try::failure)
         );
