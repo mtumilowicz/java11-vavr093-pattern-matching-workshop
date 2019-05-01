@@ -70,22 +70,22 @@ public class X {
 //                }));
 //    }
 
-    static LocalDate dateMapper(String date) {
-        return Match(date).of(
-                Case($(isNull()), () -> null),
-                Case($(isNotNull()), it -> LocalDate.parse(it)));
-    }
-
-    static Option<LocalDate> dateMapper2(String date) {
-        return Match(date).of(
-                Case($(isNull()), Option.none()),
-                Case($(isNotNull()), it -> Option.some(LocalDate.parse(it))));
-    }
-
-    static Option<LocalDate> dateMapper3(String date) {
-        return Match(date).option( // Because we can’t perform exhaustiveness checks like the Scala compiler, we provide the possibility to return an optional result
-                Case($(isNotNull()), it -> LocalDate.parse(it)));
-    }
+//    static LocalDate dateMapper(String date) {
+//        return Match(date).of(
+//                Case($(isNull()), () -> null),
+//                Case($(isNotNull()), it -> LocalDate.parse(it)));
+//    }
+//
+//    static Option<LocalDate> dateMapper2(String date) {
+//        return Match(date).of(
+//                Case($(isNull()), Option.none()),
+//                Case($(isNotNull()), it -> Option.some(LocalDate.parse(it))));
+//    }
+//
+//    static Option<LocalDate> dateMapper3(String date) {
+//        return Match(date).option( // Because we can’t perform exhaustiveness checks like the Scala compiler, we provide the possibility to return an optional result
+//                Case($(isNotNull()), it -> LocalDate.parse(it)));
+//    }
 
     static void eitherDecompose(Either<BadRequest, Person> either) {
         Match(either).of(
