@@ -1,11 +1,16 @@
 package workshops;
 
 import com.google.common.collect.Range;
+import io.vavr.control.Either;
 import io.vavr.control.Option;
+import io.vavr.control.Try;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
 
 import static io.vavr.API.*;
+import static io.vavr.Patterns.*;
 import static io.vavr.Predicates.isNotNull;
 import static io.vavr.Predicates.isNull;
 
@@ -69,5 +74,51 @@ public class Answers {
     public static Option<LocalDate> optionDateMapper(String date) {
         return Match(date).option(
                 Case($(isNotNull()), LocalDate::parse));
+    }
+
+    public static Either<String, Person> eitherDecompose(Either<BadRequest, Person> either) {
+        return Match(either).of(
+                Case($(isNull()), () -> Either.left("cannot be null")),
+                Case($Left($()), Answers::patch),
+                Case($Right($()), Answers::processPerson)
+        );
+    }
+
+    private static Either<String, Person> patch(BadRequest badRequest) {
+        return Objects.equals(badRequest.getMessage(), "can be fixed")
+                ? Either.right(Person.ofType(null))
+                : Either.left("cannot be fixed, too many errors");
+
+    }
+
+    private static Either<String, Person> processPerson(Person person) {
+        return person.getType() == Person.PersonType.VIP
+                ? Either.right(person)
+                : Either.left("cannot be processed, because ...");
+    }
+
+    public static Option<String> optionDecompose(int id, List<String> logfile) {
+        return Match(findById(id)).of(
+                Case($None(), () -> {
+                    logfile.add("cannot find for id = " + id);
+                    return Option.none();
+                }),
+                Case($Some($()), value -> Option.some("processed " + id))
+        );
+    }
+
+    private static Option<String> findById(int id) {
+        return id == 1
+                ? Option.some("found in database")
+                : Option.none();
+    }
+
+    public static Try<Integer> tryDecompose(String number) {
+        Try<Integer> _try = Try.of(() -> Integer.parseInt(number));
+
+        return Match(_try).of(
+                Case($Success($()), value -> Try.success(value * value)),
+                Case($Failure($()), Try::failure)
+        );
     }
 }

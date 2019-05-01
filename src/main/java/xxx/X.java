@@ -1,22 +1,18 @@
 package xxx;
 
-import com.google.common.math.IntMath;
 import io.vavr.collection.List;
 import io.vavr.control.Either;
-import io.vavr.control.Option;
 import io.vavr.control.Try;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
-import workshops.Person;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static io.vavr.API.*;
-import static io.vavr.Patterns.*;
+import static io.vavr.Patterns.$Cons;
 import static io.vavr.Predicates.*;
 import static xxx.DemoPatterns.*;
 
@@ -87,34 +83,34 @@ public class X {
 //                Case($(isNotNull()), it -> LocalDate.parse(it)));
 //    }
 
-    static void eitherDecompose(Either<BadRequest, Person> either) {
-        Match(either).of(
-                Case($Left($()), badRequest -> patch(badRequest)),
-                Case($Right($()), person -> processPerson(person))
-        );
-
-        Try<Integer> _try = Try.success(1);
-        Match(_try).of(
-                Case($Success($()), value -> value),
-                Case($Failure($()), x -> x)
-        );
-    }
-
-
-    static void optionDecompose(Option<Integer> option) {
-        ArrayList<String> logfile = new ArrayList<>();
-        option.onEmpty(() -> logfile.add("empty"))
-                .map(value -> IntMath.pow(value, 2))
-                .getOrElse(0);
-
-        Integer i = Match(option).of(
-                Case($None(), () -> {
-                    logfile.add("empty");
-                    return 0;
-                }),
-                Case($Some($()), value -> IntMath.pow(value, 2))
-        );
-    }
+//    static void eitherDecompose(Either<BadRequest, Person> either) {
+//        Match(either).of(
+//                Case($Left($()), badRequest -> patch(badRequest)),
+//                Case($Right($()), person -> processPerson(person))
+//        );
+//
+//        Try<Integer> _try = Try.success(1);
+//        Match(_try).of(
+//                Case($Success($()), value -> value),
+//                Case($Failure($()), x -> x)
+//        );
+//    }
+//
+//
+//    static void optionDecompose(Option<Integer> option) {
+//        ArrayList<String> logfile = new ArrayList<>();
+//        option.onEmpty(() -> logfile.add("empty"))
+//                .map(value -> IntMath.pow(value, 2))
+//                .getOrElse(0);
+//
+//        Integer i = Match(option).of(
+//                Case($None(), () -> {
+//                    logfile.add("empty");
+//                    return 0;
+//                }),
+//                Case($Some($()), value -> IntMath.pow(value, 2))
+//        );
+//    }
 
     static void ifSyntax() {
         boolean a = true;
@@ -204,13 +200,13 @@ public class X {
     }
 
 
-    static Either<String, Person> patch(BadRequest badRequest) {
-        return Either.right(null);
-    }
-
-    static Either<String, Person> processPerson(Person person) {
-        return Either.right(null);
-    }
+//    static Either<String, Person> patch(BadRequest badRequest) {
+//        return Either.right(null);
+//    }
+//
+//    static Either<String, Person> processPerson(Person person) {
+//        return Either.right(null);
+//    }
 
 //    static void isInTest() {
 //        Person person = new Person();

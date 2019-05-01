@@ -1,12 +1,11 @@
+import io.vavr.control.Either
 import io.vavr.control.Option
+import io.vavr.control.Try
 import spock.lang.Specification
-import workshops.Answers
-import workshops.Person
-import workshops.PersonStats
+import workshops.*
 
 import java.time.LocalDate
-import java.time.format.DateTimeParseException
-
+import java.time.format.DateTimeParseException 
 /**
  * Created by mtumilowicz on 2019-04-10.
  */
@@ -67,11 +66,11 @@ class Tests extends Specification {
     def "switchOnEnum, guard"() {
         when:
         Answers.switchOnEnum(Person.ofType(null))
-        
+
         then:
         thrown(IllegalStateException)
     }
-    
+
     def "rawDateMapper"() {
         expect:
         Answers.rawDateMapper('2014-10-10') == LocalDate.of(2014, 10, 10)
@@ -81,7 +80,7 @@ class Tests extends Specification {
     def "rawDateMapper, exceptional"() {
         when:
         Answers.rawDateMapper('wrong')
-        
+
         then:
         thrown(DateTimeParseException)
     }
@@ -98,5 +97,45 @@ class Tests extends Specification {
 
         then:
         thrown(DateTimeParseException)
+    }
+
+    def "eitherDecompose"() {
+        expect:
+        Answers.eitherDecompose(null) == Either.left("cannot be null")
+        Answers.eitherDecompose(Either.left(BadRequest.of(new Request(), "can be fixed"))) ==
+                Either.right(Person.ofType(null))
+        Answers.eitherDecompose(Either.left(BadRequest.of(new Request(), "cannot be fixed"))) ==
+                Either.left('cannot be fixed, too many errors')
+    }
+    
+    def "optionDecompose, cannot find in database"() {
+        given:
+        def logfile = []
+        def notExistsId = 2
+        
+        expect:
+        Answers.optionDecompose(notExistsId, logfile) == Option.none()
+        logfile == ["cannot find for id = ${notExistsId}"]
+    }
+
+    def "optionDecompose, found in database"() {
+        given:
+        def logfile = []
+        def existsId = 1
+        
+        expect:
+        Answers.optionDecompose(existsId, logfile) == Option.some('processed ' + existsId)
+        logfile == []
+    }
+    
+    def "tryDecompose"() {
+        when:
+        def successTry = Answers.tryDecompose("2")
+        def failTry = Answers.tryDecompose("wrong")
+        
+        then:
+        successTry == Try.success(4)
+        failTry.failure
+        failTry.getCause().class == NumberFormatException
     }
 }
