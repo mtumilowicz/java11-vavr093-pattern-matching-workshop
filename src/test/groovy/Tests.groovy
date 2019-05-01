@@ -152,4 +152,16 @@ class Tests extends Specification {
         Answers.localDateDecompose(LocalDate.of(2010, 10, 10)) == 15
         Answers.localDateDecompose(LocalDate.of(2019, 10, 10)) == 25
     }
+    
+    def "decomposePerson3"() {
+        given:
+        Person3 p1 = new Person3(new Account(20_000, 800), new Address("POLAND", "WARSAW"))
+        Person3 p2 = new Person3(new Account(1000, 2000), new Address("USA", "NEW YORK"))
+        Person3 p3 = new Person3(new Account(15_000, 950), new Address("POLAND", "KRAKOW"))
+        
+        expect:
+        Answers.decomposePerson3(p1) == 215
+        Answers.decomposePerson3(p2) == 328
+        Answers.decomposePerson3(p3) == 215
+    }
 }

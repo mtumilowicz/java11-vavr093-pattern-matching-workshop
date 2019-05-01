@@ -12,8 +12,6 @@ import java.util.function.Supplier;
 
 import static io.vavr.API.*;
 import static io.vavr.Predicates.*;
-import static xxx.DemoPatterns.$CreditAssessSubjects;
-import static xxx.DemoPatterns.$Person3;
 
 /**
  * Created by mtumilowicz on 2019-04-27.
@@ -133,43 +131,34 @@ public class X {
 //        );
 //    }
 
-
-    static void person3Destructor() {
-        Person3 p3 = new Person3(new Account(1, 5), new Address("a", "b"));
-
-        Match(p3).of(
-                Case($Person3($(), $()), (account, address) -> run(() -> System.out.println(account + " " + address)))
-        );
-    }
-
-    static void person3Destructor2() {
-        Person3 p3 = new Person3(new Account(1, 5), new Address("a", "b"));
-
-        Match(p3).of(
-                Case($Person3($(), $()), (account, address) -> serviceMethodAssess(new CreditAssessSubjects(account.balance, account.salary, address.country)))
-        );
-    }
-
-    static int serviceMethodAssess(CreditAssessSubjects subjects) {
-        return Match(subjects).of(
-                Case($CreditAssessSubjects($(), $(), $()),
-                        (salary, balance, country) -> 5 * serviceMethodAssessBalance(balance) +
-                                3 * serviceMethodAssessSalary(salary) +
-                                2 * serviceMethodAssessCountry(country))
-        );
-    }
-
-    static int serviceMethodAssessBalance(int balance) {
-        return 5;
-    }
-
-    static int serviceMethodAssessSalary(int salary) {
-        return 5;
-    }
-
-    static int serviceMethodAssessCountry(String country) {
-        return 5;
-    }
+//    static void person3Destructor2() {
+//        Person3 p3 = new Person3(new Account(1, 5), new Address("a", "b"));
+//
+//        Match(p3).of(
+//                Case($Person3($(), $()), (account, address) -> serviceMethodAssess(new CreditAssessSubjects(account.balance, account.salary, address.country)))
+//        );
+//    }
+//
+//    static int serviceMethodAssess(CreditAssessSubjects subjects) {
+//        return Match(subjects).of(
+//                Case($CreditAssessSubjects($(), $(), $()),
+//                        (salary, balance, country) -> 5 * serviceMethodAssessBalance(balance) +
+//                                3 * serviceMethodAssessSalary(salary) +
+//                                2 * serviceMethodAssessCountry(country))
+//        );
+//    }
+//
+//    static int serviceMethodAssessBalance(int balance) {
+//        return 5;
+//    }
+//
+//    static int serviceMethodAssessSalary(int salary) {
+//        return 5;
+//    }
+//
+//    static int serviceMethodAssessCountry(String country) {
+//        return 5;
+//    }
 
 
 //    static Either<String, Person> patch(BadRequest badRequest) {
