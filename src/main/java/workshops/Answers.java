@@ -13,6 +13,7 @@ import static io.vavr.API.*;
 import static io.vavr.Patterns.*;
 import static io.vavr.Predicates.isNotNull;
 import static io.vavr.Predicates.isNull;
+import static xxx.DemoPatterns.$LocalDate;
 
 /**
  * Created by mtumilowicz on 2019-05-01.
@@ -137,4 +138,20 @@ public class Answers {
     private static String serviceDisable(Person2 person2) {
         return "deactivated";
     }
+
+    public static int localDateDecompose(LocalDate date) {
+        return Match(date).of(
+                Case($LocalDate($(year -> year < 2015), $(), $()), Answers::taxBefore2015),
+                Case($LocalDate($(year -> year > 2015), $(), $()), Answers::taxAfter2015)
+        );
+    }
+    
+    private static int taxBefore2015() {
+        return 15;
+    }
+
+    private static int taxAfter2015() {
+        return 25;
+    }
+    
 }

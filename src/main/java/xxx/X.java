@@ -7,14 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.ToString;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static io.vavr.API.*;
-import static io.vavr.Patterns.$Cons;
 import static io.vavr.Predicates.*;
-import static xxx.DemoPatterns.*;
+import static xxx.DemoPatterns.$CreditAssessSubjects;
+import static xxx.DemoPatterns.$Person3;
 
 /**
  * Created by mtumilowicz on 2019-04-27.
@@ -127,24 +126,12 @@ public class X {
 //        return new Person2();
 //    }
 
-    static void listDecomposition() {
-        List x = List.of(1, 2, 3, 4, 5);
-
-        Match(x).of(
-                Case($Cons($(), $()), (a, tail) -> run(() -> System.out.println(a + " " + tail)))
-        );
-    }
-
-    static void localDateDecompose() {
-        LocalDate date = LocalDate.of(2014, 2, 13);
-
-        String result = Match(date).of(
-                Case($LocalDate($(year -> year < 2015), $(), $()), () -> "old"),
-                Case($LocalDate($(year -> year > 2015), $(), $()), (y, m, d) -> "month " + m + " in 2016")
-        );
-
-        System.out.println(result);
-    }
+//    static String localDateDecompose(LocalDate date) {
+//        return Match(date).of(
+//                Case($LocalDate($(year -> year < 2015), $(), $()), () -> "old"),
+//                Case($LocalDate($(year -> year > 2015), $(), $()), (y, m, d) -> "new")
+//        );
+//    }
 
 
     static void person3Destructor() {
@@ -262,7 +249,9 @@ public class X {
     }
 
     static String instanceOfTest() {
-        Supplier<Exception> ex = () -> {throw new RuntimeException();};
+        Supplier<Exception> ex = () -> {
+            throw new RuntimeException();
+        };
 
         try {
             ex.get();
@@ -274,7 +263,7 @@ public class X {
                     Case($(), "handle rest")
             );
         }
-        
+
         return "";
     }
 

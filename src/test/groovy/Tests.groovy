@@ -146,4 +146,10 @@ class Tests extends Specification {
         Answers.ifSyntax(Person2.of(false)) == "activated"
         Answers.ifSyntax(Person2.of(true)) == "deactivated"
     }
+
+    def "localDateDecompose"() {
+        expect:
+        Answers.localDateDecompose(LocalDate.of(2010, 10, 10)) == 15
+        Answers.localDateDecompose(LocalDate.of(2019, 10, 10)) == 25
+    }
 }
