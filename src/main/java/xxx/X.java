@@ -24,13 +24,13 @@ import static xxx.DemoPatterns.*;
  * Created by mtumilowicz on 2019-04-27.
  */
 public class X {
-    static String ads(int input) {
-        return Match(input).of(
-                Case($(1), "one"),
-                Case($(2), "two"),
-                Case($(3), "three"),
-                Case($(), "?"));
-    }
+//    static String ads(int input) {
+//        return Match(input).of(
+//                Case($(1), "one"),
+//                Case($(2), "two"),
+//                Case($(3), "three"),
+//                Case($(), "?"));
+//    }
 
     static String ads2(int input) {
         Range<Integer> threshold1 = Range.closed(0, 50);
