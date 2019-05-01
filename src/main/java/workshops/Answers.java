@@ -1,8 +1,13 @@
 package workshops;
 
 import com.google.common.collect.Range;
+import io.vavr.control.Option;
+
+import java.time.LocalDate;
 
 import static io.vavr.API.*;
+import static io.vavr.Predicates.isNotNull;
+import static io.vavr.Predicates.isNull;
 
 /**
  * Created by mtumilowicz on 2019-05-01.
@@ -53,5 +58,16 @@ public class Answers {
 
     private static PersonStats getFastStats(Person person) {
         return PersonStats.of(PersonStats.PersonStatsType.FAST);
+    }
+
+    public static LocalDate rawDateMapper(String date) {
+        return Match(date).of(
+                Case($(isNull()), () -> null),
+                Case($(isNotNull()), LocalDate::parse));
+    }
+
+    public static Option<LocalDate> optionDateMapper(String date) {
+        return Match(date).option(
+                Case($(isNotNull()), LocalDate::parse));
     }
 }

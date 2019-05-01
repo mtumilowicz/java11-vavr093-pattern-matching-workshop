@@ -1,7 +1,11 @@
+import io.vavr.control.Option
 import spock.lang.Specification
 import workshops.Answers
 import workshops.Person
 import workshops.PersonStats
+
+import java.time.LocalDate
+import java.time.format.DateTimeParseException
 
 /**
  * Created by mtumilowicz on 2019-04-10.
@@ -66,5 +70,33 @@ class Tests extends Specification {
         
         then:
         thrown(IllegalStateException)
+    }
+    
+    def "rawDateMapper"() {
+        expect:
+        Answers.rawDateMapper('2014-10-10') == LocalDate.of(2014, 10, 10)
+        !Answers.rawDateMapper(null)
+    }
+
+    def "rawDateMapper, exceptional"() {
+        when:
+        Answers.rawDateMapper('wrong')
+        
+        then:
+        thrown(DateTimeParseException)
+    }
+
+    def "optionDateMapper"() {
+        expect:
+        Answers.optionDateMapper('2014-10-10') == Option.some(LocalDate.of(2014, 10, 10))
+        Answers.optionDateMapper(null) == Option.none()
+    }
+
+    def "optionDateMapper, exceptional"() {
+        when:
+        Answers.optionDateMapper('wrong')
+
+        then:
+        thrown(DateTimeParseException)
     }
 }
