@@ -32,17 +32,17 @@ public class X {
 //                Case($(), "?"));
 //    }
 
-    static String ads2(int input) {
-        Range<Integer> threshold1 = Range.closed(0, 50);
-        Range<Integer> threshold2 = Range.closed(51, 150);
-        Range<Integer> threshold3 = Range.atLeast(151);
-
-        return Match(input).of(
-                Case($(threshold1::contains), "one"),
-                Case($(threshold2::contains), "two"),
-                Case($(threshold3::contains), "three"),
-                Case($(), "?"));
-    }
+//    static String ads2(int input) {
+//        Range<Integer> threshold1 = Range.closed(0, 50);
+//        Range<Integer> threshold2 = Range.closed(51, 150);
+//        Range<Integer> threshold3 = Range.atLeast(151);
+//
+//        return Match(input).of(
+//                Case($(threshold1::contains), "one"),
+//                Case($(threshold2::contains), "two"),
+//                Case($(threshold3::contains), "three"),
+//                Case($(), "?"));
+//    }
 
     static void ads3(Person person) {
         switch (person.type) {
