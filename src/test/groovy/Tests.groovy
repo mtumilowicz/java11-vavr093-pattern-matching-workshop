@@ -1,5 +1,7 @@
 import spock.lang.Specification
 import workshops.Answers
+import workshops.Person
+import workshops.PersonStats
 
 /**
  * Created by mtumilowicz on 2019-04-10.
@@ -15,17 +17,17 @@ class Tests extends Specification {
     def "number converter, guard"() {
         when:
         Answers.numberConverter(null)
-        
+
         then:
         thrown(IllegalStateException)
-        
+
         when:
         Answers.numberConverter("four")
-        
+
         then:
         thrown(IllegalStateException)
     }
-    
+
     def "thresholds"() {
         expect:
         Answers.thresholds(0) == "threshold1"
@@ -49,5 +51,20 @@ class Tests extends Specification {
 
         then:
         thrown(IllegalArgumentException)
+    }
+
+    def "switchOnEnum"() {
+        expect:
+        Answers.switchOnEnum(Person.ofType(Person.PersonType.VIP)) == PersonStats.of(PersonStats.PersonStatsType.FULL)
+        Answers.switchOnEnum(Person.ofType(Person.PersonType.ORDINARY)) == PersonStats.of(PersonStats.PersonStatsType.NORMAL)
+        Answers.switchOnEnum(Person.ofType(Person.PersonType.TEMPORARY)) == PersonStats.of(PersonStats.PersonStatsType.FAST)
+    }
+
+    def "switchOnEnum, guard"() {
+        when:
+        Answers.switchOnEnum(Person.ofType(null))
+        
+        then:
+        thrown(IllegalStateException)
     }
 }

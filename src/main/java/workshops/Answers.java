@@ -31,4 +31,27 @@ public class Answers {
                     throw new IllegalArgumentException("only positive numbers!");
                 }));
     }
+
+    public static PersonStats switchOnEnum(Person person) {
+        return Match(person.getType()).of(
+                Case($(Person.PersonType.VIP), () -> getFullStats(person)),
+                Case($(Person.PersonType.ORDINARY), () -> getStats(person)),
+                Case($(Person.PersonType.TEMPORARY), () -> getFastStats(person)),
+                Case($(), ignore -> {
+                    throw new IllegalStateException("value not supported");
+                }));
+    }
+
+    private static PersonStats getFullStats(Person person) {
+        return PersonStats.of(PersonStats.PersonStatsType.FULL);
+    }
+
+
+    private static PersonStats getStats(Person person) {
+        return PersonStats.of(PersonStats.PersonStatsType.NORMAL);
+    }
+
+    private static PersonStats getFastStats(Person person) {
+        return PersonStats.of(PersonStats.PersonStatsType.FAST);
+    }
 }

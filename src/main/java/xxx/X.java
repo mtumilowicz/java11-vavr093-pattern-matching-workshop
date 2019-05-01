@@ -1,6 +1,5 @@
 package xxx;
 
-import com.google.common.collect.Range;
 import com.google.common.math.IntMath;
 import io.vavr.collection.List;
 import io.vavr.control.Either;
@@ -8,6 +7,7 @@ import io.vavr.control.Option;
 import io.vavr.control.Try;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
+import workshops.Person;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -44,31 +44,31 @@ public class X {
 //                Case($(), "?"));
 //    }
 
-    static void ads3(Person person) {
-        switch (person.type) {
-            case VIP:
-                System.out.println("VIP"); // getfullstatistics
-                break;
-            case ORDINARY:
-                System.out.println("ORDINARY");
-                break;
-            case TEMPORARY:
-                System.out.println("TEMPORARY"); // getfaststatistics
-                break;
-            default:
-                throw new IllegalStateException("value not supported");
-        }
-    }
+//    static void ads3(Person person) {
+//        switch (person.type) {
+//            case VIP:
+//                System.out.println("VIP"); // getfullstatistics
+//                break;
+//            case ORDINARY:
+//                System.out.println("ORDINARY");
+//                break;
+//            case TEMPORARY:
+//                System.out.println("TEMPORARY"); // getfaststatistics
+//                break;
+//            default:
+//                throw new IllegalStateException("value not supported");
+//        }
+//    }
 
-    static void ads33(Person person) {
-        Match(person.type).of(
-                Case($(Type.VIP), type -> run(() -> System.out.println("VIP"))),
-                Case($(Type.ORDINARY), type -> run(() -> System.out.println("ORDINARY"))),
-                Case($(Type.TEMPORARY), type -> run(() -> System.out.println("TEMPORARY"))),
-                Case($(), ignore -> {
-                    throw new IllegalStateException("value not supported");
-                }));
-    }
+//    static void ads33(Person person) {
+//        Match(person.type).of(
+//                Case($(Type.VIP), type -> run(() -> System.out.println("VIP"))),
+//                Case($(Type.ORDINARY), type -> run(() -> System.out.println("ORDINARY"))),
+//                Case($(Type.TEMPORARY), type -> run(() -> System.out.println("TEMPORARY"))),
+//                Case($(), ignore -> {
+//                    throw new IllegalStateException("value not supported");
+//                }));
+//    }
 
     static LocalDate dateMapper(String date) {
         return Match(date).of(
@@ -205,21 +205,21 @@ public class X {
 
 
     static Either<String, Person> patch(BadRequest badRequest) {
-        return Either.right(new Person());
+        return Either.right(null);
     }
 
     static Either<String, Person> processPerson(Person person) {
-        return Either.right(new Person());
+        return Either.right(null);
     }
 
-    static void isInTest() {
-        Person person = new Person();
-
-        Match(person).of(
-                Case($Person($(isIn(Type.VIP, Type.ORDINARY))), ""),
-                Case($Person($(is(Type.TEMPORARY))), "")
-        );
-    }
+//    static void isInTest() {
+//        Person person = new Person();
+//
+//        Match(person).of(
+//                Case($Person($(isIn(Type.VIP, Type.ORDINARY))), ""),
+//                Case($Person($(is(Type.TEMPORARY))), "")
+//        );
+//    }
 
     static void existsTest() {
         List<Try<Integer>> list = List.of(Try.success(1),
@@ -322,17 +322,13 @@ public class X {
     }
 
     public static void main(String[] args) {
-        System.out.println(LocalDate.parse("2014-10-12"));
-        System.out.println(dateMapper("2014-10-12"));
-        System.out.println(dateMapper(null));
-        listDecomposition();
-        localDateDecompose();
-        person3Destructor();
+//        System.out.println(LocalDate.parse("2014-10-12"));
+//        System.out.println(dateMapper("2014-10-12"));
+//        System.out.println(dateMapper(null));
+//        listDecomposition();
+//        localDateDecompose();
+//        person3Destructor();
     }
-}
-
-class Person {
-    Type type;
 }
 
 class Person2 {
