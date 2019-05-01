@@ -21,6 +21,15 @@ import static workshops.DecompositionAnswersPatterns.*;
 /**
  * Created by mtumilowicz on 2019-05-01.
  */
+/*
+TO-DO:
+1. merge persons
+2. renaming tests
+3. ORDINARY -> REGULAR
+4. better Try example (maybe with recover - take from Try workshop)
+5. Workshop (with switch / case, if)
+6. readme
+ */
 public class Answers {
     public static int numberConverter(String number) {
         return Match(number).of(
