@@ -121,4 +121,20 @@ public class Answers {
                 Case($Failure($()), Try::failure)
         );
     }
+
+    public static String ifSyntax(Person2 person2) {
+        return Match(person2).of(
+                Case($(isNull()), () -> "cannot be null"),
+                Case($(Person2::isActive), Answers::serviceDisable),
+                Case($(), Answers::serviceActivate)
+        );
+    }
+
+    private static String serviceActivate(Person2 person2) {
+        return "activated";
+    }
+
+    private static String serviceDisable(Person2 person2) {
+        return "deactivated";
+    }
 }

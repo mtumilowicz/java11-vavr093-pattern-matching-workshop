@@ -5,7 +5,8 @@ import spock.lang.Specification
 import workshops.*
 
 import java.time.LocalDate
-import java.time.format.DateTimeParseException 
+import java.time.format.DateTimeParseException
+
 /**
  * Created by mtumilowicz on 2019-04-10.
  */
@@ -107,12 +108,12 @@ class Tests extends Specification {
         Answers.eitherDecompose(Either.left(BadRequest.of(new Request(), "cannot be fixed"))) ==
                 Either.left('cannot be fixed, too many errors')
     }
-    
+
     def "optionDecompose, cannot find in database"() {
         given:
         def logfile = []
         def notExistsId = 2
-        
+
         expect:
         Answers.optionDecompose(notExistsId, logfile) == Option.none()
         logfile == ["cannot find for id = ${notExistsId}"]
@@ -122,20 +123,27 @@ class Tests extends Specification {
         given:
         def logfile = []
         def existsId = 1
-        
+
         expect:
         Answers.optionDecompose(existsId, logfile) == Option.some('processed ' + existsId)
         logfile == []
     }
-    
+
     def "tryDecompose"() {
         when:
         def successTry = Answers.tryDecompose("2")
         def failTry = Answers.tryDecompose("wrong")
-        
+
         then:
         successTry == Try.success(4)
         failTry.failure
         failTry.getCause().class == NumberFormatException
+    }
+
+    def "ifSyntax"() {
+        expect:
+        Answers.ifSyntax(null) == "cannot be null"
+        Answers.ifSyntax(Person2.of(false)) == "activated"
+        Answers.ifSyntax(Person2.of(true)) == "deactivated"
     }
 }

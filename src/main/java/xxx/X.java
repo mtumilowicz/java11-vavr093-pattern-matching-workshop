@@ -112,35 +112,20 @@ public class X {
 //        );
 //    }
 
-    static void ifSyntax() {
-        boolean a = true;
-
-        Match(a).of(
-                Case($(true), () -> run(X::doIfTrue)),
-                Case($(false), () -> run(X::doIfNot))
-        );
-
-        Person2 person = Match(new Person2()).of(
-                Case($(p -> p.active), p -> X.doIfTrue2(p)),
-                Case($(p -> p.active), p -> X.doIfNot2(p))
-        );
-    }
-
-    static void doIfTrue() {
-
-    }
-
-    static void doIfNot() {
-
-    }
-
-    static Person2 doIfTrue2(Person2 person2) {
-        return new Person2();
-    }
-
-    static Person2 doIfNot2(Person2 person2) {
-        return new Person2();
-    }
+//    static void ifSyntax() {
+//        Person2 person = Match(new Person2()).of(
+//                Case($(p -> p.active), p -> X.doIfTrue2(p)),
+//                Case($(p -> p.active), p -> X.doIfNot2(p))
+//        );
+//    }
+//
+//    static Person2 doIfTrue2(Person2 person2) {
+//        return new Person2();
+//    }
+//
+//    static Person2 doIfNot2(Person2 person2) {
+//        return new Person2();
+//    }
 
     static void listDecomposition() {
         List x = List.of(1, 2, 3, 4, 5);
