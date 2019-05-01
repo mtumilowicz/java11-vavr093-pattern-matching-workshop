@@ -193,4 +193,33 @@ class Tests extends Specification {
         test2.get().size() == 5
         test2.get().containsAll([1,2,3,4,5])
     }
+
+    def "forAllTest"() {
+        given:
+        def ex1 = new IllegalArgumentException("a")
+        def ex2 = new IllegalStateException("b")
+        and:
+        def withFailures = List.of(Try.success(1),
+                Try.success(2),
+                Try.success(3),
+                Try.failure(ex1),
+                Try.failure(ex2))
+        def withoutFailures = List.of(Try.success(1),
+                Try.success(2),
+                Try.success(3),
+                Try.success(4),
+                Try.success(5))
+
+        when:
+        def test1 = Answers.forAllTest(withFailures)
+        def test2 = Answers.forAllTest(withoutFailures)
+
+        then:
+        test1.isLeft()
+        test1.getLeft().size() == 2
+        test1.getLeft().containsAll([ex1, ex2])
+        test2.isRight()
+        test2.get().size() == 5
+        test2.get().containsAll([1,2,3,4,5])
+    }
 }

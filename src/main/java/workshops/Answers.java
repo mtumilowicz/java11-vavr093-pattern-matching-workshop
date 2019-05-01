@@ -205,4 +205,19 @@ public class Answers {
                                 .toList()))
         );
     }
+
+    public static Either<Seq<Throwable>, Seq<Integer>> forAllTest(Seq<Try<Integer>> list) {
+        return Match(list).of(
+                Case($(forAll(Try::isSuccess)),
+                        tries -> Either.right(tries
+                                .filter(Try::isSuccess)
+                                .map(Try::get)
+                                .toList())),
+                Case($(),
+                        tries -> Either.left(tries
+                                .filter(Try::isFailure)
+                                .map(Try::getCause)
+                                .toList()))
+        );
+    }
 }
