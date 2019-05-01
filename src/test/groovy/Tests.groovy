@@ -260,10 +260,22 @@ class Tests extends Specification {
         CheckedRunnable classNotFoundException = {throw new ClassNotFoundException()}
         
         expect:
-        Answers.instanceOfTest(noException) == "no exception"
-        Answers.instanceOfTest(illegalArgumentException) == "IllegalArgumentException"
-        Answers.instanceOfTest(runtimeException) == "RuntimeException"
-        Answers.instanceOfTest(iOException) == "IOException"
-        Answers.instanceOfTest(classNotFoundException) == "handle rest"
+        Answers.instanceOfTest(noException) == 'no exception'
+        Answers.instanceOfTest(illegalArgumentException) == 'IllegalArgumentException'
+        Answers.instanceOfTest(runtimeException) == 'RuntimeException'
+        Answers.instanceOfTest(iOException) == 'IOException'
+        Answers.instanceOfTest(classNotFoundException) == 'handle rest'
+    }
+    
+    def "noneOfTest"() {
+        given:
+        def vip = new Person4(Person.PersonType.VIP, true, 1)
+        def bigSalary = new Person4(Person.PersonType.ORDINARY, true, 3000)
+        def regular = new Person4(Person.PersonType.ORDINARY, true, 300)
+        
+        expect:
+        Answers.noneOfTest(vip) == 'handle special'
+        Answers.noneOfTest(bigSalary) == 'handle special'
+        Answers.noneOfTest(regular) == 'handle rest'
     }
 }

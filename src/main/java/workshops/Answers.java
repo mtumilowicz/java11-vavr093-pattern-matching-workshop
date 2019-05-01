@@ -255,4 +255,14 @@ public class Answers {
             );
         }
     }
+
+    public static String noneOfTest(Person4 person) {
+        Predicate<Person4> isVIP = p -> p.getType() == Person.PersonType.VIP;
+        Predicate<Person4> hasBigSalary = p -> p.getSalary() > 1000;
+
+        return Match(person).of(
+                Case($(noneOf(isVIP, hasBigSalary)), "handle rest"),
+                Case($(), "handle special")
+        );
+    }
 }

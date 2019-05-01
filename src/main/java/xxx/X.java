@@ -246,13 +246,11 @@ public class X {
 //        }
 //    }
 
-    static void noneOfTest() {
-        Person4 p4 = new Person4(Type.VIP, true, 1);
-
+    static String noneOfTest(Person4 person) {
         Predicate<Person4> isVIP = p -> p.type == Type.VIP;
         Predicate<Person4> hasBigSalary = p -> p.salary > 1000;
 
-        Match(p4).of(
+        return Match(person).of(
                 Case($(noneOf(isVIP, hasBigSalary)), "handle special"),
                 Case($(), "handle rest")
         );
