@@ -1,11 +1,13 @@
 package workshops;
 
 import com.google.common.collect.Range;
+import io.vavr.CheckedRunnable;
 import io.vavr.collection.Seq;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -238,5 +240,19 @@ public class Answers {
                 Case($(allOf(isTemporary, isActive.negate())), "temporary + not active"),
                 Case($(), () -> {throw new IllegalArgumentException("case not supported");})
         );
+    }
+
+    public static String instanceOfTest(CheckedRunnable runnable) {
+        try {
+            runnable.run();
+            return "no exception";
+        } catch (Throwable exx) {
+            return Match(exx).of(
+                    Case($(instanceOf(IllegalArgumentException.class)), "IllegalArgumentException"),
+                    Case($(instanceOf(RuntimeException.class)), "RuntimeException"),
+                    Case($(instanceOf(IOException.class)), "IOException"),
+                    Case($(), "handle rest")
+            );
+        }
     }
 }

@@ -3,12 +3,11 @@ package xxx;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 
-import java.io.IOException;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 import static io.vavr.API.*;
-import static io.vavr.Predicates.*;
+import static io.vavr.Predicates.anyOf;
+import static io.vavr.Predicates.noneOf;
 
 /**
  * Created by mtumilowicz on 2019-04-27.
@@ -233,24 +232,19 @@ public class X {
 //        );
 //    }
 
-    static String instanceOfTest() {
-        Supplier<Exception> ex = () -> {
-            throw new RuntimeException();
-        };
-
-        try {
-            ex.get();
-        } catch (Exception exx) {
-            return Match(exx).of(
-                    Case($(instanceOf(IllegalArgumentException.class)), "handle exception"),
-                    Case($(instanceOf(RuntimeException.class)), "handle exception"),
-                    Case($(instanceOf(IOException.class)), "handle exception"),
-                    Case($(), "handle rest")
-            );
-        }
-
-        return "";
-    }
+//    static String instanceOfTest(CheckedRunnable runnable) {
+//        try {
+//            runnable.run();
+//            return "no exception";
+//        } catch (Throwable exx) {
+//            return Match(exx).of(
+//                    Case($(instanceOf(IllegalArgumentException.class)), "IllegalArgumentException"),
+//                    Case($(instanceOf(RuntimeException.class)), "RuntimeException"),
+//                    Case($(instanceOf(IOException.class)), "IOException"),
+//                    Case($(), "handle rest")
+//            );
+//        }
+//    }
 
     static void noneOfTest() {
         Person4 p4 = new Person4(Type.VIP, true, 1);

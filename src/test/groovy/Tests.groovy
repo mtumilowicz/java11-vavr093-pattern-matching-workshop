@@ -1,3 +1,4 @@
+import io.vavr.CheckedRunnable
 import io.vavr.collection.List
 import io.vavr.control.Either
 import io.vavr.control.Option
@@ -248,5 +249,21 @@ class Tests extends Specification {
 
         then:
         thrown(IllegalArgumentException)
+    }
+    
+    def "instanceOfTest"() {
+        given:
+        CheckedRunnable noException = {}
+        CheckedRunnable illegalArgumentException = {throw new IllegalArgumentException()}
+        CheckedRunnable runtimeException = {throw new RuntimeException()}
+        CheckedRunnable iOException = {throw new IOException()}
+        CheckedRunnable classNotFoundException = {throw new ClassNotFoundException()}
+        
+        expect:
+        Answers.instanceOfTest(noException) == "no exception"
+        Answers.instanceOfTest(illegalArgumentException) == "IllegalArgumentException"
+        Answers.instanceOfTest(runtimeException) == "RuntimeException"
+        Answers.instanceOfTest(iOException) == "IOException"
+        Answers.instanceOfTest(classNotFoundException) == "handle rest"
     }
 }
