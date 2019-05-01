@@ -9,6 +9,7 @@ import io.vavr.control.Try;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import static io.vavr.API.*;
 import static io.vavr.Patterns.*;
@@ -218,6 +219,24 @@ public class Answers {
                                 .filter(Try::isFailure)
                                 .map(Try::getCause)
                                 .toList()))
+        );
+    }
+
+    public static String allOfTest(Person4 person) {
+        Predicate<Person4> isActive = Person4::isActive;
+        Predicate<Person4> isVIP = p -> p.getType() == Person.PersonType.VIP;
+        Predicate<Person4> isOrdinary = p -> p.getType() == Person.PersonType.ORDINARY;
+        Predicate<Person4> isTemporary = p -> p.getType() == Person.PersonType.TEMPORARY;
+
+        return Match(person).of(
+                Case($(isNull()), () -> {throw new IllegalArgumentException("not null");}),
+                Case($(allOf(isVIP, isActive)), "vip + active"),
+                Case($(allOf(isVIP, isActive.negate())), "vip + not active"),
+                Case($(allOf(isOrdinary, isActive)), "ordinary + active"),
+                Case($(allOf(isOrdinary, isActive.negate())), "ordinary + not active"),
+                Case($(allOf(isTemporary, isActive)), "temporary + active"),
+                Case($(allOf(isTemporary, isActive.negate())), "temporary + not active"),
+                Case($(), () -> {throw new IllegalArgumentException("case not supported");})
         );
     }
 }

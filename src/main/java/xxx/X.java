@@ -215,24 +215,23 @@ public class X {
 //        );
 //    }
 
-    static void allOfTest() {
-        Person4 p4 = new Person4(Type.VIP, true, 1);
-
-        Predicate<Person4> isActive = p -> p.active;
-        Predicate<Person4> isVIP = p -> p.type == Type.VIP;
-        Predicate<Person4> isOrdinary = p -> p.type == Type.ORDINARY;
-        Predicate<Person4> isTemporary = p -> p.type == Type.TEMPORARY;
-
-
-        Match(p4).of(
-                Case($(allOf(isVIP, isActive)), "handle 1"),
-                Case($(allOf(isVIP, isActive.negate())), "handle 2"),
-                Case($(allOf(isOrdinary, isActive)), "handle 3"),
-                Case($(allOf(isOrdinary, isActive.negate())), "handle 4"),
-                Case($(allOf(isTemporary, isActive)), "handle 5"),
-                Case($(allOf(isTemporary, isActive.negate())), "handle 6")
-        );
-    }
+//    static void allOfTest() {
+//        Person4 p4 = new Person4(Type.VIP, true, 1);
+//
+//        Predicate<Person4> isActive = p -> p.active;
+//        Predicate<Person4> isVIP = p -> p.type == Type.VIP;
+//        Predicate<Person4> isOrdinary = p -> p.type == Type.ORDINARY;
+//        Predicate<Person4> isTemporary = p -> p.type == Type.TEMPORARY;
+//        
+//        Match(p4).of(
+//                Case($(allOf(isVIP, isActive)), "vip + active"),
+//                Case($(allOf(isVIP, isActive.negate())), "vip + not active"),
+//                Case($(allOf(isOrdinary, isActive)), "ordinary + active"),
+//                Case($(allOf(isOrdinary, isActive.negate())), "ordinary + not active"),
+//                Case($(allOf(isTemporary, isActive)), "temporary + active"),
+//                Case($(allOf(isTemporary, isActive.negate())), "temporary + not active")
+//        );
+//    }
 
     static String instanceOfTest() {
         Supplier<Exception> ex = () -> {

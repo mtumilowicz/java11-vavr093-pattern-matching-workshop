@@ -6,7 +6,8 @@ import spock.lang.Specification
 import workshops.*
 
 import java.time.LocalDate
-import java.time.format.DateTimeParseException 
+import java.time.format.DateTimeParseException
+
 /**
  * Created by mtumilowicz on 2019-04-10.
  */
@@ -152,19 +153,19 @@ class Tests extends Specification {
         Answers.localDateDecompose(LocalDate.of(2010, 10, 10)) == 15
         Answers.localDateDecompose(LocalDate.of(2019, 10, 10)) == 25
     }
-    
+
     def "decomposePerson3"() {
         given:
         Person3 p1 = new Person3(new Account(20_000, 800), new Address("POLAND", "WARSAW"))
         Person3 p2 = new Person3(new Account(1000, 2000), new Address("USA", "NEW YORK"))
         Person3 p3 = new Person3(new Account(15_000, 950), new Address("POLAND", "KRAKOW"))
-        
+
         expect:
         Answers.decomposePerson3(p1) == 215
         Answers.decomposePerson3(p2) == 328
         Answers.decomposePerson3(p3) == 215
     }
-    
+
     def "existsTest"() {
         given:
         def ex1 = new IllegalArgumentException("a")
@@ -184,14 +185,14 @@ class Tests extends Specification {
         when:
         def test1 = Answers.existsTest(withFailures)
         def test2 = Answers.existsTest(withoutFailures)
-        
+
         then:
         test1.isLeft()
         test1.getLeft().size() == 2
         test1.getLeft().containsAll([ex1, ex2])
         test2.isRight()
         test2.get().size() == 5
-        test2.get().containsAll([1,2,3,4,5])
+        test2.get().containsAll([1, 2, 3, 4, 5])
     }
 
     def "forAllTest"() {
@@ -220,6 +221,32 @@ class Tests extends Specification {
         test1.getLeft().containsAll([ex1, ex2])
         test2.isRight()
         test2.get().size() == 5
-        test2.get().containsAll([1,2,3,4,5])
+        test2.get().containsAll([1, 2, 3, 4, 5])
+    }
+
+    def "allOfTest"() {
+        given:
+        def vipActive = new Person4(Person.PersonType.VIP, true, 1)
+        def vipNotActive = new Person4(Person.PersonType.VIP, false, 1)
+        def ordinaryActive = new Person4(Person.PersonType.ORDINARY, true, 1)
+        def ordinaryNotActive = new Person4(Person.PersonType.ORDINARY, false, 1)
+        def temporaryActive = new Person4(Person.PersonType.TEMPORARY, true, 1)
+        def temporaryNotActive = new Person4(Person.PersonType.TEMPORARY, false, 1)
+
+        expect:
+        Answers.allOfTest(vipActive) == 'vip + active'
+        Answers.allOfTest(vipNotActive) == 'vip + not active'
+        Answers.allOfTest(ordinaryActive) == 'ordinary + active'
+        Answers.allOfTest(ordinaryNotActive) == 'ordinary + not active'
+        Answers.allOfTest(temporaryActive) == 'temporary + active'
+        Answers.allOfTest(temporaryNotActive) == 'temporary + not active'
+    }
+
+    def "allOfTest, guard"() {
+        when:
+        Answers.allOfTest(null)
+
+        then:
+        thrown(IllegalArgumentException)
     }
 }
