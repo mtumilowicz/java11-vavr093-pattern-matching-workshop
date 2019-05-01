@@ -278,4 +278,16 @@ class Tests extends Specification {
         Answers.noneOfTest(bigSalary) == 'handle special'
         Answers.noneOfTest(regular) == 'handle rest'
     }
+
+    def "anyOfTest"() {
+        given:
+        def vip = new Person4(Person.PersonType.VIP, true, 1)
+        def bigSalary = new Person4(Person.PersonType.ORDINARY, true, 3000)
+        def regular = new Person4(Person.PersonType.ORDINARY, true, 300)
+
+        expect:
+        Answers.anyOfTest(vip) == 'handle special'
+        Answers.anyOfTest(bigSalary) == 'handle special'
+        Answers.anyOfTest(regular) == 'handle rest'
+    }
 }

@@ -3,12 +3,6 @@ package xxx;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
 
-import java.util.function.Predicate;
-
-import static io.vavr.API.*;
-import static io.vavr.Predicates.anyOf;
-import static io.vavr.Predicates.noneOf;
-
 /**
  * Created by mtumilowicz on 2019-04-27.
  */
@@ -246,27 +240,27 @@ public class X {
 //        }
 //    }
 
-    static String noneOfTest(Person4 person) {
-        Predicate<Person4> isVIP = p -> p.type == Type.VIP;
-        Predicate<Person4> hasBigSalary = p -> p.salary > 1000;
+//    static String noneOfTest(Person4 person) {
+//        Predicate<Person4> isVIP = p -> p.type == Type.VIP;
+//        Predicate<Person4> hasBigSalary = p -> p.salary > 1000;
+//
+//        return Match(person).of(
+//                Case($(noneOf(isVIP, hasBigSalary)), "handle special"),
+//                Case($(), "handle rest")
+//        );
+//    }
 
-        return Match(person).of(
-                Case($(noneOf(isVIP, hasBigSalary)), "handle special"),
-                Case($(), "handle rest")
-        );
-    }
-
-    static void anyOfTest() {
-        Person4 p4 = new Person4(Type.VIP, true, 1);
-
-        Predicate<Person4> isVIP = p -> p.type == Type.VIP;
-        Predicate<Person4> hasBigSalary = p -> p.salary > 1000;
-
-        Match(p4).of(
-                Case($(anyOf(isVIP, hasBigSalary)), "handle special"),
-                Case($(), "handle rest")
-        );
-    }
+//    static void anyOfTest() {
+//        Person4 p4 = new Person4(Type.VIP, true, 1);
+//
+//        Predicate<Person4> isVIP = p -> p.type == Type.VIP;
+//        Predicate<Person4> hasBigSalary = p -> p.salary > 1000;
+//
+//        Match(p4).of(
+//                Case($(anyOf(isVIP, hasBigSalary)), "handle special"),
+//                Case($(), "handle rest")
+//        );
+//    }
 
     public static void main(String[] args) {
 //        System.out.println(LocalDate.parse("2014-10-12"));
