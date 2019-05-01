@@ -1,3 +1,4 @@
+import io.vavr.collection.List
 import io.vavr.control.Either
 import io.vavr.control.Option
 import io.vavr.control.Try
@@ -5,8 +6,7 @@ import spock.lang.Specification
 import workshops.*
 
 import java.time.LocalDate
-import java.time.format.DateTimeParseException
-
+import java.time.format.DateTimeParseException 
 /**
  * Created by mtumilowicz on 2019-04-10.
  */
@@ -163,5 +163,34 @@ class Tests extends Specification {
         Answers.decomposePerson3(p1) == 215
         Answers.decomposePerson3(p2) == 328
         Answers.decomposePerson3(p3) == 215
+    }
+    
+    def "existsTest"() {
+        given:
+        def ex1 = new IllegalArgumentException("a")
+        def ex2 = new IllegalStateException("b")
+        and:
+        def withFailures = List.of(Try.success(1),
+                Try.success(2),
+                Try.success(3),
+                Try.failure(ex1),
+                Try.failure(ex2))
+        def withoutFailures = List.of(Try.success(1),
+                Try.success(2),
+                Try.success(3),
+                Try.success(4),
+                Try.success(5))
+
+        when:
+        def test1 = Answers.existsTest(withFailures)
+        def test2 = Answers.existsTest(withoutFailures)
+        
+        then:
+        test1.isLeft()
+        test1.getLeft().size() == 2
+        test1.getLeft().containsAll([ex1, ex2])
+        test2.isRight()
+        test2.get().size() == 5
+        test2.get().containsAll([1,2,3,4,5])
     }
 }

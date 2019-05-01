@@ -178,25 +178,25 @@ public class X {
 //        );
 //    }
 
-    static void existsTest() {
-        List<Try<Integer>> list = List.of(Try.success(1),
-                Try.success(2),
-                Try.success(3),
-                Try.failure(new IllegalArgumentException("a")),
-                Try.failure(new IllegalStateException("b")));
-        Either<List<Throwable>, List<Integer>> a = Match(list).of(
-                Case($(exists(Try::isFailure)),
-                        tries -> Either.left(tries
-                                .filter(Try::isFailure)
-                                .map(Try::getCause)
-                                .toList())),
-                Case($(),
-                        tries -> Either.right(tries
-                                .filter(Try::isSuccess)
-                                .map(Try::get)
-                                .toList()))
-        );
-    }
+//    static void existsTest() {
+//        List<Try<Integer>> list = List.of(Try.success(1),
+//                Try.success(2),
+//                Try.success(3),
+//                Try.failure(new IllegalArgumentException("a")),
+//                Try.failure(new IllegalStateException("b")));
+//        Either<List<Throwable>, List<Integer>> a = Match(list).of(
+//                Case($(exists(Try::isFailure)),
+//                        tries -> Either.left(tries
+//                                .filter(Try::isFailure)
+//                                .map(Try::getCause)
+//                                .toList())),
+//                Case($(),
+//                        tries -> Either.right(tries
+//                                .filter(Try::isSuccess)
+//                                .map(Try::get)
+//                                .toList()))
+//        );
+//    }
 
     static void forAllTest() {
         List<Try<Integer>> list = List.of(Try.success(1),

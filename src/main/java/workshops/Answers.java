@@ -1,6 +1,7 @@
 package workshops;
 
 import com.google.common.collect.Range;
+import io.vavr.collection.Seq;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
@@ -11,8 +12,7 @@ import java.util.Objects;
 
 import static io.vavr.API.*;
 import static io.vavr.Patterns.*;
-import static io.vavr.Predicates.isNotNull;
-import static io.vavr.Predicates.isNull;
+import static io.vavr.Predicates.*;
 import static workshops.DecompositionAnswersPatterns.*;
 
 /**
@@ -190,5 +190,19 @@ public class Answers {
                 ? 120
                 : 30;
     }
-    
+
+    public static Either<Seq<Throwable>, Seq<Integer>> existsTest(Seq<Try<Integer>> list) {
+        return Match(list).of(
+                Case($(exists(Try::isFailure)),
+                        tries -> Either.left(tries
+                                .filter(Try::isFailure)
+                                .map(Try::getCause)
+                                .toList())),
+                Case($(),
+                        tries -> Either.right(tries
+                                .filter(Try::isSuccess)
+                                .map(Try::get)
+                                .toList()))
+        );
+    }
 }
