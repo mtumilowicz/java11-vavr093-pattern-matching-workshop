@@ -1,4 +1,4 @@
-package workshops;
+package request;
 
 import lombok.Value;
 

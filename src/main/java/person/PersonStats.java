@@ -1,4 +1,4 @@
-package workshops;
+package person;
 
 import lombok.Value;
 

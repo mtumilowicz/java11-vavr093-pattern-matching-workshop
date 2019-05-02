@@ -6,6 +6,11 @@ import io.vavr.collection.Seq;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
+import person.CreditAssessSubjects;
+import person.Person;
+import person.PersonStats;
+import person.PersonType;
+import request.BadRequest;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -23,6 +28,7 @@ import static workshops.DecompositionAnswersPatterns.*;
  */
 /*
 TO-DO:
+1. personstats -> string (full, ...)
 1. add personByType pattern
 1. renaming tests
 1. better Try example (maybe with recover - take from Try workshop)
@@ -156,7 +162,7 @@ public class Answers {
                 Case($LocalDate($(year -> year > 2015), $(), $()), Answers::taxAfter2015)
         );
     }
-    
+
     private static int taxBefore2015() {
         return 15;
     }
@@ -167,11 +173,13 @@ public class Answers {
 
     public static Integer decomposePerson3(Person person) {
         return Match(person).of(
-                Case($PersonByCreditAssessSubjects($(), $()), 
-                        (account, address) -> serviceMethodAssess(new CreditAssessSubjects(
-                                account.getBalance(), 
-                                account.getSalary(), 
-                                address.getCountry())))
+                Case($PersonByCreditAssessSubjects($(), $()),
+                        (account, address) -> serviceMethodAssess(CreditAssessSubjects.builder()
+                                .balance(account.getBalance())
+                                .salary(account.getSalary())
+                                .country(address.getCountry())
+                                .build()
+                        ))
         );
     }
 
@@ -185,7 +193,7 @@ public class Answers {
     }
 
     private static int serviceMethodAssessBalance(int balance) {
-        return balance < 1000 
+        return balance < 1000
                 ? 25
                 : 50;
     }
@@ -234,14 +242,18 @@ public class Answers {
 
     public static String allOfTest(Person person) {
         return Match(person).of(
-                Case($(isNull()), () -> {throw new IllegalArgumentException("not null");}),
+                Case($(isNull()), () -> {
+                    throw new IllegalArgumentException("not null");
+                }),
                 Case($(allOf(Person.hasType(PersonType.VIP), Person::isActive)), "vip + active"),
                 Case($(allOf(Person.hasType(PersonType.VIP), not(Person::isActive))), "vip + not active"),
                 Case($(allOf(Person.hasType(PersonType.REGULAR), Person::isActive)), "regular + active"),
                 Case($(allOf(Person.hasType(PersonType.REGULAR), not(Person::isActive))), "regular + not active"),
                 Case($(allOf(Person.hasType(PersonType.TEMPORARY), Person::isActive)), "temporary + active"),
                 Case($(allOf(Person.hasType(PersonType.TEMPORARY), not(Person::isActive))), "temporary + not active"),
-                Case($(), () -> {throw new IllegalArgumentException("case not supported");})
+                Case($(), () -> {
+                    throw new IllegalArgumentException("case not supported");
+                })
         );
     }
 

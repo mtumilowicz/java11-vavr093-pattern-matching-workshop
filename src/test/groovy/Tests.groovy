@@ -5,6 +5,13 @@ import io.vavr.control.Option
 import io.vavr.control.Try
 import spock.lang.Specification
 import workshops.*
+import person.Account
+import person.Address
+import person.Person
+import person.PersonStats
+import person.PersonType
+import request.BadRequest
+import request.Request
 
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
@@ -61,9 +68,12 @@ class Tests extends Specification {
 
     def "switchOnEnum"() {
         expect:
-        Answers.switchOnEnum(Person.builder().type(PersonType.VIP).build()) == PersonStats.of(PersonStats.PersonStatsType.FULL)
-        Answers.switchOnEnum(Person.builder().type(PersonType.REGULAR).build()) == PersonStats.of(PersonStats.PersonStatsType.NORMAL)
-        Answers.switchOnEnum(Person.builder().type(PersonType.TEMPORARY).build()) == PersonStats.of(PersonStats.PersonStatsType.FAST)
+        Answers.switchOnEnum(Person.builder().type(PersonType.VIP).build()) ==
+                PersonStats.of(PersonStats.PersonStatsType.FULL)
+        Answers.switchOnEnum(Person.builder().type(PersonType.REGULAR).build()) ==
+                PersonStats.of(PersonStats.PersonStatsType.NORMAL)
+        Answers.switchOnEnum(Person.builder().type(PersonType.TEMPORARY).build()) ==
+                PersonStats.of(PersonStats.PersonStatsType.FAST)
     }
 
     def "switchOnEnum, guard"() {

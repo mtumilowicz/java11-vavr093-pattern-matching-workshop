@@ -1,4 +1,4 @@
-package workshops;
+package request;
 
 public class Request {
 

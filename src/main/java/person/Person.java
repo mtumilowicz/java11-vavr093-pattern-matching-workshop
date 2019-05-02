@@ -1,5 +1,6 @@
-package workshops;
+package person;
 
+import io.vavr.API;
 import lombok.Builder;
 import lombok.Value;
 
@@ -20,7 +21,7 @@ public class Person {
     
     public static Predicate<Person> hasType(PersonType type) {
         return p -> Match(p.type).of(
-                Case($(type), true),
+                Case(API.$(type), true),
                 Case($(), false)
         );
     }
