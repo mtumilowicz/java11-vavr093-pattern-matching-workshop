@@ -14,8 +14,8 @@ import java.time.LocalDate;
 @Patterns
 public class DecompositionAnswers {
     @Unapply
-    static Tuple2<Account, Address> Person3(Person3 person) {
-        return Tuple.of(person.account, person.address);
+    static Tuple2<Account, Address> PersonByCreditAssessSubjects(Person person) {
+        return Tuple.of(person.getAccount(), person.getAddress());
     }
 
     @Unapply

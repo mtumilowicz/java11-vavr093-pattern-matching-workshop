@@ -61,14 +61,14 @@ class Tests extends Specification {
 
     def "switchOnEnum"() {
         expect:
-        Answers.switchOnEnum(Person.ofType(PersonType.VIP)) == PersonStats.of(PersonStats.PersonStatsType.FULL)
-        Answers.switchOnEnum(Person.ofType(PersonType.REGULAR)) == PersonStats.of(PersonStats.PersonStatsType.NORMAL)
-        Answers.switchOnEnum(Person.ofType(PersonType.TEMPORARY)) == PersonStats.of(PersonStats.PersonStatsType.FAST)
+        Answers.switchOnEnum(Person.builder().type(PersonType.VIP).build()) == PersonStats.of(PersonStats.PersonStatsType.FULL)
+        Answers.switchOnEnum(Person.builder().type(PersonType.REGULAR).build()) == PersonStats.of(PersonStats.PersonStatsType.NORMAL)
+        Answers.switchOnEnum(Person.builder().type(PersonType.TEMPORARY).build()) == PersonStats.of(PersonStats.PersonStatsType.FAST)
     }
 
     def "switchOnEnum, guard"() {
         when:
-        Answers.switchOnEnum(Person.ofType(null))
+        Answers.switchOnEnum(Person.builder().build())
 
         then:
         thrown(IllegalStateException)
@@ -106,7 +106,7 @@ class Tests extends Specification {
         expect:
         Answers.eitherDecompose(null) == Either.left("cannot be null")
         Answers.eitherDecompose(Either.left(BadRequest.of(new Request(), "can be fixed"))) ==
-                Either.right(Person.ofType(null))
+                Either.right(Person.builder().build())
         Answers.eitherDecompose(Either.left(BadRequest.of(new Request(), "cannot be fixed"))) ==
                 Either.left('cannot be fixed, too many errors')
     }
@@ -145,8 +145,8 @@ class Tests extends Specification {
     def "ifSyntax"() {
         expect:
         Answers.ifSyntax(null) == "cannot be null"
-        Answers.ifSyntax(Person2.of(false)) == "activated"
-        Answers.ifSyntax(Person2.of(true)) == "deactivated"
+        Answers.ifSyntax(Person.builder().active(false).build()) == "activated"
+        Answers.ifSyntax(Person.builder().active(true).build()) == "deactivated"
     }
 
     def "localDateDecompose"() {
@@ -157,9 +157,9 @@ class Tests extends Specification {
 
     def "decomposePerson3"() {
         given:
-        Person3 p1 = new Person3(new Account(20_000, 800), new Address("POLAND", "WARSAW"))
-        Person3 p2 = new Person3(new Account(1000, 2000), new Address("USA", "NEW YORK"))
-        Person3 p3 = new Person3(new Account(15_000, 950), new Address("POLAND", "KRAKOW"))
+        Person p1 = Person.builder().account(new Account(20_000, 800)).address(new Address("POLAND", "WARSAW")).build()
+        Person p2 = Person.builder().account(new Account(1000, 2000)).address(new Address("USA", "NEW YORK")).build()
+        Person p3 = Person.builder().account(new Account(15_000, 950)).address(new Address("POLAND", "KRAKOW")).build()
 
         expect:
         Answers.decomposePerson3(p1) == 215
@@ -227,12 +227,12 @@ class Tests extends Specification {
 
     def "allOfTest"() {
         given:
-        def vipActive = new Person4(PersonType.VIP, true, 1)
-        def vipNotActive = new Person4(PersonType.VIP, false, 1)
-        def regularActive = new Person4(PersonType.REGULAR, true, 1)
-        def regularNotActive = new Person4(PersonType.REGULAR, false, 1)
-        def temporaryActive = new Person4(PersonType.TEMPORARY, true, 1)
-        def temporaryNotActive = new Person4(PersonType.TEMPORARY, false, 1)
+        def vipActive = Person.builder().type(PersonType.VIP).active(true).build()
+        def vipNotActive = Person.builder().type(PersonType.VIP).active(false).build()
+        def regularActive = Person.builder().type(PersonType.REGULAR).active(true).build()
+        def regularNotActive = Person.builder().type(PersonType.REGULAR).active(false).build()
+        def temporaryActive = Person.builder().type(PersonType.TEMPORARY).active(true).build()
+        def temporaryNotActive = Person.builder().type(PersonType.TEMPORARY).active(false).build()
 
         expect:
         Answers.allOfTest(vipActive) == 'vip + active'
@@ -250,15 +250,15 @@ class Tests extends Specification {
         then:
         thrown(IllegalArgumentException)
     }
-    
+
     def "instanceOfTest"() {
         given:
         CheckedRunnable noException = {}
-        CheckedRunnable illegalArgumentException = {throw new IllegalArgumentException()}
-        CheckedRunnable runtimeException = {throw new RuntimeException()}
-        CheckedRunnable iOException = {throw new IOException()}
-        CheckedRunnable classNotFoundException = {throw new ClassNotFoundException()}
-        
+        CheckedRunnable illegalArgumentException = { throw new IllegalArgumentException() }
+        CheckedRunnable runtimeException = { throw new RuntimeException() }
+        CheckedRunnable iOException = { throw new IOException() }
+        CheckedRunnable classNotFoundException = { throw new ClassNotFoundException() }
+
         expect:
         Answers.instanceOfTest(noException) == 'no exception'
         Answers.instanceOfTest(illegalArgumentException) == 'IllegalArgumentException'
@@ -266,13 +266,13 @@ class Tests extends Specification {
         Answers.instanceOfTest(iOException) == 'IOException'
         Answers.instanceOfTest(classNotFoundException) == 'handle rest'
     }
-    
+
     def "noneOfTest"() {
         given:
-        def vip = new Person4(PersonType.VIP, true, 1)
-        def bigSalary = new Person4(PersonType.REGULAR, true, 3000)
-        def regular = new Person4(PersonType.REGULAR, true, 300)
-        
+        def vip = Person.builder().type(PersonType.VIP).account(new Account(1, 1)).build()
+        def bigSalary = Person.builder().type(PersonType.REGULAR).account(new Account(1, 3000)).build()
+        def regular = Person.builder().type(PersonType.REGULAR).account(new Account(1, 300)).build()
+
         expect:
         Answers.noneOfTest(vip) == 'handle special'
         Answers.noneOfTest(bigSalary) == 'handle special'
@@ -281,9 +281,9 @@ class Tests extends Specification {
 
     def "anyOfTest"() {
         given:
-        def vip = new Person4(PersonType.VIP, true, 1)
-        def bigSalary = new Person4(PersonType.REGULAR, true, 3000)
-        def regular = new Person4(PersonType.REGULAR, true, 300)
+        def vip = Person.builder().type(PersonType.VIP).account(new Account(1, 1)).build()
+        def bigSalary = Person.builder().type(PersonType.REGULAR).account(new Account(1, 3000)).build()
+        def regular = Person.builder().type(PersonType.REGULAR).account(new Account(1, 300)).build()
 
         expect:
         Answers.anyOfTest(vip) == 'handle special'

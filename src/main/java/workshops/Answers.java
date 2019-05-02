@@ -24,10 +24,13 @@ import static workshops.DecompositionAnswersPatterns.*;
 /*
 TO-DO:
 1. merge persons
-2. renaming tests
-3. better Try example (maybe with recover - take from Try workshop)
-4. Workshop (with switch / case, if)
-5. readme
+1. account balance -> builders
+1. move predicates isVip... to Person
+1. add personByType pattern
+1. renaming tests
+1. better Try example (maybe with recover - take from Try workshop)
+1. Workshop (with switch / case, if)
+1. readme
  */
 public class Answers {
     public static int numberConverter(String number) {
@@ -98,7 +101,7 @@ public class Answers {
 
     private static Either<String, Person> patch(BadRequest badRequest) {
         return Objects.equals(badRequest.getMessage(), "can be fixed")
-                ? Either.right(Person.ofType(null))
+                ? Either.right(Person.builder().build())
                 : Either.left("cannot be fixed, too many errors");
 
     }
@@ -134,19 +137,19 @@ public class Answers {
         );
     }
 
-    public static String ifSyntax(Person2 person2) {
+    public static String ifSyntax(Person person2) {
         return Match(person2).of(
                 Case($(isNull()), () -> "cannot be null"),
-                Case($(Person2::isActive), Answers::serviceDisable),
+                Case($(Person::isActive), Answers::serviceDisable),
                 Case($(), Answers::serviceActivate)
         );
     }
 
-    private static String serviceActivate(Person2 person2) {
+    private static String serviceActivate(Person person2) {
         return "activated";
     }
 
-    private static String serviceDisable(Person2 person2) {
+    private static String serviceDisable(Person person2) {
         return "deactivated";
     }
 
@@ -165,9 +168,9 @@ public class Answers {
         return 25;
     }
 
-    public static Integer decomposePerson3(Person3 person) {
+    public static Integer decomposePerson3(Person person) {
         return Match(person).of(
-                Case($Person3($(), $()), 
+                Case($PersonByCreditAssessSubjects($(), $()), 
                         (account, address) -> serviceMethodAssess(new CreditAssessSubjects(
                                 account.getBalance(), 
                                 account.getSalary(), 
@@ -232,11 +235,11 @@ public class Answers {
         );
     }
 
-    public static String allOfTest(Person4 person) {
-        Predicate<Person4> isActive = Person4::isActive;
-        Predicate<Person4> isVIP = p -> p.getType() == PersonType.VIP;
-        Predicate<Person4> isRegular = p -> p.getType() == PersonType.REGULAR;
-        Predicate<Person4> isTemporary = p -> p.getType() == PersonType.TEMPORARY;
+    public static String allOfTest(Person person) {
+        Predicate<Person> isActive = Person::isActive;
+        Predicate<Person> isVIP = p -> p.getType() == PersonType.VIP;
+        Predicate<Person> isRegular = p -> p.getType() == PersonType.REGULAR;
+        Predicate<Person> isTemporary = p -> p.getType() == PersonType.TEMPORARY;
 
         return Match(person).of(
                 Case($(isNull()), () -> {throw new IllegalArgumentException("not null");}),
@@ -264,9 +267,9 @@ public class Answers {
         }
     }
 
-    public static String noneOfTest(Person4 person) {
-        Predicate<Person4> isVIP = p -> p.getType() == PersonType.VIP;
-        Predicate<Person4> hasBigSalary = p -> p.getSalary() > 1000;
+    public static String noneOfTest(Person person) {
+        Predicate<Person> isVIP = p -> p.getType() == PersonType.VIP;
+        Predicate<Person> hasBigSalary = p -> p.getSalary() > 1000;
 
         return Match(person).of(
                 Case($(noneOf(isVIP, hasBigSalary)), "handle rest"),
@@ -274,9 +277,9 @@ public class Answers {
         );
     }
 
-    public static String anyOfTest(Person4 person) {
-        Predicate<Person4> isVIP = p -> p.getType() == PersonType.VIP;
-        Predicate<Person4> hasBigSalary = p -> p.getSalary() > 1000;
+    public static String anyOfTest(Person person) {
+        Predicate<Person> isVIP = p -> p.getType() == PersonType.VIP;
+        Predicate<Person> hasBigSalary = p -> p.getSalary() > 1000;
 
         return Match(person).of(
                 Case($(anyOf(isVIP, hasBigSalary)), "handle special"),
