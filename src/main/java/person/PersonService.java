@@ -38,19 +38,18 @@ public class PersonService {
     public static Either<String, Person> assemblePerson(ValidPersonRequest request) {
         return Match(request).of(
                 Case($(allOf(PersonService::businessRule1, PersonService::businessRule2)),
-                        () ->
-                                Either.right(Person.builder()
-                                        .type(request.getType())
-                                        .active(request.isActive())
-                                        .address(Address.builder()
-                                                .city(request.getCity())
-                                                .country(request.getCountry())
-                                                .build())
-                                        .account(Account.builder()
-                                                .salary(request.getSalary())
-                                                .balance(request.getBalance())
-                                                .build())
-                                        .build())),
+                        () -> Either.right(Person.builder()
+                                .type(request.getType())
+                                .active(request.isActive())
+                                .address(Address.builder()
+                                        .city(request.getCity())
+                                        .country(request.getCountry())
+                                        .build())
+                                .account(Account.builder()
+                                        .salary(request.getSalary())
+                                        .balance(request.getBalance())
+                                        .build())
+                                .build())),
                 Case($(), () -> Either.left("not all business rules are matched"))
         );
     }
