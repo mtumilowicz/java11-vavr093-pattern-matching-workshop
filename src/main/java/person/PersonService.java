@@ -41,7 +41,7 @@ public class PersonService {
         return Match(request).of(
                 Case($(allOf(PersonService::businessRule1, PersonService::vipIsActive)),
                         /*
-                         to consideration: maybe also Person creation itself should also be protected 
+                         to consideration: maybe Person creation itself should also be protected 
                          against some of that rules
                          */
                         () -> Either.right(Person.builder()
