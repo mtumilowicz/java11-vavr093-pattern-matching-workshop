@@ -123,10 +123,20 @@ class Tests extends Specification {
                 .city("Warsaw")
                 .country("Poland")
                 .build()
+        def validRequestNotFulfillBusinessRules = ValidPersonRequest.builder()
+                .type(PersonType.VIP)
+                .active(false)
+                .salary(Salary.of(1000))
+                .balance(2000)
+                .city("Warsaw")
+                .country("Poland")
+                .build()
+        and:
         def nullDecompose = Answers.eitherDecompose(null)
         def canBeFixed = Answers.eitherDecompose(Either.left(requestCanBeFixed))
         def cannotBeFixed = Answers.eitherDecompose(Either.left(requestCannotBeFixed))
         def valid = Answers.eitherDecompose(Either.right(validRequest))
+        def notFulfillBusinessRules = Answers.eitherDecompose(Either.right(validRequestNotFulfillBusinessRules))
 
         expect:
         nullDecompose == Either.left('cannot be null')
@@ -149,6 +159,7 @@ class Tests extends Specification {
                         .country("Poland")
                         .build())
                 .build())
+        notFulfillBusinessRules == Either.left("not all business rules are matched")
     }
 
     def "optionDecompose, cannot find in database"() {

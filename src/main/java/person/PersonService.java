@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 
 import static io.vavr.API.*;
 import static io.vavr.Predicates.allOf;
+import static java.util.function.Predicate.not;
 
 /**
  * Created by mtumilowicz on 2019-05-02.
@@ -37,7 +38,7 @@ public class PersonService {
 
     public static Either<String, Person> assemblePerson(ValidPersonRequest request) {
         return Match(request).of(
-                Case($(allOf(PersonService::businessRule1, PersonService::businessRule2)),
+                Case($(allOf(PersonService::businessRule1, PersonService::vipIsActive)),
                         () -> Either.right(Person.builder()
                                 .type(request.getType())
                                 .active(request.isActive())
@@ -66,7 +67,12 @@ public class PersonService {
         return true;
     }
 
-    private static boolean businessRule2(ValidPersonRequest request) {
-        return true;
+    private static boolean vipIsActive(ValidPersonRequest validRequest) {
+        Predicate<ValidPersonRequest> isVip = request -> request.getType() == PersonType.VIP;
+        Predicate<ValidPersonRequest> isActive = ValidPersonRequest::isActive;
+        return Match(validRequest).of(
+                Case($(allOf(isVip, not(isActive))), false),
+                Case($(), true)
+        );
     }
 }
