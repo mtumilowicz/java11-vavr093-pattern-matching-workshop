@@ -30,7 +30,6 @@ import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjec
 TO-DO:
 1. add personByType pattern
 1. eitherDecompose -  more real life example - full request mapped to the full person
-1. localDateDecompose - tax rate
 1. optionDecompose, tryDecompose - better examples (maybe sth from workshops, try - recover, option - ?)
 1. Workshop (with switch / case, if)
 1. readme
@@ -109,14 +108,15 @@ public class Answers {
         );
     }
 
-    public static String ifSyntax(@NonNull Person person) {
+    public static String ifSyntax(Person person) {
         return Match(person).of(
+                Case($(isNull()), "cannot be null"),
                 Case($(Person::isActive), PersonService::disable),
                 Case($(), PersonService::activate)
         );
     }
 
-    public static int localDateDecompose(@NonNull LocalDate date) {
+    public static int getTaxRateFor(@NonNull LocalDate date) {
         return Match(date).of(
                 Case($LocalDate($(year -> year < 2015), $(), $()), TaxService::taxBefore2015),
                 Case($LocalDate($(year -> year > 2015), $(), $()), TaxService::taxAfter2015)

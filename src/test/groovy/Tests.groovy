@@ -161,14 +161,14 @@ class Tests extends Specification {
         Answers.ifSyntax(activePerson) == 'deactivated'
     }
 
-    def "localDateDecompose"() {
+    def "getTaxRateFor"() {
         given:
         def _2010_10_10 = LocalDate.of(2010, 10, 10)
         def _2019_10_10 = LocalDate.of(2019, 10, 10)
         
         expect:
-        Answers.localDateDecompose(_2010_10_10) == 15
-        Answers.localDateDecompose(_2019_10_10) == 25
+        Answers.getTaxRateFor(_2010_10_10) == 15
+        Answers.getTaxRateFor(_2019_10_10) == 25
     }
 
     def "decomposePerson"() {
