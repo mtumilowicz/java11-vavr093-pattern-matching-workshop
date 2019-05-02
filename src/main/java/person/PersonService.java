@@ -4,6 +4,8 @@ import io.vavr.control.Either;
 import person.request.PersonRequest;
 import person.request.ValidPersonRequest;
 
+import java.util.function.Predicate;
+
 import static io.vavr.API.*;
 import static io.vavr.Predicates.allOf;
 
@@ -13,18 +15,19 @@ import static io.vavr.Predicates.allOf;
 public class PersonService {
 
     public static Either<String, Person> patch(PersonRequest personRequest) {
+        Predicate<PersonRequest> negativeSalary = request -> request.getSalary() < 0;
         return Match(personRequest).of(
-                Case($(request -> request.getSalary() < 0),
+                Case($(negativeSalary),
                         request -> Either.right(
                                 Person.builder()
-                                        .type(personRequest.getType())
+                                        .type(request.getType())
                                         .active(false)
                                         .address(Address.builder()
-                                                .city(personRequest.getCity())
-                                                .country(personRequest.getCountry())
+                                                .city(request.getCity())
+                                                .country(request.getCountry())
                                                 .build())
                                         .account(Account.builder()
-                                                .balance(personRequest.getBalance())
+                                                .balance(request.getBalance())
                                                 .build())
                                         .build()
                         )),
