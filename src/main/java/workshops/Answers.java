@@ -1,26 +1,26 @@
 package workshops;
 
 import com.google.common.collect.Range;
+import credit.CreditAssessmentService;
 import io.vavr.CheckedRunnable;
 import io.vavr.collection.Seq;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
-import person.CreditAssessSubjects;
-import person.Person;
-import person.PersonType;
+import person.*;
 import request.BadRequest;
+import tax.TaxService;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 import static io.vavr.API.*;
 import static io.vavr.Patterns.*;
 import static io.vavr.Predicates.*;
 import static java.util.function.Predicate.not;
-import static workshops.DecompositionAnswersPatterns.*;
+import static workshops.DecompositionAnswersPatterns.$LocalDate;
+import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjects;
 
 /**
  * Created by mtumilowicz on 2019-05-01.
@@ -28,7 +28,7 @@ import static workshops.DecompositionAnswersPatterns.*;
 /*
 TO-DO:
 1. add personByType pattern
-1. break this class into little classes (ex. personService)
+1. find and replace all ex. person3 -> person
 1. renaming tests
 1. better Try example (maybe with recover - take from Try workshop)
 1. Workshop (with switch / case, if)
@@ -61,25 +61,12 @@ public class Answers {
 
     public static String switchOnEnum(Person person) {
         return Match(person.getType()).of(
-                Case($(PersonType.VIP), () -> getFullStats(person)),
-                Case($(PersonType.REGULAR), () -> getStats(person)),
-                Case($(PersonType.TEMPORARY), () -> getFastStats(person)),
+                Case($(PersonType.VIP), () -> StatsService.getFullStats(person)),
+                Case($(PersonType.REGULAR), () -> StatsService.getStats(person)),
+                Case($(PersonType.TEMPORARY), () -> StatsService.getFastStats(person)),
                 Case($(), ignore -> {
                     throw new IllegalStateException("value not supported");
                 }));
-    }
-
-    private static String getFullStats(Person person) {
-        return "full stats";
-    }
-
-
-    private static String getStats(Person person) {
-        return "just stats";
-    }
-
-    private static String getFastStats(Person person) {
-        return "fast stats";
     }
 
     public static LocalDate rawDateMapper(String date) {
@@ -96,38 +83,19 @@ public class Answers {
     public static Either<String, Person> eitherDecompose(Either<BadRequest, Person> either) {
         return Match(either).of(
                 Case($(isNull()), () -> Either.left("cannot be null")),
-                Case($Left($()), Answers::patch),
-                Case($Right($()), Answers::processPerson)
+                Case($Left($()), PersonService::patch),
+                Case($Right($()), PersonService::processPerson)
         );
     }
 
-    private static Either<String, Person> patch(BadRequest badRequest) {
-        return Objects.equals(badRequest.getMessage(), "can be fixed")
-                ? Either.right(Person.builder().build())
-                : Either.left("cannot be fixed, too many errors");
-
-    }
-
-    private static Either<String, Person> processPerson(Person person) {
-        return person.getType() == PersonType.VIP
-                ? Either.right(person)
-                : Either.left("cannot be processed, because ...");
-    }
-
     public static Option<String> optionDecompose(int id, List<String> logfile) {
-        return Match(findById(id)).of(
+        return Match(PersonRepository.findById(id)).of(
                 Case($None(), () -> {
                     logfile.add("cannot find for id = " + id);
                     return Option.none();
                 }),
                 Case($Some($()), value -> Option.some("processed " + id))
         );
-    }
-
-    private static Option<String> findById(int id) {
-        return id == 1
-                ? Option.some("found in database")
-                : Option.none();
     }
 
     public static Try<Integer> tryDecompose(String number) {
@@ -142,71 +110,29 @@ public class Answers {
     public static String ifSyntax(Person person2) {
         return Match(person2).of(
                 Case($(isNull()), () -> "cannot be null"),
-                Case($(Person::isActive), Answers::serviceDisable),
-                Case($(), Answers::serviceActivate)
+                Case($(Person::isActive), PersonService::disable),
+                Case($(), PersonService::activate)
         );
-    }
-
-    private static String serviceActivate(Person person2) {
-        return "activated";
-    }
-
-    private static String serviceDisable(Person person2) {
-        return "deactivated";
     }
 
     public static int localDateDecompose(LocalDate date) {
         return Match(date).of(
-                Case($LocalDate($(year -> year < 2015), $(), $()), Answers::taxBefore2015),
-                Case($LocalDate($(year -> year > 2015), $(), $()), Answers::taxAfter2015)
+                Case($LocalDate($(year -> year < 2015), $(), $()), TaxService::taxBefore2015),
+                Case($LocalDate($(year -> year > 2015), $(), $()), TaxService::taxAfter2015)
         );
-    }
-
-    private static int taxBefore2015() {
-        return 15;
-    }
-
-    private static int taxAfter2015() {
-        return 25;
     }
 
     public static Integer decomposePerson3(Person person) {
         return Match(person).of(
                 Case($PersonByCreditAssessSubjects($(), $()),
-                        (account, address) -> serviceMethodAssess(CreditAssessSubjects.builder()
-                                .balance(account.getBalance())
-                                .salary(account.getSalary())
-                                .country(address.getCountry())
-                                .build()
-                        ))
+                        (account, address) ->
+                                CreditAssessmentService.serviceMethodAssess(CreditAssessSubjects.builder()
+                                        .balance(account.getBalance())
+                                        .salary(account.getSalary())
+                                        .country(address.getCountry())
+                                        .build()
+                                ))
         );
-    }
-
-    private static int serviceMethodAssess(CreditAssessSubjects subjects) {
-        return Match(subjects).of(
-                Case($CreditAssessSubjects($(), $(), $()),
-                        (salary, balance, country) -> 5 * serviceMethodAssessBalance(balance) +
-                                3 * serviceMethodAssessSalary(salary) +
-                                2 * serviceMethodAssessCountry(country))
-        );
-    }
-
-    private static int serviceMethodAssessBalance(int balance) {
-        return balance < 1000
-                ? 25
-                : 50;
-    }
-
-    private static int serviceMethodAssessSalary(int salary) {
-        return salary < 3000
-                ? 6
-                : 10;
-    }
-
-    private static int serviceMethodAssessCountry(String country) {
-        return Objects.equals(country, "POLAND")
-                ? 120
-                : 30;
     }
 
     public static Either<Seq<Throwable>, Seq<Integer>> existsTest(Seq<Try<Integer>> list) {
