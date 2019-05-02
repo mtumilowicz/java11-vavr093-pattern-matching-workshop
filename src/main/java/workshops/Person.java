@@ -3,6 +3,10 @@ package workshops;
 import lombok.Builder;
 import lombok.Value;
 
+import java.util.function.Predicate;
+
+import static io.vavr.API.*;
+
 /**
  * Created by mtumilowicz on 2019-05-01.
  */
@@ -13,17 +17,12 @@ public class Person {
     boolean active;
     Account account;
     Address address;
-
-    public boolean isVip() {
-        return type == PersonType.VIP;
-    }
-
-    public boolean isRegular() {
-        return type == PersonType.REGULAR;
-    }
-
-    public boolean isTemporary() {
-        return type == PersonType.TEMPORARY;
+    
+    public static Predicate<Person> hasType(PersonType type) {
+        return p -> Match(p.type).of(
+                Case($(type), true),
+                Case($(), false)
+        );
     }
 
     public boolean hasBigSalary() {

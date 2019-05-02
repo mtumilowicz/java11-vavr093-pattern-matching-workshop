@@ -23,7 +23,6 @@ import static workshops.DecompositionAnswersPatterns.*;
  */
 /*
 TO-DO:
-1. rewrite isVip isRegular using pattern matching is() returns Predicate(Person)
 1. add personByType pattern
 1. renaming tests
 1. better Try example (maybe with recover - take from Try workshop)
@@ -236,12 +235,12 @@ public class Answers {
     public static String allOfTest(Person person) {
         return Match(person).of(
                 Case($(isNull()), () -> {throw new IllegalArgumentException("not null");}),
-                Case($(allOf(Person::isVip, Person::isActive)), "vip + active"),
-                Case($(allOf(Person::isVip, not(Person::isActive))), "vip + not active"),
-                Case($(allOf(Person::isRegular, Person::isActive)), "regular + active"),
-                Case($(allOf(Person::isRegular, not(Person::isActive))), "regular + not active"),
-                Case($(allOf(Person::isTemporary, Person::isActive)), "temporary + active"),
-                Case($(allOf(Person::isTemporary, not(Person::isActive))), "temporary + not active"),
+                Case($(allOf(Person.hasType(PersonType.VIP), Person::isActive)), "vip + active"),
+                Case($(allOf(Person.hasType(PersonType.VIP), not(Person::isActive))), "vip + not active"),
+                Case($(allOf(Person.hasType(PersonType.REGULAR), Person::isActive)), "regular + active"),
+                Case($(allOf(Person.hasType(PersonType.REGULAR), not(Person::isActive))), "regular + not active"),
+                Case($(allOf(Person.hasType(PersonType.TEMPORARY), Person::isActive)), "temporary + active"),
+                Case($(allOf(Person.hasType(PersonType.TEMPORARY), not(Person::isActive))), "temporary + not active"),
                 Case($(), () -> {throw new IllegalArgumentException("case not supported");})
         );
     }
@@ -262,14 +261,14 @@ public class Answers {
 
     public static String noneOfTest(Person person) {
         return Match(person).of(
-                Case($(noneOf(Person::isVip, Person::hasBigSalary)), "handle rest"),
+                Case($(noneOf(Person.hasType(PersonType.VIP), Person::hasBigSalary)), "handle rest"),
                 Case($(), "handle special")
         );
     }
 
     public static String anyOfTest(Person person) {
         return Match(person).of(
-                Case($(anyOf(Person::isVip, Person::hasBigSalary)), "handle special"),
+                Case($(anyOf(Person.hasType(PersonType.VIP), Person::hasBigSalary)), "handle special"),
                 Case($(), "handle rest")
         );
     }
