@@ -6,8 +6,8 @@ import person.Account
 import person.Address
 import person.Person
 import person.PersonType
-import request.BadRequest
-import request.Request
+import request.PersonRequest
+import request.ValidPersonRequest
 import spock.lang.Specification
 import workshops.Answers
 
@@ -107,16 +107,51 @@ class Tests extends Specification {
 
     def "eitherDecompose"() {
         given:
-        def requestCanBeFixed = BadRequest.of(new Request(), 'can be fixed')
-        def requestCannotBeFixed = BadRequest.of(new Request(), 'cannot be fixed')
+        def requestCanBeFixed = PersonRequest.builder()
+                .type(PersonType.VIP)
+                .salary(-1000)
+                .build()
+        def requestCannotBeFixed = PersonRequest.builder()
+                .type(PersonType.VIP)
+                .build()
+        def validRequest = ValidPersonRequest.builder()
+                .type(PersonType.REGULAR)
+                .active(true)
+                .account(Account.builder()
+                        .salary(1000)
+                        .balance(2000)
+                        .build())
+                .address(Address.builder()
+                        .city("Warsaw")
+                        .country("Poland")
+                        .build())
+                .build()
         def nullDecompose = Answers.eitherDecompose(null)
         def canBeFixed = Answers.eitherDecompose(Either.left(requestCanBeFixed))
         def cannotBeFixed = Answers.eitherDecompose(Either.left(requestCannotBeFixed))
-        
+        def valid = Answers.eitherDecompose(Either.right(validRequest))
+
         expect:
         nullDecompose == Either.left('cannot be null')
-        canBeFixed == Either.right(Person.builder().build())
+        canBeFixed == Either.right(Person.builder()
+                .type(PersonType.VIP)
+                .account(Account.builder().build())
+                .address(Address.builder().build())
+                .active(false)
+                .build())
         cannotBeFixed == Either.left('cannot be fixed, too many errors')
+        valid == Either.right(Person.builder()
+                .type(PersonType.REGULAR)
+                .active(true)
+                .account(Account.builder()
+                        .salary(1000)
+                        .balance(2000)
+                        .build())
+                .address(Address.builder()
+                        .city("Warsaw")
+                        .country("Poland")
+                        .build())
+                .build())
     }
 
     def "optionDecompose, cannot find in database"() {
@@ -154,7 +189,7 @@ class Tests extends Specification {
         given:
         def activePerson = Person.builder().active(true).build()
         def inactivePerson = Person.builder().active(false).build()
-        
+
         expect:
         Answers.ifSyntax(null) == 'cannot be null'
         Answers.ifSyntax(inactivePerson) == 'activated'
@@ -165,7 +200,7 @@ class Tests extends Specification {
         given:
         def _2010_10_10 = LocalDate.of(2010, 10, 10)
         def _2019_10_10 = LocalDate.of(2019, 10, 10)
-        
+
         expect:
         Answers.getTaxRateFor(_2010_10_10) == 15
         Answers.getTaxRateFor(_2019_10_10) == 25
@@ -266,7 +301,7 @@ class Tests extends Specification {
         Answers.allOfTest(temporaryActive) == 'temporary + active'
         Answers.allOfTest(temporaryNotActive) == 'temporary + not active'
     }
-    
+
     def "instanceOfTest"() {
         given:
         def noExceptionThrower = {}

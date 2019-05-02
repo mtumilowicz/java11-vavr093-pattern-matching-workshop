@@ -9,7 +9,8 @@ import io.vavr.control.Option;
 import io.vavr.control.Try;
 import lombok.NonNull;
 import person.*;
-import request.BadRequest;
+import request.PersonRequest;
+import request.ValidPersonRequest;
 import tax.TaxService;
 
 import java.io.IOException;
@@ -29,7 +30,7 @@ import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjec
 /*
 TO-DO:
 1. add personByType pattern
-1. eitherDecompose -  more real life example - full request mapped to the full person
+1. additional tests for eitherDecompose + PersonService
 1. optionDecompose, tryDecompose - better examples (maybe sth from workshops, try - recover, option - ?)
 1. Workshop (with switch / case, if)
 1. readme
@@ -81,11 +82,11 @@ public class Answers {
                 Case($(isNotNull()), LocalDate::parse));
     }
 
-    public static Either<String, Person> eitherDecompose(Either<BadRequest, Person> either) {
+    public static Either<String, Person> eitherDecompose(Either<PersonRequest, ValidPersonRequest> either) {
         return Match(either).of(
                 Case($(isNull()), () -> Either.left("cannot be null")),
                 Case($Left($()), PersonService::patch),
-                Case($Right($()), PersonService::processPerson)
+                Case($Right($()), PersonService::assemblePerson)
         );
     }
 
