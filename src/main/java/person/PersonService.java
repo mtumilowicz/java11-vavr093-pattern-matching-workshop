@@ -18,16 +18,16 @@ public class PersonService {
         Predicate<PersonRequest> negativeSalary = request -> request.getSalary() < 0;
         return Match(personRequest).of(
                 Case($(negativeSalary),
-                        request -> Either.right(
+                        () -> Either.right(
                                 Person.builder()
-                                        .type(request.getType())
+                                        .type(personRequest.getType())
                                         .active(false)
                                         .address(Address.builder()
-                                                .city(request.getCity())
-                                                .country(request.getCountry())
+                                                .city(personRequest.getCity())
+                                                .country(personRequest.getCountry())
                                                 .build())
                                         .account(Account.builder()
-                                                .balance(request.getBalance())
+                                                .balance(personRequest.getBalance())
                                                 .build())
                                         .build()
                         )),
@@ -38,17 +38,17 @@ public class PersonService {
     public static Either<String, Person> assemblePerson(ValidPersonRequest request) {
         return Match(request).of(
                 Case($(allOf(PersonService::businessRule1, PersonService::businessRule2)),
-                        validRequest ->
+                        () ->
                                 Either.right(Person.builder()
-                                        .type(validRequest.getType())
-                                        .active(validRequest.isActive())
+                                        .type(request.getType())
+                                        .active(request.isActive())
                                         .address(Address.builder()
-                                                .city(validRequest.getCity())
-                                                .country(validRequest.getCountry())
+                                                .city(request.getCity())
+                                                .country(request.getCountry())
                                                 .build())
                                         .account(Account.builder()
-                                                .salary(validRequest.getSalary())
-                                                .balance(validRequest.getBalance())
+                                                .salary(request.getSalary())
+                                                .balance(request.getBalance())
                                                 .build())
                                         .build())),
                 Case($(), () -> Either.left("not all business rules are matched"))
