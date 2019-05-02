@@ -11,11 +11,11 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
 
 import static io.vavr.API.*;
 import static io.vavr.Patterns.*;
 import static io.vavr.Predicates.*;
+import static java.util.function.Predicate.not;
 import static workshops.DecompositionAnswersPatterns.*;
 
 /**
@@ -23,7 +23,7 @@ import static workshops.DecompositionAnswersPatterns.*;
  */
 /*
 TO-DO:
-1. move predicates isVip... to Person
+1. rewrite isVip isRegular using pattern matching is() returns Predicate(Person)
 1. add personByType pattern
 1. renaming tests
 1. better Try example (maybe with recover - take from Try workshop)
@@ -234,19 +234,14 @@ public class Answers {
     }
 
     public static String allOfTest(Person person) {
-        Predicate<Person> isActive = Person::isActive;
-        Predicate<Person> isVIP = p -> p.getType() == PersonType.VIP;
-        Predicate<Person> isRegular = p -> p.getType() == PersonType.REGULAR;
-        Predicate<Person> isTemporary = p -> p.getType() == PersonType.TEMPORARY;
-
         return Match(person).of(
                 Case($(isNull()), () -> {throw new IllegalArgumentException("not null");}),
-                Case($(allOf(isVIP, isActive)), "vip + active"),
-                Case($(allOf(isVIP, isActive.negate())), "vip + not active"),
-                Case($(allOf(isRegular, isActive)), "regular + active"),
-                Case($(allOf(isRegular, isActive.negate())), "regular + not active"),
-                Case($(allOf(isTemporary, isActive)), "temporary + active"),
-                Case($(allOf(isTemporary, isActive.negate())), "temporary + not active"),
+                Case($(allOf(Person::isVip, Person::isActive)), "vip + active"),
+                Case($(allOf(Person::isVip, not(Person::isActive))), "vip + not active"),
+                Case($(allOf(Person::isRegular, Person::isActive)), "regular + active"),
+                Case($(allOf(Person::isRegular, not(Person::isActive))), "regular + not active"),
+                Case($(allOf(Person::isTemporary, Person::isActive)), "temporary + active"),
+                Case($(allOf(Person::isTemporary, not(Person::isActive))), "temporary + not active"),
                 Case($(), () -> {throw new IllegalArgumentException("case not supported");})
         );
     }
@@ -266,21 +261,15 @@ public class Answers {
     }
 
     public static String noneOfTest(Person person) {
-        Predicate<Person> isVIP = p -> p.getType() == PersonType.VIP;
-        Predicate<Person> hasBigSalary = p -> p.getSalary() > 1000;
-
         return Match(person).of(
-                Case($(noneOf(isVIP, hasBigSalary)), "handle rest"),
+                Case($(noneOf(Person::isVip, Person::hasBigSalary)), "handle rest"),
                 Case($(), "handle special")
         );
     }
 
     public static String anyOfTest(Person person) {
-        Predicate<Person> isVIP = p -> p.getType() == PersonType.VIP;
-        Predicate<Person> hasBigSalary = p -> p.getSalary() > 1000;
-
         return Match(person).of(
-                Case($(anyOf(isVIP, hasBigSalary)), "handle special"),
+                Case($(anyOf(Person::isVip, Person::hasBigSalary)), "handle special"),
                 Case($(), "handle rest")
         );
     }
