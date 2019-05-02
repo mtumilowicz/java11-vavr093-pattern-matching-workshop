@@ -39,7 +39,11 @@ public class PersonService {
     public static Either<String, Person> assemblePerson(ValidPersonRequest request) {
         return Match(request).of(
                 Case($(allOf(PersonService::businessRule1, PersonService::vipIsActive)),
-                        () -> Either.right(Person.builder() // to consideration: maybe also Person creation itself should also be protected against some of that rules
+                        /*
+                         to consideration: maybe also Person creation itself should also be protected 
+                         against some of that rules
+                         */
+                        () -> Either.right(Person.builder()
                                 .type(request.getType())
                                 .active(request.isActive())
                                 .address(Address.builder()
