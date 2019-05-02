@@ -23,7 +23,6 @@ import static workshops.DecompositionAnswersPatterns.*;
  */
 /*
 TO-DO:
-1. account balance -> builders
 1. move predicates isVip... to Person
 1. add personByType pattern
 1. renaming tests

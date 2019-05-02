@@ -157,14 +157,22 @@ class Tests extends Specification {
 
     def "decomposePerson3"() {
         given:
-        Person p1 = Person.builder().account(new Account(20_000, 800)).address(new Address("POLAND", "WARSAW")).build()
-        Person p2 = Person.builder().account(new Account(1000, 2000)).address(new Address("USA", "NEW YORK")).build()
-        Person p3 = Person.builder().account(new Account(15_000, 950)).address(new Address("POLAND", "KRAKOW")).build()
+        Person p1 = Person.builder()
+                .account(Account.builder().salary(800).balance(20_000).build())
+                .address(Address.builder().country("POLAND").build())
+                .build()
+        Person p2 = Person.builder()
+                .account(Account.builder().salary(2000).balance(1000).build())
+                .address(Address.builder().country("USA").build())
+                .build()
+        Person p3 = Person.builder().account(Account.builder().salary(950).balance(15_000).build())
+                .address(Address.builder().country("POLAND").build())
+                .build()
 
         expect:
-        Answers.decomposePerson3(p1) == 215
+        Answers.decomposePerson3(p1) == 395
         Answers.decomposePerson3(p2) == 328
-        Answers.decomposePerson3(p3) == 215
+        Answers.decomposePerson3(p3) == 395
     }
 
     def "existsTest"() {
@@ -269,9 +277,15 @@ class Tests extends Specification {
 
     def "noneOfTest"() {
         given:
-        def vip = Person.builder().type(PersonType.VIP).account(new Account(1, 1)).build()
-        def bigSalary = Person.builder().type(PersonType.REGULAR).account(new Account(1, 3000)).build()
-        def regular = Person.builder().type(PersonType.REGULAR).account(new Account(1, 300)).build()
+        def vip = Person.builder().type(PersonType.VIP)
+                .account(Account.builder().salary(1).build())
+                .build()
+        def bigSalary = Person.builder().type(PersonType.REGULAR)
+                .account(Account.builder().salary(3000).build())
+                .build()
+        def regular = Person.builder().type(PersonType.REGULAR)
+                .account(Account.builder().salary(300).build())
+                .build()
 
         expect:
         Answers.noneOfTest(vip) == 'handle special'
@@ -281,9 +295,15 @@ class Tests extends Specification {
 
     def "anyOfTest"() {
         given:
-        def vip = Person.builder().type(PersonType.VIP).account(new Account(1, 1)).build()
-        def bigSalary = Person.builder().type(PersonType.REGULAR).account(new Account(1, 3000)).build()
-        def regular = Person.builder().type(PersonType.REGULAR).account(new Account(1, 300)).build()
+        def vip = Person.builder().type(PersonType.VIP)
+                .account(Account.builder().salary(1).build())
+                .build()
+        def bigSalary = Person.builder().type(PersonType.REGULAR)
+                .account(Account.builder().salary(3000).build())
+                .build()
+        def regular = Person.builder().type(PersonType.REGULAR)
+                .account(Account.builder().salary(300).build())
+                .build()
 
         expect:
         Answers.anyOfTest(vip) == 'handle special'
