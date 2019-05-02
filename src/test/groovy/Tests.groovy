@@ -266,15 +266,7 @@ class Tests extends Specification {
         Answers.allOfTest(temporaryActive) == 'temporary + active'
         Answers.allOfTest(temporaryNotActive) == 'temporary + not active'
     }
-
-    def "allOfTest guard"() {
-        when:
-        Answers.allOfTest(null)
-
-        then:
-        thrown(IllegalArgumentException)
-    }
-
+    
     def "instanceOfTest"() {
         given:
         def noExceptionThrower = {}

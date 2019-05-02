@@ -29,7 +29,6 @@ import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjec
 /*
 TO-DO:
 1. add personByType pattern
-1. renaming tests
 1. eitherDecompose -  more real life example - full request mapped to the full person
 1. localDateDecompose - tax rate
 1. rename methods in Answers
@@ -168,11 +167,8 @@ public class Answers {
         );
     }
 
-    public static String allOfTest(Person person) {
+    public static String allOfTest(@NonNull Person person) {
         return Match(person).of(
-                Case($(isNull()), () -> {
-                    throw new IllegalArgumentException("not null");
-                }),
                 Case($(allOf(Person.hasType(PersonType.VIP), Person::isActive)), "vip + active"),
                 Case($(allOf(Person.hasType(PersonType.VIP), not(Person::isActive))), "vip + not active"),
                 Case($(allOf(Person.hasType(PersonType.REGULAR), Person::isActive)), "regular + active"),
@@ -185,7 +181,7 @@ public class Answers {
         );
     }
 
-    public static String instanceOfTest(CheckedRunnable runnable) {
+    public static String instanceOfTest(@NonNull CheckedRunnable runnable) {
         try {
             runnable.run();
             return "no exception";
