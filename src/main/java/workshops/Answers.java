@@ -15,7 +15,6 @@ import tax.TaxService;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
 
 import static io.vavr.API.*;
 import static io.vavr.Patterns.*;
@@ -31,8 +30,7 @@ import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjec
 TO-DO:
 1. add personByType pattern
 1. additional tests for eitherDecompose + PersonService
-1. optionDecompose, tryDecompose - better examples (maybe sth from workshops, try - recover, option - ?)
-1. optionDecompose -> push to the display
+1. tryDecompose - better examples (maybe sth from workshops, try - recover)
 1. Workshop (with switch / case, if)
 1. readme
  */
@@ -91,13 +89,10 @@ public class Answers {
         );
     }
 
-    public static Option<String> optionDecompose(int id, List<String> logfile) {
-        return Match(PersonRepository.findById(id)).of(
-                Case($None(), () -> {
-                    logfile.add("cannot find for id = " + id);
-                    return Option.none();
-                }),
-                Case($Some($()), value -> Option.some("processed " + id))
+    public static void optionDecompose(int id, Display display) {
+        Match(PersonRepository.findById(id)).of(
+                Case($None(), run(() -> display.push("cannot find person with id = " + id))),
+                Case($Some($()),  value -> run(() -> display.push("person: " + value + " processed")))
         );
     }
 

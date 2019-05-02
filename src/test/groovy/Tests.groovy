@@ -11,6 +11,7 @@ import person.request.PersonRequest
 import person.request.ValidPersonRequest
 import spock.lang.Specification
 import workshops.Answers
+import workshops.Display
 
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
@@ -164,22 +165,26 @@ class Tests extends Specification {
 
     def "optionDecompose, cannot find in database"() {
         given:
-        def logfile = []
+        def display = new Display()
         def notExistsId = 2
 
-        expect:
-        Answers.optionDecompose(notExistsId, logfile) == Option.none()
-        logfile == ["cannot find for id = ${notExistsId}"]
+        when:
+        Answers.optionDecompose(notExistsId, display)
+        
+        then:
+        display.message == "cannot find person with id = ${notExistsId}"
     }
 
     def "optionDecompose, found in database"() {
         given:
-        def logfile = []
+        def display = new Display()
         def existsId = 1
 
-        expect:
-        Answers.optionDecompose(existsId, logfile) == Option.some('processed ' + existsId)
-        logfile == []
+        when:
+        Answers.optionDecompose(existsId, display)
+        
+        then:
+        display.message == "person: ${existsId} processed"
     }
 
     def "tryDecompose"() {
