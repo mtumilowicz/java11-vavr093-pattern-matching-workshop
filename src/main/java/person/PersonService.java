@@ -60,11 +60,11 @@ public class PersonService {
         return "deactivated";
     }
 
-    static boolean businessRule1(ValidPersonRequest request) {
+    private static boolean businessRule1(ValidPersonRequest request) {
         return true;
     }
 
-    static boolean businessRule2(ValidPersonRequest request) {
+    private static boolean businessRule2(ValidPersonRequest request) {
         return true;
     }
 }
