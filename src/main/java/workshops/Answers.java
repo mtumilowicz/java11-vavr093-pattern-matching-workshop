@@ -7,6 +7,7 @@ import io.vavr.collection.Seq;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
+import lombok.NonNull;
 import person.*;
 import request.BadRequest;
 import tax.TaxService;
@@ -34,7 +35,7 @@ TO-DO:
 1. rename methods in Answers
 1. use ' instead of " in tests
 1. add guards everywhere
-1. better Try example (maybe with recover - take from Try workshop)
+1. optionDecompose, tryDecompose - better examples (maybe sth from workshops, try - recover, option - ?)
 1. Workshop (with switch / case, if)
 1. readme
  */
@@ -63,7 +64,7 @@ public class Answers {
                 }));
     }
 
-    public static String switchOnEnum(Person person) {
+    public static String switchOnEnum(@NonNull Person person) {
         return Match(person.getType()).of(
                 Case($(PersonType.VIP), () -> StatsService.getFullStats(person)),
                 Case($(PersonType.REGULAR), () -> StatsService.getStats(person)),
@@ -119,14 +120,14 @@ public class Answers {
         );
     }
 
-    public static int localDateDecompose(LocalDate date) {
+    public static int localDateDecompose(@NonNull LocalDate date) {
         return Match(date).of(
                 Case($LocalDate($(year -> year < 2015), $(), $()), TaxService::taxBefore2015),
                 Case($LocalDate($(year -> year > 2015), $(), $()), TaxService::taxAfter2015)
         );
     }
 
-    public static Integer decomposePerson(Person person) {
+    public static Integer decomposePerson(@NonNull Person person) {
         return Match(person).of(
                 Case($PersonByCreditAssessSubjects($(), $()),
                         (account, address) ->
@@ -139,7 +140,7 @@ public class Answers {
         );
     }
 
-    public static Either<Seq<Throwable>, Seq<Integer>> existsTest(Seq<Try<Integer>> list) {
+    public static Either<Seq<Throwable>, Seq<Integer>> existsTest(@NonNull Seq<Try<Integer>> list) {
         return Match(list).of(
                 Case($(exists(Try::isFailure)),
                         tries -> Either.left(tries
@@ -154,7 +155,7 @@ public class Answers {
         );
     }
 
-    public static Either<Seq<Throwable>, Seq<Integer>> forAllTest(Seq<Try<Integer>> list) {
+    public static Either<Seq<Throwable>, Seq<Integer>> forAllTest(@NonNull Seq<Try<Integer>> list) {
         return Match(list).of(
                 Case($(forAll(Try::isSuccess)),
                         tries -> Either.right(tries
@@ -200,14 +201,14 @@ public class Answers {
         }
     }
 
-    public static String noneOfTest(Person person) {
+    public static String noneOfTest(@NonNull Person person) {
         return Match(person).of(
                 Case($(noneOf(Person.hasType(PersonType.VIP), Person::hasBigSalary)), "handle rest"),
                 Case($(), "handle special")
         );
     }
 
-    public static String anyOfTest(Person person) {
+    public static String anyOfTest(@NonNull Person person) {
         return Match(person).of(
                 Case($(anyOf(Person.hasType(PersonType.VIP), Person::hasBigSalary)), "handle special"),
                 Case($(), "handle rest")
