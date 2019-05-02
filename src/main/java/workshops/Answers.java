@@ -28,7 +28,6 @@ import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjec
 /*
 TO-DO:
 1. add personByType pattern
-1. use def in tests
 1. renaming tests
 1. better Try example (maybe with recover - take from Try workshop)
 1. Workshop (with switch / case, if)

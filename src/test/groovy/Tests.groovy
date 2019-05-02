@@ -1,16 +1,15 @@
-import io.vavr.CheckedRunnable
 import io.vavr.collection.List
 import io.vavr.control.Either
 import io.vavr.control.Option
 import io.vavr.control.Try
-import spock.lang.Specification
-import workshops.*
 import person.Account
 import person.Address
 import person.Person
 import person.PersonType
 import request.BadRequest
 import request.Request
+import spock.lang.Specification
+import workshops.Answers
 
 import java.time.LocalDate
 import java.time.format.DateTimeParseException
@@ -163,15 +162,15 @@ class Tests extends Specification {
 
     def "decomposePerson"() {
         given:
-        Person p1 = Person.builder()
+        def p1 = Person.builder()
                 .account(Account.builder().salary(800).balance(20_000).build())
                 .address(Address.builder().country("POLAND").build())
                 .build()
-        Person p2 = Person.builder()
+        def p2 = Person.builder()
                 .account(Account.builder().salary(2000).balance(1000).build())
                 .address(Address.builder().country("USA").build())
                 .build()
-        Person p3 = Person.builder().account(Account.builder().salary(950).balance(15_000).build())
+        def p3 = Person.builder().account(Account.builder().salary(950).balance(15_000).build())
                 .address(Address.builder().country("POLAND").build())
                 .build()
 
@@ -267,18 +266,18 @@ class Tests extends Specification {
 
     def "instanceOfTest"() {
         given:
-        CheckedRunnable noException = {}
-        CheckedRunnable illegalArgumentException = { throw new IllegalArgumentException() }
-        CheckedRunnable runtimeException = { throw new RuntimeException() }
-        CheckedRunnable iOException = { throw new IOException() }
-        CheckedRunnable classNotFoundException = { throw new ClassNotFoundException() }
+        def noExceptionThrower = {}
+        def illegalArgumentExceptionThrower = { throw new IllegalArgumentException() }
+        def runtimeExceptionThrower = { throw new RuntimeException() }
+        def iOExceptionThrower = { throw new IOException() }
+        def classNotFoundExceptionThrower = { throw new ClassNotFoundException() }
 
         expect:
-        Answers.instanceOfTest(noException) == 'no exception'
-        Answers.instanceOfTest(illegalArgumentException) == 'IllegalArgumentException'
-        Answers.instanceOfTest(runtimeException) == 'RuntimeException'
-        Answers.instanceOfTest(iOException) == 'IOException'
-        Answers.instanceOfTest(classNotFoundException) == 'handle rest'
+        Answers.instanceOfTest(noExceptionThrower) == 'no exception'
+        Answers.instanceOfTest(illegalArgumentExceptionThrower) == 'IllegalArgumentException'
+        Answers.instanceOfTest(runtimeExceptionThrower) == 'RuntimeException'
+        Answers.instanceOfTest(iOExceptionThrower) == 'IOException'
+        Answers.instanceOfTest(classNotFoundExceptionThrower) == 'handle rest'
     }
 
     def "noneOfTest"() {
