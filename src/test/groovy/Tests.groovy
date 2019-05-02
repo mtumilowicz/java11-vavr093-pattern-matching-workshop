@@ -61,9 +61,9 @@ class Tests extends Specification {
 
     def "switchOnEnum"() {
         expect:
-        Answers.switchOnEnum(Person.ofType(Person.PersonType.VIP)) == PersonStats.of(PersonStats.PersonStatsType.FULL)
-        Answers.switchOnEnum(Person.ofType(Person.PersonType.ORDINARY)) == PersonStats.of(PersonStats.PersonStatsType.NORMAL)
-        Answers.switchOnEnum(Person.ofType(Person.PersonType.TEMPORARY)) == PersonStats.of(PersonStats.PersonStatsType.FAST)
+        Answers.switchOnEnum(Person.ofType(PersonType.VIP)) == PersonStats.of(PersonStats.PersonStatsType.FULL)
+        Answers.switchOnEnum(Person.ofType(PersonType.REGULAR)) == PersonStats.of(PersonStats.PersonStatsType.NORMAL)
+        Answers.switchOnEnum(Person.ofType(PersonType.TEMPORARY)) == PersonStats.of(PersonStats.PersonStatsType.FAST)
     }
 
     def "switchOnEnum, guard"() {
@@ -227,18 +227,18 @@ class Tests extends Specification {
 
     def "allOfTest"() {
         given:
-        def vipActive = new Person4(Person.PersonType.VIP, true, 1)
-        def vipNotActive = new Person4(Person.PersonType.VIP, false, 1)
-        def ordinaryActive = new Person4(Person.PersonType.ORDINARY, true, 1)
-        def ordinaryNotActive = new Person4(Person.PersonType.ORDINARY, false, 1)
-        def temporaryActive = new Person4(Person.PersonType.TEMPORARY, true, 1)
-        def temporaryNotActive = new Person4(Person.PersonType.TEMPORARY, false, 1)
+        def vipActive = new Person4(PersonType.VIP, true, 1)
+        def vipNotActive = new Person4(PersonType.VIP, false, 1)
+        def regularActive = new Person4(PersonType.REGULAR, true, 1)
+        def regularNotActive = new Person4(PersonType.REGULAR, false, 1)
+        def temporaryActive = new Person4(PersonType.TEMPORARY, true, 1)
+        def temporaryNotActive = new Person4(PersonType.TEMPORARY, false, 1)
 
         expect:
         Answers.allOfTest(vipActive) == 'vip + active'
         Answers.allOfTest(vipNotActive) == 'vip + not active'
-        Answers.allOfTest(ordinaryActive) == 'ordinary + active'
-        Answers.allOfTest(ordinaryNotActive) == 'ordinary + not active'
+        Answers.allOfTest(regularActive) == 'regular + active'
+        Answers.allOfTest(regularNotActive) == 'regular + not active'
         Answers.allOfTest(temporaryActive) == 'temporary + active'
         Answers.allOfTest(temporaryNotActive) == 'temporary + not active'
     }
@@ -269,9 +269,9 @@ class Tests extends Specification {
     
     def "noneOfTest"() {
         given:
-        def vip = new Person4(Person.PersonType.VIP, true, 1)
-        def bigSalary = new Person4(Person.PersonType.ORDINARY, true, 3000)
-        def regular = new Person4(Person.PersonType.ORDINARY, true, 300)
+        def vip = new Person4(PersonType.VIP, true, 1)
+        def bigSalary = new Person4(PersonType.REGULAR, true, 3000)
+        def regular = new Person4(PersonType.REGULAR, true, 300)
         
         expect:
         Answers.noneOfTest(vip) == 'handle special'
@@ -281,9 +281,9 @@ class Tests extends Specification {
 
     def "anyOfTest"() {
         given:
-        def vip = new Person4(Person.PersonType.VIP, true, 1)
-        def bigSalary = new Person4(Person.PersonType.ORDINARY, true, 3000)
-        def regular = new Person4(Person.PersonType.ORDINARY, true, 300)
+        def vip = new Person4(PersonType.VIP, true, 1)
+        def bigSalary = new Person4(PersonType.REGULAR, true, 3000)
+        def regular = new Person4(PersonType.REGULAR, true, 300)
 
         expect:
         Answers.anyOfTest(vip) == 'handle special'

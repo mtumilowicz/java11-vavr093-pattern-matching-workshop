@@ -8,9 +8,4 @@ import lombok.Value;
 @Value(staticConstructor = "ofType")
 public class Person {
     PersonType type;
-    
-    public enum PersonType {
-        // TO-DO regular
-        ORDINARY, VIP, TEMPORARY
-    }
 }

@@ -9,7 +9,7 @@ import lombok.Value;
 @AllArgsConstructor
 @Value
 public class Person4 {
-    Person.PersonType type;
+    PersonType type;
     boolean active;
     int salary;
 }
