@@ -5,6 +5,7 @@ import person.request.PersonRequest;
 import person.request.ValidPersonRequest;
 
 import static io.vavr.API.*;
+import static io.vavr.Predicates.allOf;
 
 /**
  * Created by mtumilowicz on 2019-05-02.
@@ -32,18 +33,23 @@ public class PersonService {
     }
 
     public static Either<String, Person> assemblePerson(ValidPersonRequest request) {
-        return Either.right(Person.builder()
-                .type(request.getType())
-                .active(request.isActive())
-                .address(Address.builder()
-                        .city(request.getCity())
-                        .country(request.getCountry())
-                        .build())
-                .account(Account.builder()
-                        .salary(request.getSalary())
-                        .balance(request.getBalance())
-                        .build())
-                .build());
+        return Match(request).of(
+                Case($(allOf(PersonService::businessRule1, PersonService::businessRule2)),
+                        validRequest ->
+                                Either.right(Person.builder()
+                                        .type(validRequest.getType())
+                                        .active(validRequest.isActive())
+                                        .address(Address.builder()
+                                                .city(validRequest.getCity())
+                                                .country(validRequest.getCountry())
+                                                .build())
+                                        .account(Account.builder()
+                                                .salary(validRequest.getSalary())
+                                                .balance(validRequest.getBalance())
+                                                .build())
+                                        .build())),
+                Case($(), () -> Either.left("not all business rules are matched"))
+        );
     }
 
     public static String activate(Person person) {
@@ -52,5 +58,13 @@ public class PersonService {
 
     public static String disable(Person person) {
         return "deactivated";
+    }
+
+    static boolean businessRule1(ValidPersonRequest request) {
+        return true;
+    }
+
+    static boolean businessRule2(ValidPersonRequest request) {
+        return true;
     }
 }

@@ -30,7 +30,6 @@ import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjec
 /*
 TO-DO:
 1. add personByType pattern
-1. decomposeEither - businessRules
 1. additional tests for eitherDecompose + PersonService
 1. optionDecompose, tryDecompose - better examples (maybe sth from workshops, try - recover, option - ?)
 1. Workshop (with switch / case, if)
