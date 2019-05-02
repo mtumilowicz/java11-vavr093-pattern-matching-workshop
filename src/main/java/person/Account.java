@@ -10,5 +10,5 @@ import lombok.Value;
 @Builder
 public class Account {
     int balance;
-    int salary;
+    Salary salary;
 }

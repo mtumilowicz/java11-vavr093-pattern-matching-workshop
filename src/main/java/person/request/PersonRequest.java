@@ -1,4 +1,4 @@
-package request;
+package person.request;
 
 import lombok.Builder;
 import lombok.Value;

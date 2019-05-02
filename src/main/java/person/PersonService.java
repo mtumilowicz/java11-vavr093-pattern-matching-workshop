@@ -1,8 +1,8 @@
 package person;
 
 import io.vavr.control.Either;
-import request.PersonRequest;
-import request.ValidPersonRequest;
+import person.request.PersonRequest;
+import person.request.ValidPersonRequest;
 
 import static io.vavr.API.*;
 
@@ -35,8 +35,14 @@ public class PersonService {
         return Either.right(Person.builder()
                 .type(request.getType())
                 .active(request.isActive())
-                .address(request.getAddress())
-                .account(request.getAccount())
+                .address(Address.builder()
+                        .city(request.getCity())
+                        .country(request.getCountry())
+                        .build())
+                .account(Account.builder()
+                        .salary(request.getSalary())
+                        .balance(request.getBalance())
+                        .build())
                 .build());
     }
 

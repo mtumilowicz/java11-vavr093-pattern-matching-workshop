@@ -10,6 +10,6 @@ import lombok.Value;
 @Builder
 public class CreditAssessSubjects {
     int balance;
-    int salary;
+    Salary salary;
     String country;
 }

@@ -1,10 +1,9 @@
-package request;
+package person.request;
 
 import lombok.Builder;
 import lombok.Value;
-import person.Account;
-import person.Address;
 import person.PersonType;
+import person.Salary;
 
 /**
  * Created by mtumilowicz on 2019-05-02.
@@ -14,6 +13,8 @@ import person.PersonType;
 public class ValidPersonRequest {
     PersonType type;
     boolean active;
-    Account account;
-    Address address;
+    int balance;
+    Salary salary;
+    String city;
+    String country;
 }

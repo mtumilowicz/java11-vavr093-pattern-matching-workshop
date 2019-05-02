@@ -1,6 +1,7 @@
 package credit;
 
 import person.CreditAssessSubjects;
+import person.Salary;
 
 import java.util.Objects;
 
@@ -15,7 +16,7 @@ public class CreditAssessmentService {
     public static int serviceMethodAssess(CreditAssessSubjects subjects) {
         return Match(subjects).of(
                 Case($CreditAssessSubjects($(), $(), $()),
-                        (salary, balance, country) -> 5 * serviceMethodAssessBalance(balance) +
+                        (balance, salary, country) -> 5 * serviceMethodAssessBalance(balance) +
                                 3 * serviceMethodAssessSalary(salary) +
                                 2 * serviceMethodAssessCountry(country))
         );
@@ -27,8 +28,8 @@ public class CreditAssessmentService {
                 : 50;
     }
 
-    private static int serviceMethodAssessSalary(int salary) {
-        return salary < 3000
+    private static int serviceMethodAssessSalary(Salary salary) {
+        return salary.getValue() < 3000
                 ? 6
                 : 10;
     }

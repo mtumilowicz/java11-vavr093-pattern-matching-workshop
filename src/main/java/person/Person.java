@@ -27,10 +27,10 @@ public class Person {
     }
 
     public boolean hasBigSalary() {
-        return getSalary() > 1000;
+        return getSalary().getValue() > 1000;
     }
 
-    public int getSalary() {
+    public Salary getSalary() {
         return account.getSalary();
     }
 }

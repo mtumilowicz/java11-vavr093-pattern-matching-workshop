@@ -6,8 +6,9 @@ import person.Account
 import person.Address
 import person.Person
 import person.PersonType
-import request.PersonRequest
-import request.ValidPersonRequest
+import person.Salary
+import person.request.PersonRequest
+import person.request.ValidPersonRequest
 import spock.lang.Specification
 import workshops.Answers
 
@@ -117,14 +118,10 @@ class Tests extends Specification {
         def validRequest = ValidPersonRequest.builder()
                 .type(PersonType.REGULAR)
                 .active(true)
-                .account(Account.builder()
-                        .salary(1000)
-                        .balance(2000)
-                        .build())
-                .address(Address.builder()
-                        .city("Warsaw")
-                        .country("Poland")
-                        .build())
+                .salary(Salary.of(1000))
+                .balance(2000)
+                .city("Warsaw")
+                .country("Poland")
                 .build()
         def nullDecompose = Answers.eitherDecompose(null)
         def canBeFixed = Answers.eitherDecompose(Either.left(requestCanBeFixed))
@@ -144,7 +141,7 @@ class Tests extends Specification {
                 .type(PersonType.REGULAR)
                 .active(true)
                 .account(Account.builder()
-                        .salary(1000)
+                        .salary(Salary.of(1000))
                         .balance(2000)
                         .build())
                 .address(Address.builder()
@@ -208,22 +205,26 @@ class Tests extends Specification {
 
     def "decomposePerson"() {
         given:
+        def _800 = Salary.of(800)
+        def _2000 = Salary.of(2000)
+        def _950 = Salary.of(950)
+        and:
         def p1 = Person.builder()
-                .account(Account.builder().salary(800).balance(20_000).build())
+                .account(Account.builder().salary(_800).balance(20_000).build())
                 .address(Address.builder().country('POLAND').build())
                 .build()
         def p2 = Person.builder()
-                .account(Account.builder().salary(2000).balance(1000).build())
+                .account(Account.builder().salary(_2000).balance(1000).build())
                 .address(Address.builder().country('USA').build())
                 .build()
-        def p3 = Person.builder().account(Account.builder().salary(950).balance(15_000).build())
+        def p3 = Person.builder().account(Account.builder().salary(_950).balance(15_000).build())
                 .address(Address.builder().country('POLAND').build())
                 .build()
 
         expect:
-        Answers.decomposePerson(p1) == 395
+        Answers.decomposePerson(p1) == 508
         Answers.decomposePerson(p2) == 328
-        Answers.decomposePerson(p3) == 395
+        Answers.decomposePerson(p3) == 508
     }
 
     def "existsTest"() {
@@ -320,14 +321,18 @@ class Tests extends Specification {
 
     def "noneOfTest"() {
         given:
+        def _1 = Salary.of(1)
+        def _3000 = Salary.of(3000)
+        def _300 = Salary.of(300)
+        and:
         def vip = Person.builder().type(PersonType.VIP)
-                .account(Account.builder().salary(1).build())
+                .account(Account.builder().salary(_1).build())
                 .build()
         def bigSalary = Person.builder().type(PersonType.REGULAR)
-                .account(Account.builder().salary(3000).build())
+                .account(Account.builder().salary(_3000).build())
                 .build()
         def regular = Person.builder().type(PersonType.REGULAR)
-                .account(Account.builder().salary(300).build())
+                .account(Account.builder().salary(_300).build())
                 .build()
 
         expect:
@@ -338,14 +343,18 @@ class Tests extends Specification {
 
     def "anyOfTest"() {
         given:
+        def _1 = Salary.of(1)
+        def _3000 = Salary.of(3000)
+        def _300 = Salary.of(300)
+        and:
         def vip = Person.builder().type(PersonType.VIP)
-                .account(Account.builder().salary(1).build())
+                .account(Account.builder().salary(_1).build())
                 .build()
         def bigSalary = Person.builder().type(PersonType.REGULAR)
-                .account(Account.builder().salary(3000).build())
+                .account(Account.builder().salary(_3000).build())
                 .build()
         def regular = Person.builder().type(PersonType.REGULAR)
-                .account(Account.builder().salary(300).build())
+                .account(Account.builder().salary(_300).build())
                 .build()
 
         expect:

@@ -9,8 +9,8 @@ import io.vavr.control.Option;
 import io.vavr.control.Try;
 import lombok.NonNull;
 import person.*;
-import request.PersonRequest;
-import request.ValidPersonRequest;
+import person.request.PersonRequest;
+import person.request.ValidPersonRequest;
 import tax.TaxService;
 
 import java.io.IOException;
@@ -30,7 +30,6 @@ import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjec
 /*
 TO-DO:
 1. add personByType pattern
-1. Person + ValidPersonRequest - secure domain
 1. decomposeEither - businessRules
 1. additional tests for eitherDecompose + PersonService
 1. optionDecompose, tryDecompose - better examples (maybe sth from workshops, try - recover, option - ?)
