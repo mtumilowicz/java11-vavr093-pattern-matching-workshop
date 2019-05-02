@@ -33,7 +33,6 @@ TO-DO:
 1. eitherDecompose -  more real life example - full request mapped to the full person
 1. localDateDecompose - tax rate
 1. rename methods in Answers
-1. add guards everywhere
 1. optionDecompose, tryDecompose - better examples (maybe sth from workshops, try - recover, option - ?)
 1. Workshop (with switch / case, if)
 1. readme
@@ -55,12 +54,13 @@ public class Answers {
         Range<Integer> threshold3 = Range.atLeast(151);
 
         return Match(input).of(
-                Case($(threshold1::contains), "threshold1"),
-                Case($(threshold2::contains), "threshold2"),
-                Case($(threshold3::contains), "threshold3"),
                 Case($(i -> i < 0), () -> {
                     throw new IllegalArgumentException("only positive numbers!");
-                }));
+                }),
+                Case($(threshold1::contains), "threshold1"),
+                Case($(threshold2::contains), "threshold2"),
+                Case($(threshold3::contains), "threshold3")
+        );
     }
 
     public static String switchOnEnum(@NonNull Person person) {
@@ -111,9 +111,8 @@ public class Answers {
         );
     }
 
-    public static String ifSyntax(Person person) {
+    public static String ifSyntax(@NonNull Person person) {
         return Match(person).of(
-                Case($(isNull()), () -> "cannot be null"),
                 Case($(Person::isActive), PersonService::disable),
                 Case($(), PersonService::activate)
         );
