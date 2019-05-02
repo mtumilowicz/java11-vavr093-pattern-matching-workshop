@@ -33,7 +33,6 @@ TO-DO:
 1. eitherDecompose -  more real life example - full request mapped to the full person
 1. localDateDecompose - tax rate
 1. rename methods in Answers
-1. use ' instead of " in tests
 1. add guards everywhere
 1. optionDecompose, tryDecompose - better examples (maybe sth from workshops, try - recover, option - ?)
 1. Workshop (with switch / case, if)

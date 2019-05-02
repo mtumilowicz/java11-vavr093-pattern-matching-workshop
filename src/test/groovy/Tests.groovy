@@ -20,9 +20,9 @@ import java.time.format.DateTimeParseException
 class Tests extends Specification {
     def "numberConverter"() {
         expect:
-        Answers.numberConverter("one") == 1
-        Answers.numberConverter("two") == 2
-        Answers.numberConverter("three") == 3
+        Answers.numberConverter('one') == 1
+        Answers.numberConverter('two') == 2
+        Answers.numberConverter('three') == 3
     }
 
     def "numberConverter guard"() {
@@ -33,7 +33,7 @@ class Tests extends Specification {
         thrown(IllegalStateException)
 
         when:
-        Answers.numberConverter("four")
+        Answers.numberConverter('four')
 
         then:
         thrown(IllegalStateException)
@@ -41,19 +41,17 @@ class Tests extends Specification {
 
     def "thresholds"() {
         expect:
-        Answers.thresholds(0) == "threshold1"
-        Answers.thresholds(25) == "threshold1"
-        Answers.thresholds(50) == "threshold1"
+        Answers.thresholds(0) == 'threshold1'
+        Answers.thresholds(25) == 'threshold1'
+        Answers.thresholds(50) == 'threshold1'
         and:
-        Answers.thresholds(51) == "threshold2"
-        Answers.thresholds(100) == "threshold2"
-        Answers.thresholds(150) == "threshold2"
+        Answers.thresholds(51) == 'threshold2'
+        Answers.thresholds(100) == 'threshold2'
+        Answers.thresholds(150) == 'threshold2'
         and:
-        Answers.thresholds(200) == "threshold3"
-        Answers.thresholds(250) == "threshold3"
-        Answers.thresholds(1_000_000) == "threshold3"
-        Answers.numberConverter("two") == 2
-        Answers.numberConverter("three") == 3
+        Answers.thresholds(200) == 'threshold3'
+        Answers.thresholds(250) == 'threshold3'
+        Answers.thresholds(1_000_000) == 'threshold3'
     }
 
     def "thresholds guard"() {
@@ -66,9 +64,9 @@ class Tests extends Specification {
 
     def "switchOnEnum"() {
         expect:
-        Answers.switchOnEnum(Person.builder().type(PersonType.VIP).build()) == "full stats"
-        Answers.switchOnEnum(Person.builder().type(PersonType.REGULAR).build()) == "just stats"
-        Answers.switchOnEnum(Person.builder().type(PersonType.TEMPORARY).build()) == "fast stats"
+        Answers.switchOnEnum(Person.builder().type(PersonType.VIP).build()) == 'full stats'
+        Answers.switchOnEnum(Person.builder().type(PersonType.REGULAR).build()) == 'just stats'
+        Answers.switchOnEnum(Person.builder().type(PersonType.TEMPORARY).build()) == 'fast stats'
     }
 
     def "switchOnEnum guard"() {
@@ -143,8 +141,8 @@ class Tests extends Specification {
 
     def "tryDecompose"() {
         when:
-        def successTry = Answers.tryDecompose("2")
-        def failTry = Answers.tryDecompose("wrong")
+        def successTry = Answers.tryDecompose('2')
+        def failTry = Answers.tryDecompose('wrong')
 
         then:
         successTry == Try.success(4)
@@ -158,9 +156,9 @@ class Tests extends Specification {
         def inactivePerson = Person.builder().active(false).build()
         
         expect:
-        Answers.ifSyntax(null) == "cannot be null"
-        Answers.ifSyntax(inactivePerson) == "activated"
-        Answers.ifSyntax(activePerson) == "deactivated"
+        Answers.ifSyntax(null) == 'cannot be null'
+        Answers.ifSyntax(inactivePerson) == 'activated'
+        Answers.ifSyntax(activePerson) == 'deactivated'
     }
 
     def "localDateDecompose"() {
@@ -177,14 +175,14 @@ class Tests extends Specification {
         given:
         def p1 = Person.builder()
                 .account(Account.builder().salary(800).balance(20_000).build())
-                .address(Address.builder().country("POLAND").build())
+                .address(Address.builder().country('POLAND').build())
                 .build()
         def p2 = Person.builder()
                 .account(Account.builder().salary(2000).balance(1000).build())
-                .address(Address.builder().country("USA").build())
+                .address(Address.builder().country('USA').build())
                 .build()
         def p3 = Person.builder().account(Account.builder().salary(950).balance(15_000).build())
-                .address(Address.builder().country("POLAND").build())
+                .address(Address.builder().country('POLAND').build())
                 .build()
 
         expect:
@@ -195,8 +193,8 @@ class Tests extends Specification {
 
     def "existsTest"() {
         given:
-        def ex1 = new IllegalArgumentException("a")
-        def ex2 = new IllegalStateException("b")
+        def ex1 = new IllegalArgumentException('a')
+        def ex2 = new IllegalStateException('b')
         and:
         def withFailures = List.of(Try.success(1),
                 Try.success(2),
@@ -224,8 +222,8 @@ class Tests extends Specification {
 
     def "forAllTest"() {
         given:
-        def ex1 = new IllegalArgumentException("a")
-        def ex2 = new IllegalStateException("b")
+        def ex1 = new IllegalArgumentException('a')
+        def ex2 = new IllegalStateException('b')
         and:
         def withFailures = List.of(Try.success(1),
                 Try.success(2),
