@@ -18,14 +18,14 @@ import java.time.format.DateTimeParseException
  * Created by mtumilowicz on 2019-04-10.
  */
 class Tests extends Specification {
-    def "number converter"() {
+    def "numberConverter"() {
         expect:
         Answers.numberConverter("one") == 1
         Answers.numberConverter("two") == 2
         Answers.numberConverter("three") == 3
     }
 
-    def "number converter, guard"() {
+    def "numberConverter guard"() {
         when:
         Answers.numberConverter(null)
 
@@ -71,7 +71,7 @@ class Tests extends Specification {
         Answers.switchOnEnum(Person.builder().type(PersonType.TEMPORARY).build()) == "fast stats"
     }
 
-    def "switchOnEnum, guard"() {
+    def "switchOnEnum guard"() {
         when:
         Answers.switchOnEnum(Person.builder().build())
 
@@ -85,7 +85,7 @@ class Tests extends Specification {
         !Answers.rawDateMapper(null)
     }
 
-    def "rawDateMapper, exceptional"() {
+    def "rawDateMapper exceptional"() {
         when:
         Answers.rawDateMapper('wrong')
 
@@ -99,7 +99,7 @@ class Tests extends Specification {
         Answers.optionDateMapper(null) == Option.none()
     }
 
-    def "optionDateMapper, exceptional"() {
+    def "optionDateMapper exceptional"() {
         when:
         Answers.optionDateMapper('wrong')
 
@@ -108,12 +108,17 @@ class Tests extends Specification {
     }
 
     def "eitherDecompose"() {
+        given:
+        def requestCanBeFixed = BadRequest.of(new Request(), 'can be fixed')
+        def requestCannotBeFixed = BadRequest.of(new Request(), 'cannot be fixed')
+        def nullDecompose = Answers.eitherDecompose(null)
+        def canBeFixed = Answers.eitherDecompose(Either.left(requestCanBeFixed))
+        def cannotBeFixed = Answers.eitherDecompose(Either.left(requestCannotBeFixed))
+        
         expect:
-        Answers.eitherDecompose(null) == Either.left("cannot be null")
-        Answers.eitherDecompose(Either.left(BadRequest.of(new Request(), "can be fixed"))) ==
-                Either.right(Person.builder().build())
-        Answers.eitherDecompose(Either.left(BadRequest.of(new Request(), "cannot be fixed"))) ==
-                Either.left('cannot be fixed, too many errors')
+        nullDecompose == Either.left('cannot be null')
+        canBeFixed == Either.right(Person.builder().build())
+        cannotBeFixed == Either.left('cannot be fixed, too many errors')
     }
 
     def "optionDecompose, cannot find in database"() {
@@ -148,16 +153,24 @@ class Tests extends Specification {
     }
 
     def "ifSyntax"() {
+        given:
+        def activePerson = Person.builder().active(true).build()
+        def inactivePerson = Person.builder().active(false).build()
+        
         expect:
         Answers.ifSyntax(null) == "cannot be null"
-        Answers.ifSyntax(Person.builder().active(false).build()) == "activated"
-        Answers.ifSyntax(Person.builder().active(true).build()) == "deactivated"
+        Answers.ifSyntax(inactivePerson) == "activated"
+        Answers.ifSyntax(activePerson) == "deactivated"
     }
 
     def "localDateDecompose"() {
+        given:
+        def _2010_10_10 = LocalDate.of(2010, 10, 10)
+        def _2019_10_10 = LocalDate.of(2019, 10, 10)
+        
         expect:
-        Answers.localDateDecompose(LocalDate.of(2010, 10, 10)) == 15
-        Answers.localDateDecompose(LocalDate.of(2019, 10, 10)) == 25
+        Answers.localDateDecompose(_2010_10_10) == 15
+        Answers.localDateDecompose(_2019_10_10) == 25
     }
 
     def "decomposePerson"() {
@@ -256,7 +269,7 @@ class Tests extends Specification {
         Answers.allOfTest(temporaryNotActive) == 'temporary + not active'
     }
 
-    def "allOfTest, guard"() {
+    def "allOfTest guard"() {
         when:
         Answers.allOfTest(null)
 

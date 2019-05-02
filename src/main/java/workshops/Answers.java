@@ -29,6 +29,11 @@ import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjec
 TO-DO:
 1. add personByType pattern
 1. renaming tests
+1. eitherDecompose -  more real life example - full request mapped to the full person
+1. localDateDecompose - tax rate
+1. rename methods in Answers
+1. use ' instead of " in tests
+1. add guards everywhere
 1. better Try example (maybe with recover - take from Try workshop)
 1. Workshop (with switch / case, if)
 1. readme
