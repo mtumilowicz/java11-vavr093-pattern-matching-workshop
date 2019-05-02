@@ -31,7 +31,6 @@ TO-DO:
 1. add personByType pattern
 1. eitherDecompose -  more real life example - full request mapped to the full person
 1. localDateDecompose - tax rate
-1. rename methods in Answers
 1. optionDecompose, tryDecompose - better examples (maybe sth from workshops, try - recover, option - ?)
 1. Workshop (with switch / case, if)
 1. readme
