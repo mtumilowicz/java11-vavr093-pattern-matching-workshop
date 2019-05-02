@@ -1,6 +1,7 @@
 package person;
 
 import io.vavr.control.Either;
+import lombok.NonNull;
 import person.request.PersonRequest;
 import person.request.ValidPersonRequest;
 
@@ -15,7 +16,7 @@ import static java.util.function.Predicate.not;
  */
 public class PersonService {
 
-    public static Either<String, Person> patch(PersonRequest personRequest) {
+    public static Either<String, Person> patch(@NonNull PersonRequest personRequest) {
         Predicate<PersonRequest> negativeSalary = request -> request.getSalary() < 0;
         return Match(personRequest).of(
                 Case($(negativeSalary),
@@ -36,7 +37,7 @@ public class PersonService {
         );
     }
 
-    public static Either<String, Person> assemblePerson(ValidPersonRequest request) {
+    public static Either<String, Person> assemblePerson(@NonNull ValidPersonRequest request) {
         return Match(request).of(
                 Case($(allOf(PersonService::businessRule1, PersonService::vipIsActive)),
                         /*
@@ -59,19 +60,19 @@ public class PersonService {
         );
     }
 
-    public static String activate(Person person) {
+    public static String activate(@NonNull Person person) {
         return "activated";
     }
 
-    public static String disable(Person person) {
+    public static String disable(@NonNull Person person) {
         return "deactivated";
     }
 
-    private static boolean businessRule1(ValidPersonRequest request) {
+    private static boolean businessRule1(@NonNull ValidPersonRequest request) {
         return true;
     }
 
-    private static boolean vipIsActive(ValidPersonRequest validRequest) {
+    private static boolean vipIsActive(@NonNull ValidPersonRequest validRequest) {
         Predicate<ValidPersonRequest> isVip = request -> request.getType() == PersonType.VIP;
         Predicate<ValidPersonRequest> isActive = ValidPersonRequest::isActive;
         return Match(validRequest).of(
