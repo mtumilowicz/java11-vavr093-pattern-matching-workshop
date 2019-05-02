@@ -161,7 +161,7 @@ class Tests extends Specification {
         Answers.localDateDecompose(LocalDate.of(2019, 10, 10)) == 25
     }
 
-    def "decomposePerson3"() {
+    def "decomposePerson"() {
         given:
         Person p1 = Person.builder()
                 .account(Account.builder().salary(800).balance(20_000).build())
@@ -176,9 +176,9 @@ class Tests extends Specification {
                 .build()
 
         expect:
-        Answers.decomposePerson3(p1) == 395
-        Answers.decomposePerson3(p2) == 328
-        Answers.decomposePerson3(p3) == 395
+        Answers.decomposePerson(p1) == 395
+        Answers.decomposePerson(p2) == 328
+        Answers.decomposePerson(p3) == 395
     }
 
     def "existsTest"() {

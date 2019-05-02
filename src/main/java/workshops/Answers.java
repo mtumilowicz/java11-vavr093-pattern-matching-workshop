@@ -28,7 +28,7 @@ import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjec
 /*
 TO-DO:
 1. add personByType pattern
-1. find and replace all ex. person3 -> person
+1. use def in tests
 1. renaming tests
 1. better Try example (maybe with recover - take from Try workshop)
 1. Workshop (with switch / case, if)
@@ -107,8 +107,8 @@ public class Answers {
         );
     }
 
-    public static String ifSyntax(Person person2) {
-        return Match(person2).of(
+    public static String ifSyntax(Person person) {
+        return Match(person).of(
                 Case($(isNull()), () -> "cannot be null"),
                 Case($(Person::isActive), PersonService::disable),
                 Case($(), PersonService::activate)
@@ -122,7 +122,7 @@ public class Answers {
         );
     }
 
-    public static Integer decomposePerson3(Person person) {
+    public static Integer decomposePerson(Person person) {
         return Match(person).of(
                 Case($PersonByCreditAssessSubjects($(), $()),
                         (account, address) ->
