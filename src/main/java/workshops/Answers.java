@@ -8,7 +8,6 @@ import io.vavr.control.Option;
 import io.vavr.control.Try;
 import person.CreditAssessSubjects;
 import person.Person;
-import person.PersonStats;
 import person.PersonType;
 import request.BadRequest;
 
@@ -28,8 +27,8 @@ import static workshops.DecompositionAnswersPatterns.*;
  */
 /*
 TO-DO:
-1. personstats -> string (full, ...)
 1. add personByType pattern
+1. break this class into little classes (ex. personService)
 1. renaming tests
 1. better Try example (maybe with recover - take from Try workshop)
 1. Workshop (with switch / case, if)
@@ -60,7 +59,7 @@ public class Answers {
                 }));
     }
 
-    public static PersonStats switchOnEnum(Person person) {
+    public static String switchOnEnum(Person person) {
         return Match(person.getType()).of(
                 Case($(PersonType.VIP), () -> getFullStats(person)),
                 Case($(PersonType.REGULAR), () -> getStats(person)),
@@ -70,17 +69,17 @@ public class Answers {
                 }));
     }
 
-    private static PersonStats getFullStats(Person person) {
-        return PersonStats.of(PersonStats.PersonStatsType.FULL);
+    private static String getFullStats(Person person) {
+        return "full stats";
     }
 
 
-    private static PersonStats getStats(Person person) {
-        return PersonStats.of(PersonStats.PersonStatsType.NORMAL);
+    private static String getStats(Person person) {
+        return "just stats";
     }
 
-    private static PersonStats getFastStats(Person person) {
-        return PersonStats.of(PersonStats.PersonStatsType.FAST);
+    private static String getFastStats(Person person) {
+        return "fast stats";
     }
 
     public static LocalDate rawDateMapper(String date) {

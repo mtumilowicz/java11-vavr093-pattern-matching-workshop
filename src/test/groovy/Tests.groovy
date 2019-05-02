@@ -8,7 +8,6 @@ import workshops.*
 import person.Account
 import person.Address
 import person.Person
-import person.PersonStats
 import person.PersonType
 import request.BadRequest
 import request.Request
@@ -68,12 +67,9 @@ class Tests extends Specification {
 
     def "switchOnEnum"() {
         expect:
-        Answers.switchOnEnum(Person.builder().type(PersonType.VIP).build()) ==
-                PersonStats.of(PersonStats.PersonStatsType.FULL)
-        Answers.switchOnEnum(Person.builder().type(PersonType.REGULAR).build()) ==
-                PersonStats.of(PersonStats.PersonStatsType.NORMAL)
-        Answers.switchOnEnum(Person.builder().type(PersonType.TEMPORARY).build()) ==
-                PersonStats.of(PersonStats.PersonStatsType.FAST)
+        Answers.switchOnEnum(Person.builder().type(PersonType.VIP).build()) == "full stats"
+        Answers.switchOnEnum(Person.builder().type(PersonType.REGULAR).build()) == "just stats"
+        Answers.switchOnEnum(Person.builder().type(PersonType.TEMPORARY).build()) == "fast stats"
     }
 
     def "switchOnEnum, guard"() {
