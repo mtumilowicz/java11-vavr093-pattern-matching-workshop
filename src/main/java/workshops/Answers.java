@@ -20,15 +20,13 @@ import static io.vavr.API.*;
 import static io.vavr.Patterns.*;
 import static io.vavr.Predicates.*;
 import static java.util.function.Predicate.not;
-import static workshops.DecompositionAnswersPatterns.$LocalDate;
-import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjects;
+import static workshops.DecompositionAnswersPatterns.*;
 
 /**
  * Created by mtumilowicz on 2019-05-01.
  */
 /*
 TO-DO:
-1. add personByType pattern
 1. additional tests for eitherDecompose + PersonService
 1. tryDecompose - better examples (maybe sth from workshops, try - recover)
 1. Workshop (with switch / case, if)
