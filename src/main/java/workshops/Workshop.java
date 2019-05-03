@@ -118,16 +118,16 @@ public class Workshop {
         if (Objects.isNull(person)) {
             return "cannot be null";
         }
-        
+
         return person.isActive() // Case($(Person::isActive), PersonService::disable)
-                ? PersonService.disable(person) 
+                ? PersonService.disable(person)
                 : PersonService.activate(person);
     }
 
     public static int getTaxRateFor(@NonNull LocalDate date) {
         // Match(date).of
         // Case($LocalDate($(year -> year < 2015), $(), $()), TaxService::taxBeforeAnd2015)
-        return date.getYear() <= 2015 
+        return date.getYear() <= 2015
                 ? TaxService.taxBeforeAnd2015()
                 : TaxService.taxAfter2015();
     }
@@ -145,18 +145,11 @@ public class Workshop {
     }
 
     public static Either<Seq<Throwable>, Seq<Integer>> existsTest(@NonNull Seq<Try<Integer>> list) {
-        return Match(list).of(
-                Case($(exists(Try::isFailure)),
-                        tries -> Either.left(tries
-                                .filter(Try::isFailure)
-                                .map(Try::getCause)
-                                .toList())),
-                Case($(),
-                        tries -> Either.right(tries
-                                .filter(Try::isSuccess)
-                                .map(Try::get)
-                                .toList()))
-        );
+        // Match(list).of
+        return list.exists(Try::isFailure)
+                // Case($(exists(Try::isFailure)), tries -> ...
+                ? Either.left(list.filter(Try::isFailure).map(Try::getCause))
+                : Either.right(list.filter(Try::isFailure).map(Try::get));
     }
 
     public static Either<Seq<Throwable>, Seq<Integer>> forAllTest(@NonNull Seq<Try<Integer>> list) {
