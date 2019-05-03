@@ -116,11 +116,14 @@ public class Workshop {
     }
 
     public static String ifSyntax(Person person) {
-        return Match(person).of(
-                Case($(isNull()), "cannot be null"),
-                Case($(Person::isActive), PersonService::disable),
-                Case($(), PersonService::activate)
-        );
+        // Match(person).of
+        if (Objects.isNull(person)) {
+            return "cannot be null";
+        }
+        
+        return person.isActive() // Case($(Person::isActive), PersonService::disable)
+                ? PersonService.disable(person) 
+                : PersonService.activate(person);
     }
 
     public static int getTaxRateFor(@NonNull LocalDate date) {
