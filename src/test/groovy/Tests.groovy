@@ -10,7 +10,8 @@ import spock.lang.Specification
 import workshops.Answers
 
 import java.time.LocalDate
-import java.time.format.DateTimeParseException 
+import java.time.format.DateTimeParseException
+
 /**
  * Created by mtumilowicz on 2019-04-10.
  */
@@ -138,7 +139,7 @@ class Tests extends Specification {
     def "eitherDecompose - failure patch - to many errors (empty request)"() {
         given:
         def cannotBeFixed = PersonRequest.builder().build()
-        
+
         when:
         def notFixed = Answers.eitherDecompose(Either.left(cannotBeFixed))
 
@@ -217,6 +218,28 @@ class Tests extends Specification {
         display.message == "person: ${existsId} processed"
     }
 
+    def "tryDecompose, successfully parsed and squared"() {
+        given:
+        def display = new Display()
+
+        when:
+        Answers.tryDecompose('3', display)
+        
+        then:
+        display.message == 'squared number is: 9'
+    }
+    
+    def "tryDecompose, fail to parse an input string as a number"() {
+        given:
+        def display = new Display()
+
+        when:
+        Answers.tryDecompose('wrong', display)
+        
+        then:
+        display.message == 'cannot square number: For input string: "wrong"'
+    }
+
     def "ifSyntax"() {
         given:
         def activePerson = Person.builder().active(true).build()
@@ -257,9 +280,9 @@ class Tests extends Specification {
                 .build()
 
         expect:
-        Answers.decomposePerson(p1) == 508
-        Answers.decomposePerson(p2) == 328
-        Answers.decomposePerson(p3) == 508
+        Answers.personDecompose(p1) == 508
+        Answers.personDecompose(p2) == 328
+        Answers.personDecompose(p3) == 508
     }
 
     def "existsTest"() {

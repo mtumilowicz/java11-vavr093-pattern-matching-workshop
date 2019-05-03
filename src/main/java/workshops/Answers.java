@@ -29,7 +29,6 @@ import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjec
  */
 /*
 TO-DO:
-1. tryDecompose - copy of optionDecompose
 1. Workshop (with switch / case, if)
 1. readme
  */
@@ -95,6 +94,16 @@ public class Answers {
         );
     }
 
+    public static void tryDecompose(String number, Display display) {
+        Try<Integer> _try = Try.of(() -> Integer.parseInt(number));
+        Match(_try).of(
+                Case($Success($()),
+                        i -> run(() -> display.push("squared number is: " + i * i))),
+                Case($Failure($()),
+                        ex -> run(() -> display.push("cannot square number: " + ex.getLocalizedMessage())))
+        );
+    }
+
     public static String ifSyntax(Person person) {
         return Match(person).of(
                 Case($(isNull()), "cannot be null"),
@@ -110,7 +119,7 @@ public class Answers {
         );
     }
 
-    public static Integer decomposePerson(@NonNull Person person) {
+    public static Integer personDecompose(@NonNull Person person) {
         return Match(person).of(
                 Case($PersonByCreditAssessSubjects($(), $()),
                         (account, address) ->
