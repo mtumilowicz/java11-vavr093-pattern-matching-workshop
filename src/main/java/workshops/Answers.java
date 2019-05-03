@@ -29,6 +29,7 @@ import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjec
  */
 /*
 TO-DO:
+1. tryDecompose - copy of optionDecompose
 1. Workshop (with switch / case, if)
 1. readme
  */
