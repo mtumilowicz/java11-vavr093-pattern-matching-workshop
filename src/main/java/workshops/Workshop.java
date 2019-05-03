@@ -95,16 +95,18 @@ public class Workshop {
     }
 
     public static Either<String, Person> eitherDecompose(Either<PersonRequest, ValidPersonRequest> either) {
+        // Match(either).of
         return Objects.isNull(either)
                 ? Either.left("cannot be null")
+                // hint: Case($Left($()), PersonService::patch)
                 : either.fold(PersonService::patch, PersonService::assemblePerson);
     }
 
     public static void optionDecompose(int id, Display display) {
-        Match(PersonRepository.findById(id)).of(
-                Case($None(), run(() -> display.push("cannot find person with id = " + id))),
-                Case($Some($()), value -> run(() -> display.push("person: " + value + " processed")))
-        );
+        PersonRepository.findById(id) // Match(PersonRepository.findById(id)).of
+                // Case($None(), run(() -> display.push("cannot find person with id = " + id)))
+                .onEmpty(() -> display.push("cannot find person with id = " + id))
+                .forEach(value -> display.push("person: " + value + " processed"));
     }
 
     public static void tryDecompose(String number, Display display) {
