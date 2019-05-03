@@ -35,8 +35,8 @@ import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjec
 public class Workshop {
 
     public static int numberConverter(String number) {
-        Preconditions.checkState(nonNull(number));
-        
+        Preconditions.checkState(nonNull(number), "value not supported");
+
         switch (number) { // hint: Match(number).of
             case "one": // hint: Case($("one"), 1)
                 return 1;
@@ -50,18 +50,24 @@ public class Workshop {
     }
 
     public static String thresholds(int input) {
+        Preconditions.checkArgument(input >= 0, "only positive numbers!");
+        
         Range<Integer> threshold1 = Range.closed(0, 50);
         Range<Integer> threshold2 = Range.closed(51, 150);
         Range<Integer> threshold3 = Range.atLeast(151);
 
-        return Match(input).of(
-                Case($(i -> i < 0), () -> {
-                    throw new IllegalArgumentException("only positive numbers!");
-                }),
-                Case($(threshold1::contains), "threshold1"),
-                Case($(threshold2::contains), "threshold2"),
-                Case($(threshold3::contains), "threshold3")
-        );
+        // hint: Match(input).of
+        if (threshold1.contains(input)) { // hint: Case($(threshold1::contains), "threshold1")
+            return "threshold1";
+        }
+        if (threshold2.contains(input)) {
+            return "threshold2";
+        }
+        if (threshold3.contains(input)) {
+            return "threshold3";
+        }
+
+        return "threshold3";
     }
 
     public static String switchOnEnum(@NonNull Person person) {
