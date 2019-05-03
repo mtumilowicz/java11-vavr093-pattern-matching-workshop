@@ -179,8 +179,8 @@ public class Answers {
         try {
             runnable.run();
             return "no exception";
-        } catch (Throwable exx) {
-            return Match(exx).of(
+        } catch (Throwable ex) {
+            return Match(ex).of(
                     Case($(instanceOf(IllegalArgumentException.class)), "IllegalArgumentException"),
                     Case($(instanceOf(RuntimeException.class)), "RuntimeException"),
                     Case($(instanceOf(IOException.class)), "IOException"),
