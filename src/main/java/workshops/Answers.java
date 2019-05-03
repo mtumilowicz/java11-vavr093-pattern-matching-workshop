@@ -12,6 +12,7 @@ import out.Display;
 import person.*;
 import person.request.PersonRequest;
 import person.request.ValidPersonRequest;
+import repo.*;
 import tax.TaxService;
 
 import java.io.IOException;
@@ -21,7 +22,8 @@ import static io.vavr.API.*;
 import static io.vavr.Patterns.*;
 import static io.vavr.Predicates.*;
 import static java.util.function.Predicate.not;
-import static workshops.DecompositionAnswersPatterns.*;
+import static workshops.DecompositionAnswersPatterns.$LocalDate;
+import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjects;
 
 /**
  * Created by mtumilowicz on 2019-05-01.
@@ -94,13 +96,11 @@ public class Answers {
         );
     }
 
-    public static Try<Integer> tryDecompose(String number) {
-        Try<Integer> _try = Try.of(() -> Integer.parseInt(number));
-
-        return Match(_try).of( // try with exceptions
-                Case($Success($()), value -> Try.success(value * value)),
-                Case($Failure($()), Try::failure)
-        );
+    public static Try<String> tryDecompose(int id) {
+        return CacheRepository.findById(id)
+                        .recover(CacheSynchronization.class, "cache synchronization with database, try again later")
+                        .recoverWith(CacheUserCannotBeFound.class, ex -> DatabaseRepository.findById(ex.getUserId()))
+                        .recover(DatabaseConnectionProblem.class, "cannot connect to database");
     }
 
     public static String ifSyntax(Person person) {

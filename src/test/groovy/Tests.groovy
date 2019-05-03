@@ -2,16 +2,15 @@ import io.vavr.collection.List
 import io.vavr.control.Either
 import io.vavr.control.Option
 import io.vavr.control.Try
+import out.Display
 import person.*
 import person.request.PersonRequest
 import person.request.ValidPersonRequest
 import spock.lang.Specification
 import workshops.Answers
-import out.Display
 
 import java.time.LocalDate
-import java.time.format.DateTimeParseException
-
+import java.time.format.DateTimeParseException 
 /**
  * Created by mtumilowicz on 2019-04-10.
  */
@@ -219,14 +218,17 @@ class Tests extends Specification {
     }
 
     def "tryDecompose"() {
-        when:
-        def successTry = Answers.tryDecompose('2')
-        def failTry = Answers.tryDecompose('wrong')
+        given:
+        def userFromCache = 1
+        def databaseConnection = 2
+        def userFromDatabase = 4
+        def cacheSynchronization = 5
 
-        then:
-        successTry == Try.success(4)
-        failTry.failure
-        failTry.getCause().class == NumberFormatException
+        expect:
+        Answers.tryDecompose(userFromCache).get() == 'from cache'
+        Answers.tryDecompose(userFromDatabase).get() == 'from database'
+        Answers.tryDecompose(cacheSynchronization).get() == 'cache synchronization with database, try again later'
+        Answers.tryDecompose(databaseConnection).get() == 'cannot connect to database'
     }
 
     def "ifSyntax"() {
