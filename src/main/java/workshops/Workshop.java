@@ -17,13 +17,11 @@ import tax.TaxService;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Objects;
 
 import static io.vavr.API.*;
-import static io.vavr.API.$;
 import static io.vavr.Patterns.*;
-import static io.vavr.Patterns.$Failure;
 import static io.vavr.Predicates.*;
-import static io.vavr.Predicates.anyOf;
 import static java.util.Objects.nonNull;
 import static java.util.function.Predicate.not;
 import static workshops.DecompositionAnswersPatterns.$LocalDate;
@@ -73,8 +71,8 @@ public class Workshop {
     public static String switchOnEnum(@NonNull Person person) {
         Preconditions.checkState(nonNull(person.getType()), "value not supported");
         
-        switch (person.getType()) {
-            case VIP:
+        switch (person.getType()) { // hint: Match(person.getType()).of
+            case VIP: // hint: Case($(PersonType.VIP), () -> StatsService.getFullStats(person))
                 return StatsService.getFullStats(person);
             case REGULAR:
                 return StatsService.getStats(person);
@@ -86,9 +84,9 @@ public class Workshop {
     }
 
     public static LocalDate rawDateMapper(String date) {
-        return Match(date).of(
-                Case($(isNull()), () -> null),
-                Case($(isNotNull()), LocalDate::parse));
+        return Objects.isNull(date) // hint: Match(date).of
+                ? null // hint: Case($(isNull()), () -> null)
+                : LocalDate.parse(date);
     }
 
     public static Option<LocalDate> optionDateMapper(String date) {
