@@ -103,24 +103,31 @@ class Tests extends Specification {
         thrown(DateTimeParseException)
     }
 
-    def "eitherDecompose - request can be fixed"() {
+    def "eitherDecompose - successful patch when salary < 0 - active = false, salary = 0"() {
         given:
-        def requestCanBeFixed = PersonRequest.builder()
+        def canBeFixed = PersonRequest.builder()
                 .type(PersonType.VIP)
+                .balance(3000)
+                .country('Poland')
+                .city('Warsaw')
+                .active(true)
                 .salary(-1000)
                 .build()
+        when:
+        def fixed = Answers.eitherDecompose(Either.left(canBeFixed))
 
-        and:
-        def canBeFixed = Answers.eitherDecompose(Either.left(requestCanBeFixed))
-
-        expect:
-        canBeFixed == Either.right(Person.builder()
+        then:
+        fixed == Either.right(Person.builder()
                 .type(PersonType.VIP)
+                .active(false)
                 .account(Account.builder()
                         .salary(Salary.of(0))
+                        .balance(3000)
                         .build())
-                .address(Address.builder().build())
-                .active(false)
+                .address(Address.builder()
+                        .city('Warsaw')
+                        .country('Poland')
+                        .build())
                 .build())
     }
 
@@ -129,25 +136,24 @@ class Tests extends Specification {
         Answers.eitherDecompose(null) == Either.left('cannot be null')
     }
 
-    def "eitherDecompose - requestCannotBeFixed"() {
+    def "eitherDecompose - failure patch - to many errors (empty request)"() {
         given:
-        def requestCannotBeFixed = PersonRequest.builder()
-                .build()
-
+        def cannotBeFixed = PersonRequest.builder().build()
+        
         when:
-        def cannotBeFixed = Answers.eitherDecompose(Either.left(requestCannotBeFixed))
+        def notFixed = Answers.eitherDecompose(Either.left(cannotBeFixed))
 
         then:
-        cannotBeFixed == Either.left('cannot be fixed, too many errors')
+        notFixed == Either.left('cannot be fixed, too many errors')
     }
 
-    def "eitherDecompose - all business rules are met"() {
+    def "eitherDecompose - successful assemble - all business rules are met"() {
         given:
         def allBusinessRulesAreMet = ValidPersonRequest.builder()
-                .type(PersonType.REGULAR)
+                .type(PersonType.VIP)
                 .active(true)
-                .salary(Salary.of(1000))
-                .balance(2000)
+                .salary(Salary.of(0))
+                .balance(3000)
                 .city('Warsaw')
                 .country('Poland')
                 .build()
@@ -157,11 +163,11 @@ class Tests extends Specification {
 
         then:
         correct == Either.right(Person.builder()
-                .type(PersonType.REGULAR)
+                .type(PersonType.VIP)
                 .active(true)
                 .account(Account.builder()
-                        .salary(Salary.of(1000))
-                        .balance(2000)
+                        .salary(Salary.of(0))
+                        .balance(3000)
                         .build())
                 .address(Address.builder()
                         .city('Warsaw')
@@ -170,13 +176,13 @@ class Tests extends Specification {
                 .build())
     }
 
-    def "eitherDecompose - not all business rules are met: VIP has to be active"() {
+    def "eitherDecompose - failure assemble - not all business rules are met: VIP should be active"() {
         given:
         def notAllBusinessRulesAreMet = ValidPersonRequest.builder()
                 .type(PersonType.VIP)
                 .active(false)
-                .salary(Salary.of(1000))
-                .balance(2000)
+                .salary(Salary.of(0))
+                .balance(3000)
                 .city('Warsaw')
                 .country('Poland')
                 .build()
