@@ -23,7 +23,6 @@ import static io.vavr.API.*;
 import static io.vavr.Predicates.*;
 import static java.util.Objects.nonNull;
 import static java.util.function.Predicate.not;
-import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjects;
 
 /**
  * Created by mtumilowicz on 2019-05-03.
@@ -134,15 +133,14 @@ public class Workshop {
     }
 
     public static Integer personDecompose(@NonNull Person person) {
-        return Match(person).of(
-                Case($PersonByCreditAssessSubjects($(), $()),
-                        (account, address) ->
-                                CreditAssessmentService.serviceMethodAssess(CreditAssessSubjects.builder()
-                                        .balance(account.getBalance())
-                                        .salary(account.getSalary())
-                                        .country(address.getCountry())
-                                        .build()
-                                ))
+        // Match(person).of
+        // Case($PersonByCreditAssessSubjects($(), $()), (account, address) -> ...
+        Account account = person.getAccount();
+        return CreditAssessmentService.serviceMethodAssess(CreditAssessSubjects.builder()
+                .balance(account.getBalance())
+                .salary(account.getSalary())
+                .country(person.getAddress().getCountry())
+                .build()
         );
     }
 
