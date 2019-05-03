@@ -12,7 +12,6 @@ import out.Display;
 import person.*;
 import person.request.PersonRequest;
 import person.request.ValidPersonRequest;
-import repo.*;
 import tax.TaxService;
 
 import java.io.IOException;
@@ -30,7 +29,6 @@ import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjec
  */
 /*
 TO-DO:
-1. tryDecompose - better examples (maybe sth from workshops, try - recover)
 1. Workshop (with switch / case, if)
 1. readme
  */
@@ -92,15 +90,8 @@ public class Answers {
     public static void optionDecompose(int id, Display display) {
         Match(PersonRepository.findById(id)).of(
                 Case($None(), run(() -> display.push("cannot find person with id = " + id))),
-                Case($Some($()),  value -> run(() -> display.push("person: " + value + " processed")))
+                Case($Some($()), value -> run(() -> display.push("person: " + value + " processed")))
         );
-    }
-
-    public static Try<String> tryDecompose(int id) {
-        return CacheRepository.findById(id)
-                        .recover(CacheSynchronization.class, "cache synchronization with database, try again later")
-                        .recoverWith(CacheUserCannotBeFound.class, ex -> DatabaseRepository.findById(ex.getUserId()))
-                        .recover(DatabaseConnectionProblem.class, "cannot connect to database");
     }
 
     public static String ifSyntax(Person person) {

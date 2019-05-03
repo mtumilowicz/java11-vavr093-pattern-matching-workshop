@@ -217,20 +217,6 @@ class Tests extends Specification {
         display.message == "person: ${existsId} processed"
     }
 
-    def "tryDecompose"() {
-        given:
-        def userFromCache = 1
-        def databaseConnection = 2
-        def userFromDatabase = 4
-        def cacheSynchronization = 5
-
-        expect:
-        Answers.tryDecompose(userFromCache).get() == 'from cache'
-        Answers.tryDecompose(userFromDatabase).get() == 'from database'
-        Answers.tryDecompose(cacheSynchronization).get() == 'cache synchronization with database, try again later'
-        Answers.tryDecompose(databaseConnection).get() == 'cannot connect to database'
-    }
-
     def "ifSyntax"() {
         given:
         def activePerson = Person.builder().active(true).build()
