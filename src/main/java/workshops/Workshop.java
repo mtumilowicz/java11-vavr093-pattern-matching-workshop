@@ -90,8 +90,8 @@ public class Workshop {
     }
 
     public static Option<LocalDate> optionDateMapper(String date) {
-        return Match(date).option(
-                Case($(isNotNull()), LocalDate::parse));
+        return Option.of(date) // hint: Match(date).option
+                .map(LocalDate::parse); // hint: Case($(isNotNull()), LocalDate::parse))
     }
 
     public static Either<String, Person> eitherDecompose(Either<PersonRequest, ValidPersonRequest> either) {
