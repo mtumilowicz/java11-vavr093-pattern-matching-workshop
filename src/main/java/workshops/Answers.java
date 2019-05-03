@@ -29,8 +29,7 @@ import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjec
  */
 /*
 TO-DO:
-1. verify messages of exceptions
-1. Workshop (with switch / case, if)
+1. text over methods in Workshops what we gonna do / what we want to show
 1. readme
  */
 public class Answers {
