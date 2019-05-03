@@ -8,6 +8,7 @@ import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import lombok.NonNull;
+import out.Display;
 import person.*;
 import person.request.PersonRequest;
 import person.request.ValidPersonRequest;

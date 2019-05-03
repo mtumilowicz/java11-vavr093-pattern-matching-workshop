@@ -7,7 +7,7 @@ import person.request.PersonRequest
 import person.request.ValidPersonRequest
 import spock.lang.Specification
 import workshops.Answers
-import workshops.Display
+import out.Display
 
 import java.time.LocalDate
 import java.time.format.DateTimeParseException

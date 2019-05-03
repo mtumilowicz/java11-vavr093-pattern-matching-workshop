@@ -1,4 +1,4 @@
-package workshops;
+package out;
 
 import lombok.Getter;
 import lombok.ToString;
