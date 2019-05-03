@@ -23,7 +23,6 @@ import static io.vavr.API.*;
 import static io.vavr.Predicates.*;
 import static java.util.Objects.nonNull;
 import static java.util.function.Predicate.not;
-import static workshops.DecompositionAnswersPatterns.$LocalDate;
 import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjects;
 
 /**
@@ -127,10 +126,11 @@ public class Workshop {
     }
 
     public static int getTaxRateFor(@NonNull LocalDate date) {
-        return Match(date).of(
-                Case($LocalDate($(year -> year < 2015), $(), $()), TaxService::taxBeforeAnd2015),
-                Case($LocalDate($(year -> year > 2015), $(), $()), TaxService::taxAfter2015)
-        );
+        // Match(date).of
+        // Case($LocalDate($(year -> year < 2015), $(), $()), TaxService::taxBeforeAnd2015)
+        return date.getYear() <= 2015 
+                ? TaxService.taxBeforeAnd2015()
+                : TaxService.taxAfter2015();
     }
 
     public static Integer personDecompose(@NonNull Person person) {
