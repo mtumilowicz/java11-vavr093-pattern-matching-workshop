@@ -149,14 +149,14 @@ public class Workshop {
         return list.exists(Try::isFailure)
                 // Case($(exists(Try::isFailure)), tries -> ...
                 ? Either.left(list.filter(Try::isFailure).map(Try::getCause))
-                : Either.right(list.filter(Try::isFailure).map(Try::get));
+                : Either.right(list.map(Try::get));
     }
 
     public static Either<Seq<Throwable>, Seq<Integer>> forAllTest(@NonNull Seq<Try<Integer>> list) {
         // Match(list).of
         return list.forAll(Try::isSuccess)
                 // Case($(forAll(Try::isSuccess)), tries -> ...
-                ? Either.right(list.filter(Try::isFailure).map(Try::get))
+                ? Either.right(list.map(Try::get))
                 : Either.left(list.filter(Try::isFailure).map(Try::getCause));
     }
 

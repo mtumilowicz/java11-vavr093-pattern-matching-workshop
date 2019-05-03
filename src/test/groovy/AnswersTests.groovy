@@ -292,12 +292,14 @@ class AnswersTests extends Specification {
         def ex1 = new IllegalArgumentException('a')
         def ex2 = new IllegalStateException('b')
         and:
-        def withFailures = List.of(Try.success(1),
+        def withFailures = List.of(
+                Try.success(1),
                 Try.success(2),
                 Try.success(3),
                 Try.failure(ex1),
                 Try.failure(ex2))
-        def withoutFailures = List.of(Try.success(1),
+        def withoutFailures = List.of(
+                Try.success(1),
                 Try.success(2),
                 Try.success(3),
                 Try.success(4),
@@ -321,12 +323,14 @@ class AnswersTests extends Specification {
         def ex1 = new IllegalArgumentException('a')
         def ex2 = new IllegalStateException('b')
         and:
-        def withFailures = List.of(Try.success(1),
+        def withFailures = List.of(
+                Try.success(1),
                 Try.success(2),
                 Try.success(3),
                 Try.failure(ex1),
                 Try.failure(ex2))
-        def withoutFailures = List.of(Try.success(1),
+        def withoutFailures = List.of(
+                Try.success(1),
                 Try.success(2),
                 Try.success(3),
                 Try.success(4),

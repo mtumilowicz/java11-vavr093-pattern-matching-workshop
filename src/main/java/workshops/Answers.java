@@ -142,7 +142,6 @@ public class Answers {
                                 .toList())),
                 Case($(),
                         tries -> Either.right(tries
-                                .filter(Try::isSuccess)
                                 .map(Try::get)
                                 .toList()))
         );
@@ -152,7 +151,6 @@ public class Answers {
         return Match(list).of(
                 Case($(forAll(Try::isSuccess)),
                         tries -> Either.right(tries
-                                .filter(Try::isSuccess)
                                 .map(Try::get)
                                 .toList())),
                 Case($(),
