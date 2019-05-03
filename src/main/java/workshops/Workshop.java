@@ -201,8 +201,8 @@ public class Workshop {
 
     public static String noneOfTest(@NonNull Person person) {
         return Match(person).of(
-                Case($(noneOf(Person.hasType(PersonType.VIP), Person::hasBigSalary)), "handle rest"),
-                Case($(), "handle special")
+                Case($(noneOf(Person.hasType(PersonType.VIP), Person::hasBigSalary)), "handle special"),
+                Case($(), "handle rest")
         );
     }
 

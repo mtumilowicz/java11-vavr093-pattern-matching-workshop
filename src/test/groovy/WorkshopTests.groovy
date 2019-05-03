@@ -399,9 +399,9 @@ class WorkshopTests extends Specification {
                 .build()
 
         expect:
-        Workshop.noneOfTest(vip) == 'handle special'
-        Workshop.noneOfTest(bigSalary) == 'handle special'
-        Workshop.noneOfTest(regular) == 'handle rest'
+        Workshop.noneOfTest(vip) == 'handle rest'
+        Workshop.noneOfTest(bigSalary) == 'handle rest'
+        Workshop.noneOfTest(regular) == 'handle special'
     }
 
     def "anyOfTest"() {

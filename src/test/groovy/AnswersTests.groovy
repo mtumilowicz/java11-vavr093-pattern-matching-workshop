@@ -400,9 +400,9 @@ class AnswersTests extends Specification {
                 .build()
 
         expect:
-        Answers.noneOfTest(vip) == 'handle special'
-        Answers.noneOfTest(bigSalary) == 'handle special'
-        Answers.noneOfTest(regular) == 'handle rest'
+        Answers.noneOfTest(vip) == 'handle rest'
+        Answers.noneOfTest(bigSalary) == 'handle rest'
+        Answers.noneOfTest(regular) == 'handle special'
     }
 
     def "anyOfTest"() {
