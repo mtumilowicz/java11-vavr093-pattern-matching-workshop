@@ -188,13 +188,14 @@ public class Workshop {
         try {
             runnable.run();
             return "no exception";
+        } catch (IllegalArgumentException ex) {
+            return "IllegalArgumentException";
+        } catch (RuntimeException ex) {
+            return "RuntimeException";
+        } catch (IOException ex) {
+            return "IOException";
         } catch (Throwable ex) {
-            return Match(ex).of(
-                    Case($(instanceOf(IllegalArgumentException.class)), "IllegalArgumentException"),
-                    Case($(instanceOf(RuntimeException.class)), "RuntimeException"),
-                    Case($(instanceOf(IOException.class)), "IOException"),
-                    Case($(), "handle rest")
-            );
+            return "handle rest";
         }
     }
 
