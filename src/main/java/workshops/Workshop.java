@@ -70,7 +70,7 @@ public class Workshop {
 
     public static String switchOnEnum(@NonNull Person person) {
         Preconditions.checkState(nonNull(person.getType()), "value not supported");
-        
+
         switch (person.getType()) { // hint: Match(person.getType()).of
             case VIP: // hint: Case($(PersonType.VIP), () -> StatsService.getFullStats(person))
                 return StatsService.getFullStats(person);
@@ -95,11 +95,9 @@ public class Workshop {
     }
 
     public static Either<String, Person> eitherDecompose(Either<PersonRequest, ValidPersonRequest> either) {
-        return Match(either).of(
-                Case($(isNull()), () -> Either.left("cannot be null")),
-                Case($Left($()), PersonService::patch),
-                Case($Right($()), PersonService::assemblePerson)
-        );
+        return Objects.isNull(either)
+                ? Either.left("cannot be null")
+                : either.fold(PersonService::patch, PersonService::assemblePerson);
     }
 
     public static void optionDecompose(int id, Display display) {
