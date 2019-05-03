@@ -19,8 +19,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import static io.vavr.API.*;
-import static io.vavr.Predicates.*;
 import static java.util.Objects.nonNull;
 import static java.util.function.Predicate.not;
 
@@ -204,15 +202,20 @@ public class Workshop {
     public static String noneOfTest(@NonNull Person person) {
         // Match(person).of
         // Case($(noneOf(Person.hasType(PersonType.VIP), Person::hasBigSalary)), "handle special")
+        // what if more than two predicates ?
+        // what if more than one condition (that cannot be written using ternary op)
         return not(Person.hasType(PersonType.VIP).or(Person::hasBigSalary)).test(person)
                 ? "handle special"
                 : "handle rest";
     }
 
     public static String anyOfTest(@NonNull Person person) {
-        return Match(person).of(
-                Case($(anyOf(Person.hasType(PersonType.VIP), Person::hasBigSalary)), "handle special"),
-                Case($(), "handle rest")
-        );
+        // Match(person).of
+        // Case($(anyOf(Person.hasType(PersonType.VIP), Person::hasBigSalary)), "handle special")
+        // what if more than two predicates ?
+        // what if more than one condition (that cannot be written using ternary op)
+        return Person.hasType(PersonType.VIP).or(Person::hasBigSalary).test(person)
+                ? "handle special"
+                : "handle rest";
     }
 }
