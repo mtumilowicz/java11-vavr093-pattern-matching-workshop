@@ -27,8 +27,7 @@ import static workshops.DecompositionAnswersPatterns.*;
  */
 /*
 TO-DO:
-1. additional tests for eitherDecompose
-1. personService - assemblePerson -> assemble
+1. merge PersonServiceTest and Tests
 1. tryDecompose - better examples (maybe sth from workshops, try - recover)
 1. Workshop (with switch / case, if)
 1. readme

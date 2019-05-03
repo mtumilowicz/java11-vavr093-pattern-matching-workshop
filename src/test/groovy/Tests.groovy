@@ -2,11 +2,7 @@ import io.vavr.collection.List
 import io.vavr.control.Either
 import io.vavr.control.Option
 import io.vavr.control.Try
-import person.Account
-import person.Address
-import person.Person
-import person.PersonType
-import person.Salary
+import person.*
 import person.request.PersonRequest
 import person.request.ValidPersonRequest
 import spock.lang.Specification
@@ -107,16 +103,47 @@ class Tests extends Specification {
         thrown(DateTimeParseException)
     }
 
-    def "eitherDecompose"() {
+    def "eitherDecompose - request can be fixed"() {
         given:
         def requestCanBeFixed = PersonRequest.builder()
                 .type(PersonType.VIP)
                 .salary(-1000)
                 .build()
-        def requestCannotBeFixed = PersonRequest.builder()
+
+        and:
+        def canBeFixed = Answers.eitherDecompose(Either.left(requestCanBeFixed))
+
+        expect:
+        canBeFixed == Either.right(Person.builder()
                 .type(PersonType.VIP)
+                .account(Account.builder()
+                        .salary(Salary.of(0))
+                        .build())
+                .address(Address.builder().build())
+                .active(false)
+                .build())
+    }
+
+    def "eitherDecompose - argument cannot be null"() {
+        expect:
+        Answers.eitherDecompose(null) == Either.left('cannot be null')
+    }
+
+    def "eitherDecompose - requestCannotBeFixed"() {
+        given:
+        def requestCannotBeFixed = PersonRequest.builder()
                 .build()
-        def validRequest = ValidPersonRequest.builder()
+
+        when:
+        def cannotBeFixed = Answers.eitherDecompose(Either.left(requestCannotBeFixed))
+
+        then:
+        cannotBeFixed == Either.left('cannot be fixed, too many errors')
+    }
+
+    def "eitherDecompose - all business rules are met"() {
+        given:
+        def allBusinessRulesAreMet = ValidPersonRequest.builder()
                 .type(PersonType.REGULAR)
                 .active(true)
                 .salary(Salary.of(1000))
@@ -124,31 +151,12 @@ class Tests extends Specification {
                 .city('Warsaw')
                 .country('Poland')
                 .build()
-        def validRequestNotFulfillBusinessRules = ValidPersonRequest.builder()
-                .type(PersonType.VIP)
-                .active(false)
-                .salary(Salary.of(1000))
-                .balance(2000)
-                .city('Warsaw')
-                .country('Poland')
-                .build()
-        and:
-        def nullDecompose = Answers.eitherDecompose(null)
-        def canBeFixed = Answers.eitherDecompose(Either.left(requestCanBeFixed))
-        def cannotBeFixed = Answers.eitherDecompose(Either.left(requestCannotBeFixed))
-        def valid = Answers.eitherDecompose(Either.right(validRequest))
-        def notFulfillBusinessRules = Answers.eitherDecompose(Either.right(validRequestNotFulfillBusinessRules))
 
-        expect:
-        nullDecompose == Either.left('cannot be null')
-        canBeFixed == Either.right(Person.builder()
-                .type(PersonType.VIP)
-                .account(Account.builder().build())
-                .address(Address.builder().build())
-                .active(false)
-                .build())
-        cannotBeFixed == Either.left('cannot be fixed, too many errors')
-        valid == Either.right(Person.builder()
+        when:
+        def correct = Answers.eitherDecompose(Either.right(allBusinessRulesAreMet))
+
+        then:
+        correct == Either.right(Person.builder()
                 .type(PersonType.REGULAR)
                 .active(true)
                 .account(Account.builder()
@@ -160,7 +168,24 @@ class Tests extends Specification {
                         .country('Poland')
                         .build())
                 .build())
-        notFulfillBusinessRules == Either.left('not all business rules are matched')
+    }
+
+    def "eitherDecompose - not all business rules are met: VIP has to be active"() {
+        given:
+        def notAllBusinessRulesAreMet = ValidPersonRequest.builder()
+                .type(PersonType.VIP)
+                .active(false)
+                .salary(Salary.of(1000))
+                .balance(2000)
+                .city('Warsaw')
+                .country('Poland')
+                .build()
+
+        when:
+        def incorrect = Answers.eitherDecompose(Either.right(notAllBusinessRulesAreMet))
+
+        then:
+        incorrect == Either.left('not all business rules are matched')
     }
 
     def "optionDecompose, cannot find in database"() {
@@ -170,7 +195,7 @@ class Tests extends Specification {
 
         when:
         Answers.optionDecompose(notExistsId, display)
-        
+
         then:
         display.message == "cannot find person with id = ${notExistsId}"
     }
@@ -182,7 +207,7 @@ class Tests extends Specification {
 
         when:
         Answers.optionDecompose(existsId, display)
-        
+
         then:
         display.message == "person: ${existsId} processed"
     }
