@@ -161,17 +161,27 @@ public class Workshop {
     }
 
     public static String allOfTest(@NonNull Person person) {
-        return Match(person).of(
-                Case($(allOf(Person.hasType(PersonType.VIP), Person::isActive)), "vip + active"),
-                Case($(allOf(Person.hasType(PersonType.VIP), not(Person::isActive))), "vip + not active"),
-                Case($(allOf(Person.hasType(PersonType.REGULAR), Person::isActive)), "regular + active"),
-                Case($(allOf(Person.hasType(PersonType.REGULAR), not(Person::isActive))), "regular + not active"),
-                Case($(allOf(Person.hasType(PersonType.TEMPORARY), Person::isActive)), "temporary + active"),
-                Case($(allOf(Person.hasType(PersonType.TEMPORARY), not(Person::isActive))), "temporary + not active"),
-                Case($(), () -> {
-                    throw new IllegalArgumentException("case not supported");
-                })
-        );
+        // Match(person).of
+        // Case($(allOf(Person.hasType(PersonType.VIP), Person::isActive)), "vip + active")
+        if (Person.hasType(PersonType.VIP).and(Person::isActive).test(person)) {
+            return "vip + active";
+        }
+        if (Person.hasType(PersonType.VIP).and(not(Person::isActive)).test(person)) {
+            return "vip + not active";
+        }
+        if (Person.hasType(PersonType.REGULAR).and(Person::isActive).test(person)) {
+            return "regular + active";
+        }
+        if (Person.hasType(PersonType.REGULAR).and(not(Person::isActive)).test(person)) {
+            return "regular + not active";
+        }
+        if (Person.hasType(PersonType.TEMPORARY).and(Person::isActive).test(person)) {
+            return "temporary + active";
+        }
+        if (Person.hasType(PersonType.TEMPORARY).and(not(Person::isActive)).test(person)) {
+            return "temporary + not active";
+        }
+        throw new IllegalArgumentException("condition not supported");
     }
 
     public static String instanceOfTest(@NonNull CheckedRunnable runnable) {
