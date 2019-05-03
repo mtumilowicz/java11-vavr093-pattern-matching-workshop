@@ -15,7 +15,7 @@ import java.time.format.DateTimeParseException
 /**
  * Created by mtumilowicz on 2019-04-10.
  */
-class Tests extends Specification {
+class AnswersTests extends Specification {
     def "numberConverter"() {
         expect:
         Answers.numberConverter('one') == 1
