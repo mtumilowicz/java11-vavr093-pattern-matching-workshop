@@ -255,9 +255,11 @@ class AnswersTests extends Specification {
         given:
         def _2010_10_10 = LocalDate.of(2010, 10, 10)
         def _2019_10_10 = LocalDate.of(2019, 10, 10)
+        def _2015_01_01 = LocalDate.of(2015, 1, 1)
 
         expect:
         Answers.getTaxRateFor(_2010_10_10) == 15
+        Answers.getTaxRateFor(_2015_01_01) == 15
         Answers.getTaxRateFor(_2019_10_10) == 25
     }
 

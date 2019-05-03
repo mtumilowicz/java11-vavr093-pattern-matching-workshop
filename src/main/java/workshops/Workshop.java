@@ -128,7 +128,7 @@ public class Workshop {
 
     public static int getTaxRateFor(@NonNull LocalDate date) {
         return Match(date).of(
-                Case($LocalDate($(year -> year < 2015), $(), $()), TaxService::taxBefore2015),
+                Case($LocalDate($(year -> year < 2015), $(), $()), TaxService::taxBeforeAnd2015),
                 Case($LocalDate($(year -> year > 2015), $(), $()), TaxService::taxAfter2015)
         );
     }

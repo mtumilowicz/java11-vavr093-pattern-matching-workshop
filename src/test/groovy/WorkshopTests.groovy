@@ -10,8 +10,7 @@ import spock.lang.Specification
 import workshops.Workshop
 
 import java.time.LocalDate
-import java.time.format.DateTimeParseException
-
+import java.time.format.DateTimeParseException 
 /**
  * Created by mtumilowicz on 2019-04-10.
  */
@@ -255,9 +254,11 @@ class WorkshopTests extends Specification {
         given:
         def _2010_10_10 = LocalDate.of(2010, 10, 10)
         def _2019_10_10 = LocalDate.of(2019, 10, 10)
+        def _2015_01_01 = LocalDate.of(2015, 1, 1)
 
         expect:
         Workshop.getTaxRateFor(_2010_10_10) == 15
+        Workshop.getTaxRateFor(_2015_01_01) == 15
         Workshop.getTaxRateFor(_2019_10_10) == 25
     }
 
