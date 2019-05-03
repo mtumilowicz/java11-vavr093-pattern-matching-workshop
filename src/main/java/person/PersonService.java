@@ -30,6 +30,7 @@ public class PersonService {
                                                 .build())
                                         .account(Account.builder()
                                                 .balance(personRequest.getBalance())
+                                                .salary(Salary.of(0))
                                                 .build())
                                         .build()
                         )),
