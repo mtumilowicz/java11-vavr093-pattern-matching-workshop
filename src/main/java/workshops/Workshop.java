@@ -195,15 +195,18 @@ public class Workshop {
         } catch (IOException ex) {
             return "IOException";
         } catch (Throwable ex) {
+            // Match(ex).of
+            // Case($(instanceOf(IllegalArgumentException.class)), "IllegalArgumentException")
             return "handle rest";
         }
     }
 
     public static String noneOfTest(@NonNull Person person) {
-        return Match(person).of(
-                Case($(noneOf(Person.hasType(PersonType.VIP), Person::hasBigSalary)), "handle special"),
-                Case($(), "handle rest")
-        );
+        // Match(person).of
+        // Case($(noneOf(Person.hasType(PersonType.VIP), Person::hasBigSalary)), "handle special")
+        return not(Person.hasType(PersonType.VIP).or(Person::hasBigSalary)).test(person)
+                ? "handle special"
+                : "handle rest";
     }
 
     public static String anyOfTest(@NonNull Person person) {
