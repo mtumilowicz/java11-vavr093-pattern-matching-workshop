@@ -1,5 +1,6 @@
 package workshops;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Range;
 import credit.CreditAssessmentService;
 import io.vavr.CheckedRunnable;
@@ -23,6 +24,7 @@ import static io.vavr.Patterns.*;
 import static io.vavr.Patterns.$Failure;
 import static io.vavr.Predicates.*;
 import static io.vavr.Predicates.anyOf;
+import static java.util.Objects.nonNull;
 import static java.util.function.Predicate.not;
 import static workshops.DecompositionAnswersPatterns.$LocalDate;
 import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjects;
@@ -31,14 +33,20 @@ import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjec
  * Created by mtumilowicz on 2019-05-03.
  */
 public class Workshop {
+
     public static int numberConverter(String number) {
-        return Match(number).of(
-                Case($("one"), 1),
-                Case($("two"), 2),
-                Case($("three"), 3),
-                Case($(), () -> {
-                    throw new IllegalStateException("value not supported");
-                }));
+        Preconditions.checkState(nonNull(number));
+        
+        switch (number) { // hint: Match(number).of
+            case "one": // hint: Case($("one"), 1)
+                return 1;
+            case "two":
+                return 2;
+            case "three":
+                return 3;
+            default:
+                throw new IllegalStateException("value not supported");
+        }
     }
 
     public static String thresholds(int input) {
