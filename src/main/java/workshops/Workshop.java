@@ -51,7 +51,7 @@ public class Workshop {
 
     public static String thresholds(int input) {
         Preconditions.checkArgument(input >= 0, "only positive numbers!");
-        
+
         Range<Integer> threshold1 = Range.closed(0, 50);
         Range<Integer> threshold2 = Range.closed(51, 150);
         Range<Integer> threshold3 = Range.atLeast(151);
@@ -71,13 +71,18 @@ public class Workshop {
     }
 
     public static String switchOnEnum(@NonNull Person person) {
-        return Match(person.getType()).of(
-                Case($(PersonType.VIP), () -> StatsService.getFullStats(person)),
-                Case($(PersonType.REGULAR), () -> StatsService.getStats(person)),
-                Case($(PersonType.TEMPORARY), () -> StatsService.getFastStats(person)),
-                Case($(), ignore -> {
-                    throw new IllegalStateException("value not supported");
-                }));
+        Preconditions.checkState(nonNull(person.getType()), "value not supported");
+        
+        switch (person.getType()) {
+            case VIP:
+                return StatsService.getFullStats(person);
+            case REGULAR:
+                return StatsService.getStats(person);
+            case TEMPORARY:
+                return StatsService.getFastStats(person);
+            default:
+                throw new IllegalStateException("value not supported");
+        }
     }
 
     public static LocalDate rawDateMapper(String date) {
