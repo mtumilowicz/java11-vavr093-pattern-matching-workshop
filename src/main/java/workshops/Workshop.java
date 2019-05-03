@@ -20,7 +20,6 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 import static io.vavr.API.*;
-import static io.vavr.Patterns.*;
 import static io.vavr.Predicates.*;
 import static java.util.Objects.nonNull;
 import static java.util.function.Predicate.not;
@@ -110,13 +109,10 @@ public class Workshop {
     }
 
     public static void tryDecompose(String number, Display display) {
-        Try<Integer> _try = Try.of(() -> Integer.parseInt(number));
-        Match(_try).of(
-                Case($Success($()),
-                        i -> run(() -> display.push("squared number is: " + i * i))),
-                Case($Failure($()),
-                        ex -> run(() -> display.push("cannot square number: " + ex.getLocalizedMessage())))
-        );
+        Try.of(() -> Integer.parseInt(number)) // Match(...).of
+                // Case($Success($()), i -> run(() -> display.push("squared number is: " + i * i)))
+                .onSuccess(i -> display.push("squared number is: " + i * i))
+                .onFailure(ex -> display.push("cannot square number: " + ex.getLocalizedMessage()));
     }
 
     public static String ifSyntax(Person person) {
