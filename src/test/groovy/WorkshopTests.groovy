@@ -303,16 +303,16 @@ class WorkshopTests extends Specification {
                 Try.success(5))
 
         when:
-        def test1 = Workshop.existsTest(withFailures)
-        def test2 = Workshop.existsTest(withoutFailures)
+        def failures = Workshop.existsTest(withFailures)
+        def successes = Workshop.existsTest(withoutFailures)
 
         then:
-        test1.isLeft()
-        test1.getLeft().size() == 2
-        test1.getLeft().containsAll([ex1, ex2])
-        test2.isRight()
-        test2.get().size() == 5
-        test2.get().containsAll([1, 2, 3, 4, 5])
+        failures.isLeft()
+        failures.getLeft().size() == 2
+        failures.getLeft().containsAll([ex1, ex2])
+        successes.isRight()
+        successes.get().size() == 5
+        successes.get().containsAll([1, 2, 3, 4, 5])
     }
 
     def "forAllTest"() {
@@ -332,16 +332,16 @@ class WorkshopTests extends Specification {
                 Try.success(5))
 
         when:
-        def test1 = Workshop.forAllTest(withFailures)
-        def test2 = Workshop.forAllTest(withoutFailures)
+        def failures = Workshop.forAllTest(withFailures)
+        def successes = Workshop.forAllTest(withoutFailures)
 
         then:
-        test1.isLeft()
-        test1.getLeft().size() == 2
-        test1.getLeft().containsAll([ex1, ex2])
-        test2.isRight()
-        test2.get().size() == 5
-        test2.get().containsAll([1, 2, 3, 4, 5])
+        failures.isLeft()
+        failures.getLeft().size() == 2
+        failures.getLeft().containsAll([ex1, ex2])
+        successes.isRight()
+        successes.get().size() == 5
+        successes.get().containsAll([1, 2, 3, 4, 5])
     }
 
     def "allOfTest"() {

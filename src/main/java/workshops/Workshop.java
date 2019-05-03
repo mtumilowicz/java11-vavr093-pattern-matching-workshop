@@ -153,18 +153,11 @@ public class Workshop {
     }
 
     public static Either<Seq<Throwable>, Seq<Integer>> forAllTest(@NonNull Seq<Try<Integer>> list) {
-        return Match(list).of(
-                Case($(forAll(Try::isSuccess)),
-                        tries -> Either.right(tries
-                                .filter(Try::isSuccess)
-                                .map(Try::get)
-                                .toList())),
-                Case($(),
-                        tries -> Either.left(tries
-                                .filter(Try::isFailure)
-                                .map(Try::getCause)
-                                .toList()))
-        );
+        // Match(list).of
+        return list.forAll(Try::isSuccess)
+                // Case($(forAll(Try::isSuccess)), tries -> ...
+                ? Either.right(list.filter(Try::isFailure).map(Try::get))
+                : Either.left(list.filter(Try::isFailure).map(Try::getCause));
     }
 
     public static String allOfTest(@NonNull Person person) {
