@@ -274,6 +274,9 @@ public class Workshop {
         );
     }
 
+    /**
+     *
+     */
     public static Either<Seq<Throwable>, Seq<Integer>> existsTest(@NonNull Seq<Try<Integer>> list) {
         // Match(list).of
         return list.exists(Try::isFailure)
