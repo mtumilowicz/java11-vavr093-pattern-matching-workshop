@@ -206,15 +206,25 @@ public class Workshop {
 
     /**
      * every logic based on dates could be represented using pattern matching
-     * nearly always in a more concise, cleaner and easier to read way
+     * nearly always - in a more concise, cleaner and easier to read way
+     * 
+     * the purpose of this example is to show that we could think about pattern matching
+     * as a way of decomposing LocalDate basing on some predicates:
+     * switch(localDate)
+     *  case (predicate1(localDate)) do something
+     *  case (predicate2(localDate)) do something else
+     * 
+     * DecompositionAnswers.$LocalDate is a decomposer written by us - if you want to
+     * master writing your decomposers please follow the rules from DecompositionWorkshop
+     * and don't forget to import them here
      */
     public static int getTaxRateFor(@NonNull LocalDate date) {
         // Match(date).of
-        // Case($LocalDate($(year -> year < 2015), $(), $()), TaxService::taxBeforeAnd2015)
         Predicate<Integer> before2010 = year -> year < 2010;
         Predicate<Integer> after2010 = year -> year > 2010;
         Predicate<Integer> before2015 = year -> year < 2015;
 
+        // Case($LocalDate($(before2010.or(is(2010))), $(), $()), TaxService::taxBeforeOr2010)
         if (before2010.or(is(2010)).test(date.getYear())) {
             return TaxService.taxBeforeOr2010();
         }
