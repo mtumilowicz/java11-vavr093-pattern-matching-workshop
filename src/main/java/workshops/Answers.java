@@ -31,6 +31,7 @@ import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjec
 TO-DO:
 1. text over methods in Workshops what we gonna do / what we want to show
 1. readme
+1. what is goin on when pattern matching without guard
  */
 public class Answers {
     public static int numberConverter(String number) {
