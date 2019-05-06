@@ -27,6 +27,11 @@ import static java.util.function.Predicate.not;
  */
 public class Workshop {
 
+    /**
+     * very simple number converter just to show, that every classic
+     * switch-case construction could be rewritten using pattern matching
+     * to be more concise, clean and easy to read
+     */
     public static int numberConverter(String number) {
         Preconditions.checkState(nonNull(number), "value not supported");
 
@@ -42,6 +47,11 @@ public class Workshop {
         }
     }
 
+    /**
+     * very simple threshold based logic just to show, that every well-known
+     * multiple ifs construction could be rewritten using pattern matching
+     * to be more concise, clean and easy to read
+     */
     public static String thresholds(int input) {
         Preconditions.checkArgument(input >= 0, "only positive numbers!");
 
@@ -63,6 +73,21 @@ public class Workshop {
         return "threshold3";
     }
 
+    /**
+     * very simple enum based logic just to show, that every well-known
+     * switch-case enum construction could be rewritten using pattern matching
+     * to be more concise, clean and easy to read
+     * 
+     * this method simply loads appropriate stats for a given enum in a way:
+     * VIP -> full stats (vips are not very common, and full stats are possibly time consuming
+     *      so we may want to load it only for special client to show for example highly dedicated 
+     *      marketing suggestions)
+     * REGULAR -> we load ordinary, highly optimized stats - compromise between time-consumption
+     *      and their scope
+     * TEMPORARY -> it's just a temporary client (for example - performs buy without permanent account), 
+     *      so we don't want to gather all info about him, or even we do not have possibility to do it,
+     *      so we perform only fast round
+     */
     public static String switchOnEnum(@NonNull Person person) {
         Preconditions.checkState(nonNull(person.getType()), "value not supported");
 
@@ -78,6 +103,14 @@ public class Workshop {
         }
     }
 
+    /**
+     * well-known object to object converter with a non-null guard
+     * could be rewritten using pattern-matching in a more concise, 
+     * clean and easy to read way
+     * 
+     * this method simply converts String date -> LocalDate
+     * and if date is null - it return null
+     */
     public static LocalDate rawDateMapper(String date) {
         return Objects.isNull(date) // hint: Match(date).of
                 ? null // hint: Case($(isNull()), () -> null)
