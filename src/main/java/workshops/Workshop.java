@@ -104,12 +104,12 @@ public class Workshop {
     }
 
     /**
-     * well-known object to object converter with a non-null guard
+     * well-known X -> Y converter with a non-null guard
      * could be rewritten using pattern-matching in a more concise, 
      * clean and easy to read way
      * 
      * this method simply converts String date -> LocalDate
-     * and if date is null - it return null
+     * and if date is null - it returns null
      */
     public static LocalDate rawDateMapper(String date) {
         return Objects.isNull(date) // hint: Match(date).of
@@ -117,11 +117,29 @@ public class Workshop {
                 : LocalDate.parse(date);
     }
 
+    /**
+     * well-known X -> Option<Y> converter could be rewritten 
+     * using pattern-matching in a more concise, 
+     * clean and easy to read way
+     *
+     * this method simply converts String date -> Option<LocalDate>
+     * and if date is null - it returns Option.none()
+     */
     public static Option<LocalDate> optionDateMapper(String date) {
         return Option.of(date) // hint: Match(date).option
                 .map(LocalDate::parse); // hint: Case($(isNotNull()), LocalDate::parse))
     }
 
+    /**
+     * every use of either's fold method could be rewritten using pattern matching
+     * in some cases - it is easier to read
+     * 
+     * the purpose of this example is to show, that we could think about pattern matching
+     * as a way of object decomposition
+     * switch(either)
+     *  case Left - do something
+     *  case Right - do something else
+     */
     public static Either<String, Person> eitherDecompose(Either<PersonRequest, ValidPersonRequest> either) {
         // Match(either).of
         return Objects.isNull(either)
@@ -130,6 +148,17 @@ public class Workshop {
                 : either.fold(PersonService::patch, PersonService::assemblePerson);
     }
 
+    /**
+     * every final consuming of Option could be rewritten using pattern matching
+     * in some cases - it is easier to read
+     * especially when it comes to performing side-effects
+     * 
+     * the purpose of this example is to show, that we could think about pattern matching
+     * as a way of object decomposition
+     * switch(option)
+     *  case None - run some action (side-effects)
+     *  case Some - run other action (side-effects)
+     */
     public static void optionDecompose(int id, Display display) {
         PersonRepository.findById(id) // Match(PersonRepository.findById(id)).of
                 // Case($None(), run(() -> display.push("cannot find person with id = " + id)))
@@ -137,6 +166,17 @@ public class Workshop {
                 .forEach(value -> display.push("person: " + value + " processed"));
     }
 
+    /**
+     * every final consuming of Try could be rewritten using pattern matching
+     * in some cases - it is easier to read
+     * especially when it comes to performing side-effects
+     *
+     * the purpose of this example is to show, that we could think about pattern matching
+     * as a way of object decomposition
+     * switch(try)
+     *  case Success - run some action (side-effects)
+     *  case Failure - run other action (side-effects)
+     */
     public static void tryDecompose(String number, Display display) {
         Try.of(() -> Integer.parseInt(number)) // Match(...).of
                 // Case($Success($()), i -> run(() -> display.push("squared number is: " + i * i)))
