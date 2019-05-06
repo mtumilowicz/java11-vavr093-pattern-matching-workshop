@@ -184,6 +184,13 @@ public class Workshop {
                 .onFailure(ex -> display.push("cannot square number: " + ex.getLocalizedMessage()));
     }
 
+    /**
+     * every ternary operator could be rewritten using pattern matching
+     * in some cases - it is easier to read
+     * 
+     * the purpose of this example is to show, that we could think about pattern matching
+     * as a generalization of if-statement or ternary-statement
+     */
     public static String ifSyntax(Person person) {
         // Match(person).of
         if (Objects.isNull(person)) {
@@ -195,6 +202,11 @@ public class Workshop {
                 : PersonService.activate(person);
     }
 
+    /**
+     * every logic based on dates could be represented using pattern matching
+     * nearly always in a more concise, cleaner and easier to read way
+     * 
+     */
     public static int getTaxRateFor(@NonNull LocalDate date) {
         // Match(date).of
         // Case($LocalDate($(year -> year < 2015), $(), $()), TaxService::taxBeforeAnd2015)
