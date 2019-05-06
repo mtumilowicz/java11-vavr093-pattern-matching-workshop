@@ -33,6 +33,7 @@ TO-DO:
 1. text over methods in Workshops what we gonna do / what we want to show
 1. readme
 1. what is goin on when pattern matching without guard
+1. personDecompose - rewrite in a described way
  */
 public class Answers {
     public static int numberConverter(String number) {
