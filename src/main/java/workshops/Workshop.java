@@ -18,7 +18,9 @@ import tax.TaxService;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.function.Predicate;
 
+import static io.vavr.Predicates.is;
 import static java.util.Objects.nonNull;
 import static java.util.function.Predicate.not;
 
@@ -77,16 +79,16 @@ public class Workshop {
      * very simple enum based logic just to show, that every well-known
      * switch-case enum construction could be rewritten using pattern matching
      * to be more concise, clean and easy to read
-     * 
+     * <p>
      * this method simply loads appropriate stats for a given enum in a way:
      * VIP -> full stats (vips are not very common, and full stats are possibly time consuming
-     *      so we may want to load it only for special client to show for example highly dedicated 
-     *      marketing suggestions)
+     * so we may want to load it only for special client to show for example highly dedicated
+     * marketing suggestions)
      * REGULAR -> we load ordinary, highly optimized stats - compromise between time-consumption
-     *      and their scope
-     * TEMPORARY -> it's just a temporary client (for example - performs buy without permanent account), 
-     *      so we don't want to gather all info about him, or even we do not have possibility to do it,
-     *      so we perform only fast round
+     * and their scope
+     * TEMPORARY -> it's just a temporary client (for example - performs buy without permanent account),
+     * so we don't want to gather all info about him, or even we do not have possibility to do it,
+     * so we perform only fast round
      */
     public static String switchOnEnum(@NonNull Person person) {
         Preconditions.checkState(nonNull(person.getType()), "value not supported");
@@ -105,9 +107,9 @@ public class Workshop {
 
     /**
      * well-known X -> Y converter with a non-null guard
-     * could be rewritten using pattern-matching in a more concise, 
+     * could be rewritten using pattern-matching in a more concise,
      * clean and easy to read way
-     * 
+     * <p>
      * this method simply converts String date -> LocalDate
      * and if date is null - it returns null
      */
@@ -118,10 +120,10 @@ public class Workshop {
     }
 
     /**
-     * well-known X -> Option<Y> converter could be rewritten 
-     * using pattern-matching in a more concise, 
+     * well-known X -> Option<Y> converter could be rewritten
+     * using pattern-matching in a more concise,
      * clean and easy to read way
-     *
+     * <p>
      * this method simply converts String date -> Option<LocalDate>
      * and if date is null - it returns Option.none()
      */
@@ -133,12 +135,12 @@ public class Workshop {
     /**
      * every use of either's fold method could be rewritten using pattern matching
      * in some cases - it is easier to read
-     * 
+     * <p>
      * the purpose of this example is to show, that we could think about pattern matching
      * as a way of object decomposition
      * switch(either)
-     *  case Left - do something
-     *  case Right - do something else
+     * case Left - do something
+     * case Right - do something else
      */
     public static Either<String, Person> eitherDecompose(Either<PersonRequest, ValidPersonRequest> either) {
         // Match(either).of
@@ -152,12 +154,12 @@ public class Workshop {
      * every final consuming of Option could be rewritten using pattern matching
      * in some cases - it is easier to read
      * especially when it comes to performing side-effects
-     * 
+     * <p>
      * the purpose of this example is to show, that we could think about pattern matching
      * as a way of object decomposition
      * switch(option)
-     *  case None - run some action (side-effects)
-     *  case Some - run other action (side-effects)
+     * case None - run some action (side-effects)
+     * case Some - run other action (side-effects)
      */
     public static void optionDecompose(int id, Display display) {
         PersonRepository.findById(id) // Match(PersonRepository.findById(id)).of
@@ -170,12 +172,12 @@ public class Workshop {
      * every final consuming of Try could be rewritten using pattern matching
      * in some cases - it is easier to read
      * especially when it comes to performing side-effects
-     *
+     * <p>
      * the purpose of this example is to show, that we could think about pattern matching
      * as a way of object decomposition
      * switch(try)
-     *  case Success - run some action (side-effects)
-     *  case Failure - run other action (side-effects)
+     * case Success - run some action (side-effects)
+     * case Failure - run other action (side-effects)
      */
     public static void tryDecompose(String number, Display display) {
         Try.of(() -> Integer.parseInt(number)) // Match(...).of
@@ -187,7 +189,7 @@ public class Workshop {
     /**
      * every ternary operator could be rewritten using pattern matching
      * in some cases - it is easier to read
-     * 
+     * <p>
      * the purpose of this example is to show, that we could think about pattern matching
      * as a generalization of if-statement or ternary-statement
      */
@@ -205,14 +207,24 @@ public class Workshop {
     /**
      * every logic based on dates could be represented using pattern matching
      * nearly always in a more concise, cleaner and easier to read way
-     * 
      */
     public static int getTaxRateFor(@NonNull LocalDate date) {
         // Match(date).of
         // Case($LocalDate($(year -> year < 2015), $(), $()), TaxService::taxBeforeAnd2015)
-        return date.getYear() <= 2015
-                ? TaxService.taxBeforeAnd2015()
-                : TaxService.taxAfter2015();
+        Predicate<Integer> before2010 = year -> year < 2010;
+        Predicate<Integer> after2010 = year -> year > 2010;
+        Predicate<Integer> before2015 = year -> year < 2015;
+
+        if (before2010.or(is(2010)).test(date.getYear())) {
+            return TaxService.taxBeforeOr2010();
+        }
+
+        if (after2010.and(before2015).test(date.getYear())) {
+            return TaxService.taxFrom2010To2015();
+        }
+
+        // (default) - it has to be >= 2015 after bouncing from above ifs
+        return TaxService.taxAfterOr2015();
     }
 
     public static Integer personDecompose(@NonNull Person person) {

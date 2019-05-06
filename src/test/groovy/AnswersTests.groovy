@@ -253,14 +253,20 @@ class AnswersTests extends Specification {
 
     def "getTaxRateFor"() {
         given:
+        def _2005_10_10 = LocalDate.of(2005, 10, 10)
         def _2010_10_10 = LocalDate.of(2010, 10, 10)
-        def _2019_10_10 = LocalDate.of(2019, 10, 10)
-        def _2015_01_01 = LocalDate.of(2015, 1, 1)
+        def _2011_10_10 = LocalDate.of(2011, 10, 10)
+        def _2015_10_10 = LocalDate.of(2015, 10, 10)
+        def _2017_10_10 = LocalDate.of(2017, 10, 10)
+        def _2020_01_01 = LocalDate.of(2020, 1, 1)
 
         expect:
-        Answers.getTaxRateFor(_2010_10_10) == 15
-        Answers.getTaxRateFor(_2015_01_01) == 15
-        Answers.getTaxRateFor(_2019_10_10) == 25
+        Answers.getTaxRateFor(_2005_10_10) == 1
+        Answers.getTaxRateFor(_2010_10_10) == 1
+        Answers.getTaxRateFor(_2011_10_10) == 2
+        Answers.getTaxRateFor(_2015_10_10) == 3
+        Answers.getTaxRateFor(_2017_10_10) == 3
+        Answers.getTaxRateFor(_2020_01_01) == 3
     }
 
     def "decomposePerson"() {

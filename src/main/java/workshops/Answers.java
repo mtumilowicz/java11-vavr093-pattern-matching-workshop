@@ -16,6 +16,7 @@ import tax.TaxService;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.function.Predicate;
 
 import static io.vavr.API.*;
 import static io.vavr.Patterns.*;
@@ -114,9 +115,15 @@ public class Answers {
     }
 
     public static int getTaxRateFor(@NonNull LocalDate date) {
+        Predicate<Integer> before2010 = year -> year < 2010;
+        Predicate<Integer> after2010 = year -> year > 2010;
+        Predicate<Integer> before2015 = year -> year < 2015;
+        Predicate<Integer> after2015 = year -> year > 2015;
+        
         return Match(date).of(
-                Case($LocalDate($(year -> year <= 2015), $(), $()), TaxService::taxBeforeAnd2015),
-                Case($LocalDate($(year -> year > 2015), $(), $()), TaxService::taxAfter2015)
+                Case($LocalDate($(before2010.or(is(2010))), $(), $()), TaxService::taxBeforeOr2010),
+                Case($LocalDate($(after2010.and(before2015)), $(), $()), TaxService::taxFrom2010To2015),
+                Case($LocalDate($(after2015.or(is(2015))), $(), $()), TaxService::taxAfterOr2015)
         );
     }
 
