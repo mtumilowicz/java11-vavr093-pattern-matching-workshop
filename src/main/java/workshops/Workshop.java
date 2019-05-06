@@ -237,6 +237,31 @@ public class Workshop {
         return TaxService.taxAfterOr2015();
     }
 
+    /**
+     * we often need to extract some objects from other object and build
+     * another object from them - pattern matching is a perfect match
+     * 
+     * suppose that we have a person, and we want to assess credit risk
+     * based on account status and address
+     * without pattern matching we often have to perform in a completely structural
+     * way, firstly declaring all needed objects:
+     * Address address = person.getAddress();
+     * Account account = person.getAccount();
+     * ...
+     * and then create what we really need
+     * RiskSubjects.city(address.city)
+     *      .country(address.country)
+     *      .quarter(address.quarter)
+     *      .balance(account.balance)
+     * however - we could extract that objects and construct the other 
+     * in a more functional way: 
+     * Case(decompose person on account and address, (account, address) -> ...
+     *
+     * note that maybe on that example the gain of using pattern matching is not easily
+     * visible, but suppose that we have to construct two types of objects:
+     * VipRiskSubject and RegularRiskSubject basing on account balance - ifs
+     * could be converted to nested pattern matching - quite similar to getTaxRateFor example
+     */
     public static Integer personDecompose(@NonNull Person person) {
         // Match(person).of
         // Case($PersonByCreditAssessSubjects($(), $()), (account, address) -> ...
