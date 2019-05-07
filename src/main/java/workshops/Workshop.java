@@ -355,6 +355,22 @@ public class Workshop {
         throw new IllegalArgumentException("condition not supported");
     }
 
+    /**
+     * we often need to perform some actions that depends on the class of some objects
+     * it leads to many if statements with instanceof
+     * 
+     * if (x instance of X1)
+     *      do something
+     * if (x instance of X2)
+     *      do something else
+     * otherwise
+     *      do default
+     *      
+     * or another example: try with multiple catch statements
+     *      
+     * this example shows that situations sketched above could be rewritten using
+     * pattern matching with a gain in clarity and readability
+     */
     public static String instanceOfTest(@NonNull CheckedRunnable runnable) {
         try {
             runnable.run();
