@@ -275,7 +275,17 @@ public class Workshop {
     }
 
     /**
-     *
+     * the main goal of that example is to show how pattern matching plays with lists
+     * 
+     * primarily we want to show that something like this
+     * if list contains object with particular behaviour do something
+     * (if list contains object with other behaviour do something else)
+     * if list doesn't contain any particular object do default
+     * could be rewritten with pattern matching
+     * 
+     * below method converts sequence of int tries into either in such a way:
+     *  if there is at least one failure - returns Either.left(all failure's exceptions)
+     *  if there is no failure - returns Either.right(all ints)
      */
     public static Either<Seq<Throwable>, Seq<Integer>> existsTest(@NonNull Seq<Try<Integer>> list) {
         // Match(list).of
