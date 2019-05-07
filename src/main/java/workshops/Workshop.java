@@ -82,9 +82,8 @@ public class Workshop {
     /**
      * very simple enum based logic
      * 
-     * we want to show that every well-known
-     * switch-case enum construction could be rewritten using pattern matching
-     * to be more concise, clean and easy to read
+     * we want to show that every well-known enum switch-case construction 
+     * could be rewritten using pattern matching and be more concise, clean and easy to read
      * <p>
      * this method simply loads appropriate stats for a given enum in a way:
      *  VIP -> full stats (vips are not very common, and full stats are possibly time consuming
@@ -111,10 +110,10 @@ public class Workshop {
     }
 
     /**
-     * well-known X -> Y converter with a non-null guard
+     * nearly every day we met conversions: X -> Y with a non-null guard
      * 
-     * it could be rewritten using pattern-matching in a more concise,
-     * clean and easy to read way
+     * it is worth mentioning that such converter could be rewritten 
+     * using pattern-matching in some cases with a gain in a readability
      * <p>
      * this method simply converts String date -> LocalDate
      * and if date is null - it returns null
@@ -126,11 +125,9 @@ public class Workshop {
     }
 
     /**
-     * well-known X -> Option<Y> converter 
-     * 
-     * it could be rewritten
-     * using pattern-matching in a more concise,
-     * clean and easy to read way
+     * nearly every day we met conversions: X -> Option<Y>
+     * it is worth mentioning that such converter could be rewritten
+     * using pattern-matching in some cases with a gain in a readability
      * <p>
      * this method simply converts String date -> Option<LocalDate>
      * and if date is null - it returns Option.none()
@@ -160,7 +157,7 @@ public class Workshop {
 
     /**
      * every final consumption of Option could be rewritten using pattern matching
-     * in some cases - it is easier to read, especially when it comes to performing side-effects
+     * in some cases - it is easier to read, especially when it comes to complex side-effects
      * <p>
      * the purpose of this example is to show, that we could think about pattern matching
      * as a way of object's decomposition
@@ -177,13 +174,13 @@ public class Workshop {
 
     /**
      * every final consumption of Try could be rewritten using pattern matching
-     * in some cases - it is easier to read, especially when it comes to performing side-effects
+     * in some cases - it is easier to read, especially when it comes to complex side-effects
      * <p>
      * the purpose of this example is to show, that we could think about pattern matching
      * as a way of object's decomposition
      * switch(try)
-     * case Success - run some action (side-effects)
-     * case Failure - run other action (side-effects)
+     *  case Success - run some action (side-effects)
+     *  case Failure - run other action (side-effects)
      */
     public static void tryDecompose(String number, Display display) {
         Try.of(() -> Integer.parseInt(number)) // Match(...).of
@@ -245,11 +242,12 @@ public class Workshop {
 
     /**
      * we often need to extract some objects from other object and build
-     * another object from them - pattern matching is a perfect match
+     * another object from them (based on some additional logic) - pattern 
+     * matching is a perfect for such cases
      * 
      * suppose that we have a person, and we want to assess credit risk
      * based on account status and address
-     * without pattern matching we often have to perform in a completely structural
+     * without pattern matching we often have to perform it in a completely structural
      * way, firstly declaring all needed objects:
      * Address address = person.getAddress();
      * Account account = person.getAccount();
@@ -259,7 +257,7 @@ public class Workshop {
      *      .country(address.country)
      *      .quarter(address.quarter)
      *      .balance(account.balance)
-     * however - we could extract that objects and construct the other 
+     * however - we could extract that objects and then construct the other 
      * in a more functional way: 
      * Case(decompose person on account and address, (account, address) -> ...
      *
@@ -282,14 +280,15 @@ public class Workshop {
 
     /**
      * the main goal of that example is to show how pattern matching plays with lists
-     * 
-     * primarily we want to show that something like this
-     * if list contains object with particular behaviour do something
-     * (if list contains object with other behaviour do something else)
+     *
+     * primarily we want to show that below use case could be rewritten 
+     * with pattern matching:
+     *
+     * if predicate is hold for at least one object in the list - do something
+     * if other predicate is hold for at least one object in the list - do something else
      * otherwise do default
-     * could be rewritten with pattern matching
      * 
-     * below method converts sequence of int tries into either in such a way:
+     * below method converts sequence of int tries into Either in such a way:
      *  if there is at least one failure - returns Either.left(all failure's exceptions)
      *  if there is no failure - returns Either.right(all ints)
      */
@@ -302,16 +301,17 @@ public class Workshop {
     }
 
     /**
-     * the main goal of that example is to show how pattern matching plays with lists
+     * the main goal of this example is to show how pattern matching plays with lists
      *
      * primarily we want to show that below use case 
      * could be rewritten with pattern matching:
-     * if the list is consisted only of object with particular behaviour do something
-     * (if the list is consisted only of object with other behaviour do something else)
+     * 
+     * if predicate is hold for every object in the list - do something
+     * if other predicate is hold for every object in the list - do something else
      * otherwise do default
      *
-     * below method converts sequence of int tries into either in such a way:
-     *  if there is only successes - returns Either.right(all ints)
+     * below method converts sequence of int tries into Either in such a way:
+     *  if there are only successes - returns Either.right(all ints)
      *  if there is no success - returns Either.left(all failure's exceptions)
      */
     public static Either<Seq<Throwable>, Seq<Integer>> forAllTest(@NonNull Seq<Try<Integer>> list) {
@@ -323,11 +323,10 @@ public class Workshop {
     }
 
     /**
-     * we often need to perform different actions when different sets of predicates (of
-     * a given object) are held
+     * we often need to perform different actions when different sets of predicates are held
      * 
      * suppose that we have a person, and we want to do something like this:
-     * if (person.isSomething() and person.isSomethingElse() and person.hasSomething)
+     * if (person.isSomething() and person.isSomethingElse() and person.hasSomething())
      *      do some action
      * if (not person.isSomething() and person.hasSomethingElse)
      *      do some other action
@@ -363,7 +362,7 @@ public class Workshop {
 
     /**
      * we often need to perform some actions that depends on the class of some objects
-     * it leads to many if statements with instanceof
+     * it leads into many if statements with instanceof
      * 
      * if (x instance of X1)
      *      do something
@@ -372,7 +371,7 @@ public class Workshop {
      * otherwise
      *      do default
      *      
-     * or another example: try with multiple catch statements
+     * or quite similar issue: try with multiple catch statements
      *      
      * this example shows that situations sketched above could be rewritten using
      * pattern matching with a gain in clarity and readability
@@ -395,13 +394,13 @@ public class Workshop {
     }
 
     /**
-     * we often need to perform different actions when different sets of predicates (of
-     * a given object) are not held
+     * we often need to perform different actions when different sets of predicates
+     * are not held
      *
      * suppose that we have a person, and we want to do something like this:
-     * if (not person.isSomething() and not person.isSomethingElse() and not person.hasSomething)
+     * if (not person.isSomething() and not person.isSomethingElse() and not person.hasSomething())
      *      do some action
-     * if (not person.isSomething() and not person.hasSomethingElse)
+     * if (not person.isSomething() and not person.hasSomethingElse())
      *      do some other action
      * otherwise
      *      do default
@@ -418,8 +417,8 @@ public class Workshop {
     }
 
     /**
-     * we often need to perform different actions when different sets of predicates (of
-     * a given object) are not held
+     * we often need to perform different actions when at least one predicate from appropriate
+     * set is held
      *
      * suppose that we have a person, and we want to do something like this:
      * if (person.isSomething() or person.isSomethingElse() or person.hasSomething())
