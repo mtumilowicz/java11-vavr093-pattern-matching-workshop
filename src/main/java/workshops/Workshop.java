@@ -388,21 +388,47 @@ public class Workshop {
         }
     }
 
+    /**
+     * we often need to perform different actions when different sets of predicates (of
+     * a given object) are not held
+     *
+     * suppose that we have a person, and we want to do something like this:
+     * if (not person.isSomething() and not person.isSomethingElse() and not person.hasSomething)
+     *      do some action
+     * if (not person.isSomething() and not person.hasSomethingElse)
+     *      do some other action
+     * otherwise
+     *      do default
+     *
+     * this example shows that it could be easily written using pattern matching
+     * with a gain in readability and clarity
+     */
     public static String noneOfTest(@NonNull Person person) {
         // Match(person).of
         // Case($(noneOf(Person.hasType(PersonType.VIP), Person::hasBigSalary)), "handle special")
-        // what if more than two predicates ?
-        // what if more than one condition (that cannot be written using ternary op)
         return not(Person.hasType(PersonType.VIP).or(Person::hasBigSalary)).test(person)
                 ? "handle special"
                 : "handle rest";
     }
 
+    /**
+     * we often need to perform different actions when different sets of predicates (of
+     * a given object) are not held
+     *
+     * suppose that we have a person, and we want to do something like this:
+     * if (person.isSomething() or person.isSomethingElse() or person.hasSomething())
+     *      do some action
+     * if (person.isSomething() or person.hasSomethingElse())
+     *      do some other action
+     * otherwise
+     *      do default
+     *
+     * this example shows that it could be easily written using pattern matching
+     * with a gain in readability and clarity
+     */
     public static String anyOfTest(@NonNull Person person) {
         // Match(person).of
         // Case($(anyOf(Person.hasType(PersonType.VIP), Person::hasBigSalary)), "handle special")
-        // what if more than two predicates ?
-        // what if more than one condition (that cannot be written using ternary op)
         return Person.hasType(PersonType.VIP).or(Person::hasBigSalary).test(person)
                 ? "handle special"
                 : "handle rest";
