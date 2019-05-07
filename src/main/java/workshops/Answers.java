@@ -30,10 +30,8 @@ import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjec
  */
 /*
 TO-DO:
-1. final review of methods description
 1. readme
 1. what is goin on when pattern matching without guard
-1. personDecompose - rewrite in a described way
 1. DecompositionWorkshop - update
  */
 public class Answers {
