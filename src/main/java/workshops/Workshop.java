@@ -30,7 +30,9 @@ import static java.util.function.Predicate.not;
 public class Workshop {
 
     /**
-     * very simple number converter just to show, that every classic
+     * very simple number converter 
+     * 
+     * we want to show, that every classic
      * switch-case construction could be rewritten using pattern matching
      * to be more concise, clean and easy to read
      */
@@ -50,7 +52,9 @@ public class Workshop {
     }
 
     /**
-     * very simple threshold based logic just to show, that every well-known
+     * very simple threshold based logic
+     * 
+     * we want to show that every well-known
      * multiple ifs construction could be rewritten using pattern matching
      * to be more concise, clean and easy to read
      */
@@ -76,19 +80,20 @@ public class Workshop {
     }
 
     /**
-     * very simple enum based logic just to show, that every well-known
+     * very simple enum based logic
+     * 
+     * we want to show that every well-known
      * switch-case enum construction could be rewritten using pattern matching
      * to be more concise, clean and easy to read
      * <p>
      * this method simply loads appropriate stats for a given enum in a way:
-     * VIP -> full stats (vips are not very common, and full stats are possibly time consuming
-     * so we may want to load it only for special client to show for example highly dedicated
-     * marketing suggestions)
-     * REGULAR -> we load ordinary, highly optimized stats - compromise between time-consumption
-     * and their scope
-     * TEMPORARY -> it's just a temporary client (for example - performs buy without permanent account),
-     * so we don't want to gather all info about him, or even we do not have possibility to do it,
-     * so we perform only fast round
+     *  VIP -> full stats (vips are not very common, and full stats are possibly time consuming
+     *      so we may want to load it only for special client to show for example highly dedicated
+     *      marketing suggestions)
+     *  REGULAR -> we load ordinary, highly optimized stats - compromise between time-consumption
+     *      and their scope
+     *  TEMPORARY -> it's just a temporary client (for example - performs buy without permanent account),
+     *      so we don't want to gather all info about him, or even we do not have possibility to do it
      */
     public static String switchOnEnum(@NonNull Person person) {
         Preconditions.checkState(nonNull(person.getType()), "value not supported");
@@ -107,7 +112,8 @@ public class Workshop {
 
     /**
      * well-known X -> Y converter with a non-null guard
-     * could be rewritten using pattern-matching in a more concise,
+     * 
+     * it could be rewritten using pattern-matching in a more concise,
      * clean and easy to read way
      * <p>
      * this method simply converts String date -> LocalDate
@@ -120,7 +126,9 @@ public class Workshop {
     }
 
     /**
-     * well-known X -> Option<Y> converter could be rewritten
+     * well-known X -> Option<Y> converter 
+     * 
+     * it could be rewritten
      * using pattern-matching in a more concise,
      * clean and easy to read way
      * <p>
@@ -137,10 +145,10 @@ public class Workshop {
      * in some cases - it is easier to read
      * <p>
      * the purpose of this example is to show, that we could think about pattern matching
-     * as a way of object decomposition
+     * as a way of object's decomposition
      * switch(either)
-     * case Left - do something
-     * case Right - do something else
+     *  case Left - do something
+     *  case Right - do something else
      */
     public static Either<String, Person> eitherDecompose(Either<PersonRequest, ValidPersonRequest> either) {
         // Match(either).of
@@ -151,15 +159,14 @@ public class Workshop {
     }
 
     /**
-     * every final consuming of Option could be rewritten using pattern matching
-     * in some cases - it is easier to read
-     * especially when it comes to performing side-effects
+     * every final consumption of Option could be rewritten using pattern matching
+     * in some cases - it is easier to read, especially when it comes to performing side-effects
      * <p>
      * the purpose of this example is to show, that we could think about pattern matching
-     * as a way of object decomposition
+     * as a way of object's decomposition
      * switch(option)
-     * case None - run some action (side-effects)
-     * case Some - run other action (side-effects)
+     *  case None - run some action (side-effects)
+     *  case Some - run other action (side-effects)
      */
     public static void optionDecompose(int id, Display display) {
         PersonRepository.findById(id) // Match(PersonRepository.findById(id)).of
@@ -169,12 +176,11 @@ public class Workshop {
     }
 
     /**
-     * every final consuming of Try could be rewritten using pattern matching
-     * in some cases - it is easier to read
-     * especially when it comes to performing side-effects
+     * every final consumption of Try could be rewritten using pattern matching
+     * in some cases - it is easier to read, especially when it comes to performing side-effects
      * <p>
      * the purpose of this example is to show, that we could think about pattern matching
-     * as a way of object decomposition
+     * as a way of object's decomposition
      * switch(try)
      * case Success - run some action (side-effects)
      * case Failure - run other action (side-effects)
@@ -216,7 +222,7 @@ public class Workshop {
      * 
      * DecompositionAnswers.$LocalDate is a decomposer written by us - if you want to
      * master writing your decomposers please follow the rules from DecompositionWorkshop
-     * and don't forget to import them here
+     * and don't forget to use them here
      */
     public static int getTaxRateFor(@NonNull LocalDate date) {
         // Match(date).of
