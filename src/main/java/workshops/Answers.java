@@ -30,7 +30,7 @@ import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjec
  */
 /*
 TO-DO:
-1. add an example for isIn
+1. add an example for isIn (infoAliases, helpAliases)
 1. readme
 1. what is goin on when pattern matching without guard
  */
