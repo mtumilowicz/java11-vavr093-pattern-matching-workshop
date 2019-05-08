@@ -30,9 +30,10 @@ import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjec
  */
 /*
 TO-DO:
-1. add an example for isIn (infoAliases, helpAliases)
+1. add an example for isIn
+    $(isIn(PaymentType.CREDIT_CARD, PaymentType.PAYPAL, PaymentType.GIFT_CARD))))
+    $(isIn(PaymentType.CASH))
 1. readme
-1. what is goin on when pattern matching without guard
  */
 public class Answers {
     public static int numberConverter(String number) {
