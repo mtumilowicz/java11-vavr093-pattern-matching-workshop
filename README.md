@@ -118,6 +118,12 @@ there is possibility to return an `Option` result which prevents as from `MatchE
     |`$TupleN(N...)`                           |Tuple  |
 * User-Defined Patterns
     
-* run, side effects
-    * run must not be used as direct return value, i.e. outside of a lambda body
-    the Cases will be eagerly evaluated before the patterns are matched
+* performing side effects
+    ```
+    Match(PersonRepository.findById(id)).of(
+            Case($None(), run(() -> display.push("cannot find person with id = " + id))),
+            Case($Some($()), value -> run(() -> display.push("person: " + value + " processed")))
+    );
+    ```
+    * `run` must not be used as direct return value, i.e. outside of a lambda body - 
+    the cases have to be evaluated lazily
