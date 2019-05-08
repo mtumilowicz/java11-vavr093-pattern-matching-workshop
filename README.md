@@ -83,6 +83,7 @@ there is possibility to return an `Option` result which prevents as from `MatchE
     and in the case when there is no much for `predicate1()` as well as `predicate2()`
     we got `Option.none()` instead of `MatchError`
 * predicates - list
+
     |method   |description   |
     |---|---|
     |`allOf(Predicate<T>... predicates)`          |A combinator that checks if all of the given predicates are satisfied.   |
