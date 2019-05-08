@@ -7,6 +7,7 @@ https://nikitapavlenko.wordpress.com/2017/02/22/how-to-use-javaslang-pattern-mat
 http://blog.vavr.io/pattern-matching-starter/
 http://blog.vavr.io/pattern-matching-essentials/
 https://static.javadoc.io/io.vavr/vavr/0.9.3/io/vavr/Predicates.html
+https://static.javadoc.io/io.vavr/vavr/0.9.3/io/vavr/Patterns.html
 
 # project description
 
@@ -27,6 +28,12 @@ https://static.javadoc.io/io.vavr/vavr/0.9.3/io/vavr/Predicates.html
          Case($(), number -> "?")
      );
     ```
+* `Case` consists of two parts:
+    * part that matches logic: `$(1)`
+    * part that says what should be returned when value matches. 
+        * it can be any object 
+        * it can be supplier of an object
+        * it can be function of a matched value
 * saves us from writing stacks of if-then-else branches
 * switch-case on steroids
 * is not natively supported in Java - we need third party libraries
@@ -38,7 +45,7 @@ https://static.javadoc.io/io.vavr/vavr/0.9.3/io/vavr/Predicates.html
     * `$(value)` - equals pattern
     * `$(predicate)` - conditional pattern
 * in most cases it acts like an expression, it results in a value, but there is a
-possibility to handle side effects
+possibility to handle side effects as well (well-known `Void` hack)
 * a constructor is a function which is applied to arguments and returns a new instance, 
 a deconstructor is a function which takes an instance and returns the parts (object is unapplied)
 * the easies to see is deconstructor used on LocalDate to get year, month and day
