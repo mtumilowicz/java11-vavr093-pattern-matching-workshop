@@ -1,9 +1,12 @@
 package workshops;
 
+import bill.Invoice;
+import bill.PaymentType;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Range;
 import credit.CreditAssessmentService;
 import io.vavr.CheckedRunnable;
+import io.vavr.collection.HashSet;
 import io.vavr.collection.Seq;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
@@ -30,8 +33,8 @@ import static java.util.function.Predicate.not;
 public class Workshop {
 
     /**
-     * very simple number converter 
-     * 
+     * very simple number converter
+     * <p>
      * we want to show, that every classic
      * switch-case construction could be rewritten using pattern matching
      * to be more concise, clean and easy to read
@@ -53,7 +56,7 @@ public class Workshop {
 
     /**
      * very simple threshold based logic
-     * 
+     * <p>
      * we want to show that every well-known
      * multiple ifs construction could be rewritten using pattern matching
      * to be more concise, clean and easy to read
@@ -81,18 +84,18 @@ public class Workshop {
 
     /**
      * very simple enum based logic
-     * 
-     * we want to show that every well-known enum switch-case construction 
+     * <p>
+     * we want to show that every well-known enum switch-case construction
      * could be rewritten using pattern matching and be more concise, clean and easy to read
      * <p>
      * this method simply loads appropriate stats for a given enum in a way:
-     *  VIP -> full stats (vips are not very common, and full stats are possibly time consuming
-     *      so we may want to load it only for special client to show for example highly dedicated
-     *      marketing suggestions)
-     *  REGULAR -> we load ordinary, highly optimized stats - compromise between time-consumption
-     *      and their scope
-     *  TEMPORARY -> it's just a temporary client (for example - performs buy without permanent account),
-     *      so we don't want to gather all info about him, or even we do not have possibility to do it
+     * VIP -> full stats (vips are not very common, and full stats are possibly time consuming
+     * so we may want to load it only for special client to show for example highly dedicated
+     * marketing suggestions)
+     * REGULAR -> we load ordinary, highly optimized stats - compromise between time-consumption
+     * and their scope
+     * TEMPORARY -> it's just a temporary client (for example - performs buy without permanent account),
+     * so we don't want to gather all info about him, or even we do not have possibility to do it
      */
     public static String switchOnEnum(@NonNull Person person) {
         Preconditions.checkState(nonNull(person.getType()), "value not supported");
@@ -111,8 +114,8 @@ public class Workshop {
 
     /**
      * nearly every day we met conversions: X -> Y with a non-null guard
-     * 
-     * it is worth mentioning that such converter could be rewritten 
+     * <p>
+     * it is worth mentioning that such converter could be rewritten
      * using pattern-matching in some cases with a gain in a readability
      * <p>
      * this method simply converts String date -> LocalDate
@@ -144,8 +147,8 @@ public class Workshop {
      * the purpose of this example is to show, that we could think about pattern matching
      * as a way of object's decomposition
      * switch(either)
-     *  case Left - do something
-     *  case Right - do something else
+     * case Left - do something
+     * case Right - do something else
      */
     public static Either<String, Person> eitherDecompose(Either<PersonRequest, ValidPersonRequest> either) {
         // Match(either).of
@@ -162,8 +165,8 @@ public class Workshop {
      * the purpose of this example is to show, that we could think about pattern matching
      * as a way of object's decomposition
      * switch(option)
-     *  case None - run some action (side-effects)
-     *  case Some - run other action (side-effects)
+     * case None - run some action (side-effects)
+     * case Some - run other action (side-effects)
      */
     public static void optionDecompose(int id, Display display) {
         PersonRepository.findById(id) // Match(PersonRepository.findById(id)).of
@@ -179,8 +182,8 @@ public class Workshop {
      * the purpose of this example is to show, that we could think about pattern matching
      * as a way of object's decomposition
      * switch(try)
-     *  case Success - run some action (side-effects)
-     *  case Failure - run other action (side-effects)
+     * case Success - run some action (side-effects)
+     * case Failure - run other action (side-effects)
      */
     public static void tryDecompose(String number, Display display) {
         Try.of(() -> Integer.parseInt(number)) // Match(...).of
@@ -210,13 +213,13 @@ public class Workshop {
     /**
      * every logic based on dates could be represented using pattern matching
      * nearly always - in a more concise, cleaner and easier to read way
-     * 
+     * <p>
      * the purpose of this example is to show that we could think about pattern matching
      * as a way of decomposing LocalDate basing on some predicates:
      * switch(localDate)
-     *  case (predicate1(localDate)) do something
-     *  case (predicate2(localDate)) do something else
-     * 
+     * case (predicate1(localDate)) do something
+     * case (predicate2(localDate)) do something else
+     * <p>
      * DecompositionAnswers.$LocalDate is a decomposer written by us - if you want to
      * master writing your decomposers please follow the rules from DecompositionWorkshop
      * and don't forget to use them here
@@ -242,9 +245,9 @@ public class Workshop {
 
     /**
      * we often need to extract some objects from other object and build
-     * another object from them (based on some additional logic) - pattern 
+     * another object from them (based on some additional logic) - pattern
      * matching is a perfect for such cases
-     * 
+     * <p>
      * suppose that we have a person, and we want to assess credit risk
      * based on account status and address
      * without pattern matching we often have to perform it in a completely structural
@@ -254,13 +257,13 @@ public class Workshop {
      * ...
      * and then create what we really need
      * RiskSubjects.city(address.city)
-     *      .country(address.country)
-     *      .quarter(address.quarter)
-     *      .balance(account.balance)
-     * however - we could extract that objects and then construct the other 
-     * in a more functional way: 
+     * .country(address.country)
+     * .quarter(address.quarter)
+     * .balance(account.balance)
+     * however - we could extract that objects and then construct the other
+     * in a more functional way:
      * Case(decompose person on account and address, (account, address) -> ...
-     *
+     * <p>
      * note that maybe on that example the gain of using pattern matching is not easily
      * visible, but suppose that we have to construct two types of objects:
      * VipRiskSubject and RegularRiskSubject basing on account balance - ifs
@@ -279,18 +282,57 @@ public class Workshop {
     }
 
     /**
+     * we often meet logic steered by set (or iterable) membership
+     * it is usually pile of if-then-return statements
+     *  if set1.contains(x) return y1
+     *  if set2.contains(x) return y2
+     *  if set3.contains(x) return y3
+     *  otherwise throw exception
+     * which is quite noisy and vague
+     * 
+     * the goal of this example is to show how to rewrite it using pattern matching
+     * 
+     * this method simply returns generic type based on chosen payment
+     *  CREDIT_CARD, GIFT_CARD -> "card"
+     *  CASH -> "cash"
+     *  PAYPAL -> "online"
+     *  BLIK, APPLE_PAY -> "mobile"
+     *  null -> "not paid yet"
+     */
+    public static String isInTest(@NonNull Invoice invoice) {
+        var paymentType = invoice.getPaymentType();
+        if (HashSet.of(PaymentType.CREDIT_CARD, PaymentType.GIFT_CARD).contains(paymentType)) {
+            return "card";
+        }
+        if (HashSet.of(PaymentType.CASH).contains(paymentType)) {
+            return "cash";
+        }
+        if (HashSet.of(PaymentType.PAYPAL).contains(paymentType)) {
+            return "online";
+        }
+        if (HashSet.of(PaymentType.BLIK, PaymentType.APPLE_PAY).contains(paymentType)) {
+            return "mobile";
+        }
+        if (Objects.isNull(paymentType)) {
+            return "not paid yet";
+        }
+        
+        throw new IllegalArgumentException("value not supported: " + paymentType);
+    }
+
+    /**
      * the main goal of that example is to show how pattern matching plays with lists
-     *
-     * primarily we want to show that below use case could be rewritten 
+     * <p>
+     * primarily we want to show that below use case could be rewritten
      * with pattern matching:
-     *
+     * <p>
      * if predicate is hold for at least one object in the list - do something
      * if other predicate is hold for at least one object in the list - do something else
      * otherwise do default
-     * 
+     * <p>
      * below method converts sequence of int tries into Either in such a way:
-     *  if there is at least one failure - returns Either.left(all failure's exceptions)
-     *  if there is no failure - returns Either.right(all ints)
+     * if there is at least one failure - returns Either.left(all failure's exceptions)
+     * if there is no failure - returns Either.right(all ints)
      */
     public static Either<Seq<Throwable>, Seq<Integer>> existsTest(@NonNull Seq<Try<Integer>> list) {
         // Match(list).of
@@ -302,17 +344,17 @@ public class Workshop {
 
     /**
      * the main goal of this example is to show how pattern matching plays with lists
-     *
-     * primarily we want to show that below use case 
+     * <p>
+     * primarily we want to show that below use case
      * could be rewritten with pattern matching:
-     * 
+     * <p>
      * if predicate is hold for every object in the list - do something
      * if other predicate is hold for every object in the list - do something else
      * otherwise do default
-     *
+     * <p>
      * below method converts sequence of int tries into Either in such a way:
-     *  if there are only successes - returns Either.right(all ints)
-     *  if there is no success - returns Either.left(all failure's exceptions)
+     * if there are only successes - returns Either.right(all ints)
+     * if there is no success - returns Either.left(all failure's exceptions)
      */
     public static Either<Seq<Throwable>, Seq<Integer>> forAllTest(@NonNull Seq<Try<Integer>> list) {
         // Match(list).of
@@ -324,15 +366,15 @@ public class Workshop {
 
     /**
      * we often need to perform different actions when different sets of predicates are held
-     * 
+     * <p>
      * suppose that we have a person, and we want to do something like this:
      * if (person.isSomething() and person.isSomethingElse() and person.hasSomething())
-     *      do some action
+     * do some action
      * if (not person.isSomething() and person.hasSomethingElse)
-     *      do some other action
+     * do some other action
      * otherwise
-     *      do default
-     * 
+     * do default
+     * <p>
      * this example shows that it could be easily written using pattern matching
      * with a gain in readability and clarity
      */
@@ -363,16 +405,16 @@ public class Workshop {
     /**
      * we often need to perform some actions that depends on the class of some objects
      * it leads into many if statements with instanceof
-     * 
+     * <p>
      * if (x instance of X1)
-     *      do something
+     * do something
      * if (x instance of X2)
-     *      do something else
+     * do something else
      * otherwise
-     *      do default
-     *      
+     * do default
+     * <p>
      * or quite similar issue: try with multiple catch statements
-     *      
+     * <p>
      * this example shows that situations sketched above could be rewritten using
      * pattern matching with a gain in clarity and readability
      */
@@ -396,15 +438,15 @@ public class Workshop {
     /**
      * we often need to perform different actions when different sets of predicates
      * are not held
-     *
+     * <p>
      * suppose that we have a person, and we want to do something like this:
      * if (not person.isSomething() and not person.isSomethingElse() and not person.hasSomething())
-     *      do some action
+     * do some action
      * if (not person.isSomething() and not person.hasSomethingElse())
-     *      do some other action
+     * do some other action
      * otherwise
-     *      do default
-     *
+     * do default
+     * <p>
      * this example shows that it could be easily written using pattern matching
      * with a gain in readability and clarity
      */
@@ -419,15 +461,15 @@ public class Workshop {
     /**
      * we often need to perform different actions when at least one predicate from appropriate
      * set is held
-     *
+     * <p>
      * suppose that we have a person, and we want to do something like this:
      * if (person.isSomething() or person.isSomethingElse() or person.hasSomething())
-     *      do some action
+     * do some action
      * if (person.isSomething() or person.hasSomethingElse())
-     *      do some other action
+     * do some other action
      * otherwise
-     *      do default
-     *
+     * do default
+     * <p>
      * this example shows that it could be easily written using pattern matching
      * with a gain in readability and clarity
      */

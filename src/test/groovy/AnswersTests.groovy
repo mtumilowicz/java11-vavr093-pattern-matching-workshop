@@ -1,3 +1,5 @@
+import bill.Invoice
+import bill.PaymentType
 import io.vavr.collection.List
 import io.vavr.control.Either
 import io.vavr.control.Option
@@ -291,6 +293,17 @@ class AnswersTests extends Specification {
         Answers.personDecompose(p1) == 508
         Answers.personDecompose(p2) == 328
         Answers.personDecompose(p3) == 508
+    }
+    
+    def "isInTest"() {
+        expect:
+        Answers.isInTest(Invoice.of(PaymentType.APPLE_PAY)) == 'mobile'
+        Answers.isInTest(Invoice.of(PaymentType.BLIK)) == 'mobile'
+        Answers.isInTest(Invoice.of(PaymentType.CASH)) == 'cash'
+        Answers.isInTest(Invoice.of(PaymentType.CREDIT_CARD)) == 'card'
+        Answers.isInTest(Invoice.of(PaymentType.GIFT_CARD)) == 'card'
+        Answers.isInTest(Invoice.of(PaymentType.PAYPAL)) == 'online'
+        Answers.isInTest(Invoice.of()) == 'not paid yet'
     }
 
     def "existsTest"() {

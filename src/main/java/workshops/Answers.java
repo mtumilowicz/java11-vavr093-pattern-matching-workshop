@@ -1,5 +1,7 @@
 package workshops;
 
+import bill.Invoice;
+import bill.PaymentType;
 import com.google.common.collect.Range;
 import credit.CreditAssessmentService;
 import io.vavr.CheckedRunnable;
@@ -30,9 +32,6 @@ import static workshops.DecompositionAnswersPatterns.$PersonByCreditAssessSubjec
  */
 /*
 TO-DO:
-1. add an example for isIn
-    $(isIn(PaymentType.CREDIT_CARD, PaymentType.PAYPAL, PaymentType.GIFT_CARD))))
-    $(isIn(PaymentType.CASH))
 1. readme
  */
 public class Answers {
@@ -120,7 +119,7 @@ public class Answers {
         Predicate<Integer> after2010 = year -> year > 2010;
         Predicate<Integer> before2015 = year -> year < 2015;
         Predicate<Integer> after2015 = year -> year > 2015;
-        
+
         return Match(date).of(
                 Case($LocalDate($(before2010.or(is(2010))), $(), $()), TaxService::taxBeforeOr2010),
                 Case($LocalDate($(after2010.and(before2015)), $(), $()), TaxService::taxFrom2010To2015),
@@ -138,6 +137,16 @@ public class Answers {
                                         .country(address.getCountry())
                                         .build()
                                 ))
+        );
+    }
+
+    public static String isInTest(@NonNull Invoice invoice) {
+        return Match(invoice.getPaymentType()).of(
+                Case($(isIn(PaymentType.CREDIT_CARD, PaymentType.GIFT_CARD)), "card"),
+                Case($(isIn(PaymentType.CASH)), "cash"),
+                Case($(isIn(PaymentType.PAYPAL)), "online"),
+                Case($(isIn(PaymentType.BLIK, PaymentType.APPLE_PAY)), "mobile"),
+                Case($(isNull()), "not paid yet")
         );
     }
 

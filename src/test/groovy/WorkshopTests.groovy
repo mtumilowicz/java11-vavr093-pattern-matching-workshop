@@ -1,3 +1,5 @@
+import bill.Invoice
+import bill.PaymentType
 import io.vavr.collection.List
 import io.vavr.control.Either
 import io.vavr.control.Option
@@ -7,7 +9,6 @@ import person.*
 import person.request.PersonRequest
 import person.request.ValidPersonRequest
 import spock.lang.Specification
-import workshops.Answers
 import workshops.Workshop
 
 import java.time.LocalDate
@@ -291,6 +292,17 @@ class WorkshopTests extends Specification {
         Workshop.personDecompose(p1) == 508
         Workshop.personDecompose(p2) == 328
         Workshop.personDecompose(p3) == 508
+    }
+
+    def "isInTest"() {
+        expect:
+        Workshop.isInTest(Invoice.of(PaymentType.APPLE_PAY)) == 'mobile'
+        Workshop.isInTest(Invoice.of(PaymentType.BLIK)) == 'mobile'
+        Workshop.isInTest(Invoice.of(PaymentType.CASH)) == 'cash'
+        Workshop.isInTest(Invoice.of(PaymentType.CREDIT_CARD)) == 'card'
+        Workshop.isInTest(Invoice.of(PaymentType.GIFT_CARD)) == 'card'
+        Workshop.isInTest(Invoice.of(PaymentType.PAYPAL)) == 'online'
+        Workshop.isInTest(Invoice.of()) == 'not paid yet'
     }
 
     def "existsTest"() {
