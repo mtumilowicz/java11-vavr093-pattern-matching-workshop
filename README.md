@@ -69,5 +69,6 @@ there is possibility to return an `Option` result which prevents as from `MatchE
     we got `Option.none()` instead of `MatchError`
 * predicates - list
 * Object Decomposition
+    * annotation preprocessor
 * predefined patterns
 * User-Defined Patterns
