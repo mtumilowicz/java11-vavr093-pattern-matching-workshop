@@ -40,7 +40,7 @@ https://static.javadoc.io/io.vavr/vavr/0.9.3/io/vavr/Patterns.html
     );
     ```
 * `switch-case` on steroids
-* saves us from writing stacks of if-then-else branches
+* saves us from writing pile of if-then-else branches
 * is not natively supported in Java - we need third party libraries
 * more human readable way
 * reduces the amount of code while focusing on the relevant parts
