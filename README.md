@@ -7,8 +7,8 @@
 * https://www.vavr.io/vavr-docs/#_pattern_matching
 * https://static.javadoc.io/io.vavr/vavr/0.9.3/io/vavr/Predicates.html
 * https://static.javadoc.io/io.vavr/vavr/0.9.3/io/vavr/Patterns.html
-* on the workshop we will try to rewrite all methods from `Workshop` using pattern matching
-* answers: `Answers`
+* in the workshop we will try to rewrite all methods from `java/workshops/Workshop` using pattern matching
+* answers: `java/workshops/Answers`
 
 # theory in a nutshell
 * easy example to set intuition
@@ -44,7 +44,7 @@
     * is natively supported in many languages - `Scala`, `Haskell`, `Kotlin`
 * more human readable way
 * reduces the amount of code while focusing on the relevant parts
-* `Match(i).of` is in some kind the equivalent of `switch` statement
+* `Match(i).of` is to some extent the equivalent of `switch` statement
 * `Case` consists of two parts:
     * part that matches logic from predicate, for example: `$(1) ~ (i -> i == 1)`
     * part that tells what should be returned when value matches
