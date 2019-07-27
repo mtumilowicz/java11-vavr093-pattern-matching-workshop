@@ -8,6 +8,7 @@
 * https://static.javadoc.io/io.vavr/vavr/0.9.3/io/vavr/Predicates.html
 * https://static.javadoc.io/io.vavr/vavr/0.9.3/io/vavr/Patterns.html
 * in the workshop we will try to rewrite all methods from `java/workshops/Workshop` using pattern matching
+    * don't forget to implement methods from `java/workshops/DecompositionWorkshop`
 * answers: `java/workshops/Answers`
 
 # theory in a nutshell
