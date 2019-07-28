@@ -1,9 +1,7 @@
 import bill.Invoice
 import bill.PaymentType
-import io.vavr.collection.List
 import io.vavr.control.Either
 import io.vavr.control.Option
-import io.vavr.control.Try
 import out.Display
 import person.*
 import person.request.PersonRequest
@@ -12,8 +10,7 @@ import spock.lang.Specification
 import workshops.Answers
 
 import java.time.LocalDate
-import java.time.format.DateTimeParseException
-
+import java.time.format.DateTimeParseException 
 /**
  * Created by mtumilowicz on 2019-04-10.
  */
@@ -304,68 +301,6 @@ class AnswersTests extends Specification {
         Answers.isInTest(Invoice.of(PaymentType.GIFT_CARD)) == 'card'
         Answers.isInTest(Invoice.of(PaymentType.PAYPAL)) == 'online'
         Answers.isInTest(Invoice.of()) == 'not paid yet'
-    }
-
-    def "existsTest"() {
-        given:
-        def ex1 = new IllegalArgumentException('a')
-        def ex2 = new IllegalStateException('b')
-        and:
-        def withFailures = List.of(
-                Try.success(1),
-                Try.success(2),
-                Try.success(3),
-                Try.failure(ex1),
-                Try.failure(ex2))
-        def withoutFailures = List.of(
-                Try.success(1),
-                Try.success(2),
-                Try.success(3),
-                Try.success(4),
-                Try.success(5))
-
-        when:
-        def failures = Answers.existsTest(withFailures)
-        def successes = Answers.existsTest(withoutFailures)
-
-        then:
-        failures.isLeft()
-        failures.getLeft().size() == 2
-        failures.getLeft().containsAll([ex1, ex2])
-        successes.isRight()
-        successes.get().size() == 5
-        successes.get().containsAll([1, 2, 3, 4, 5])
-    }
-
-    def "forAllTest"() {
-        given:
-        def ex1 = new IllegalArgumentException('a')
-        def ex2 = new IllegalStateException('b')
-        and:
-        def withFailures = List.of(
-                Try.success(1),
-                Try.success(2),
-                Try.success(3),
-                Try.failure(ex1),
-                Try.failure(ex2))
-        def withoutFailures = List.of(
-                Try.success(1),
-                Try.success(2),
-                Try.success(3),
-                Try.success(4),
-                Try.success(5))
-
-        when:
-        def failures = Answers.forAllTest(withFailures)
-        def successes = Answers.forAllTest(withoutFailures)
-
-        then:
-        failures.isLeft()
-        failures.getLeft().size() == 2
-        failures.getLeft().containsAll([ex1, ex2])
-        successes.isRight()
-        successes.get().size() == 5
-        successes.get().containsAll([1, 2, 3, 4, 5])
     }
 
     def "allOfTest"() {
