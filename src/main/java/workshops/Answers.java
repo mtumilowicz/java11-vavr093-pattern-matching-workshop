@@ -5,7 +5,6 @@ import bill.PaymentType;
 import com.google.common.collect.Range;
 import credit.CreditAssessmentService;
 import io.vavr.CheckedRunnable;
-import io.vavr.collection.Seq;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
@@ -147,34 +146,6 @@ public class Answers {
                 Case($(isIn(PaymentType.PAYPAL)), "online"),
                 Case($(isIn(PaymentType.BLIK, PaymentType.APPLE_PAY)), "mobile"),
                 Case($(isNull()), "not paid yet")
-        );
-    }
-
-    public static Either<Seq<Throwable>, Seq<Integer>> existsTest(@NonNull Seq<Try<Integer>> list) {
-        return Match(list).of(
-                Case($(exists(Try::isFailure)),
-                        tries -> Either.left(tries
-                                .filter(Try::isFailure)
-                                .map(Try::getCause)
-                                .toList())),
-                Case($(),
-                        tries -> Either.right(tries
-                                .map(Try::get)
-                                .toList()))
-        );
-    }
-
-    public static Either<Seq<Throwable>, Seq<Integer>> forAllTest(@NonNull Seq<Try<Integer>> list) {
-        return Match(list).of(
-                Case($(forAll(Try::isSuccess)),
-                        tries -> Either.right(tries
-                                .map(Try::get)
-                                .toList())),
-                Case($(),
-                        tries -> Either.left(tries
-                                .filter(Try::isFailure)
-                                .map(Try::getCause)
-                                .toList()))
         );
     }
 

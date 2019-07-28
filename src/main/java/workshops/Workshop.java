@@ -7,7 +7,6 @@ import com.google.common.collect.Range;
 import credit.CreditAssessmentService;
 import io.vavr.CheckedRunnable;
 import io.vavr.collection.HashSet;
-import io.vavr.collection.Seq;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
@@ -37,7 +36,7 @@ public class Workshop {
      * <p>
      * we want to show, that every classic
      * switch-case construction could be rewritten using pattern matching
-     * to be more concise, clean and easy to read
+     * and be more concise, clean and easy to read
      */
     public static int numberConverter(String number) {
         Preconditions.checkState(nonNull(number), "value not supported");
@@ -59,7 +58,7 @@ public class Workshop {
      * <p>
      * we want to show that every well-known
      * multiple ifs construction could be rewritten using pattern matching
-     * to be more concise, clean and easy to read
+     * and be more concise, clean and easy to read
      */
     public static String thresholds(int input) {
         Preconditions.checkArgument(input >= 0, "only positive numbers!");
@@ -129,7 +128,7 @@ public class Workshop {
 
     /**
      * nearly every day we met conversions: X -> Option<Y>
-     * it is worth mentioning that such converter could be rewritten
+     * it is worth mentioning that such conversion could be rewritten
      * using pattern-matching in some cases with a gain in a readability
      * <p>
      * this method simply converts String date -> Option<LocalDate>
@@ -162,7 +161,7 @@ public class Workshop {
      * every final consumption of Option could be rewritten using pattern matching
      * in some cases - it is easier to read, especially when it comes to complex side-effects
      * <p>
-     * the purpose of this example is to show, that we could think about pattern matching
+     * the purpose of this example is to show that we could think about pattern matching
      * as a way of object's decomposition
      * switch(option)
      * case None - run some action (side-effects)
@@ -215,14 +214,10 @@ public class Workshop {
      * nearly always - in a more concise, cleaner and easier to read way
      * <p>
      * the purpose of this example is to show that we could think about pattern matching
-     * as a way of decomposing LocalDate basing on some predicates:
+     * as a way of decomposition of LocalDate based on some predicates:
      * switch(localDate)
      * case (predicate1(localDate)) do something
      * case (predicate2(localDate)) do something else
-     * <p>
-     * DecompositionAnswers.$LocalDate is a decomposer written by us - if you want to
-     * master writing your decomposers please follow the rules from DecompositionWorkshop
-     * and don't forget to use them here
      */
     public static int getTaxRateFor(@NonNull LocalDate date) {
         // Match(date).of
@@ -230,6 +225,7 @@ public class Workshop {
         Predicate<Integer> after2010 = year -> year > 2010;
         Predicate<Integer> before2015 = year -> year < 2015;
 
+        // implement java/workshops/DecompositionWorkshop.LocalDate and rebuild project
         // Case($LocalDate($(before2010.or(is(2010))), $(), $()), TaxService::taxBeforeOr2010)
         if (before2010.or(is(2010)).test(date.getYear())) {
             return TaxService.taxBeforeOr2010();
@@ -271,6 +267,7 @@ public class Workshop {
      */
     public static Integer personDecompose(@NonNull Person person) {
         // Match(person).of
+        // go to DecompositionWorkshop.PersonByCreditAssessSubjects, implement method and rebuild project
         // Case($PersonByCreditAssessSubjects($(), $()), (account, address) -> ...
         Account account = person.getAccount();
         return CreditAssessmentService.serviceMethodAssess(CreditAssessSubjects.builder()
@@ -292,7 +289,7 @@ public class Workshop {
      * 
      * the goal of this example is to show how to rewrite it using pattern matching
      * 
-     * this method simply returns generic type based on chosen payment
+     * this method simply returns type (for example for front-end) based on chosen payment
      *  CREDIT_CARD, GIFT_CARD -> "card"
      *  CASH -> "cash"
      *  PAYPAL -> "online"
@@ -301,6 +298,8 @@ public class Workshop {
      */
     public static String isInTest(@NonNull Invoice invoice) {
         var paymentType = invoice.getPaymentType();
+        // Match(person).of
+        // Case($(isIn(...)), ...),
         if (HashSet.of(PaymentType.CREDIT_CARD, PaymentType.GIFT_CARD).contains(paymentType)) {
             return "card";
         }
@@ -318,50 +317,6 @@ public class Workshop {
         }
         
         throw new IllegalArgumentException("value not supported: " + paymentType);
-    }
-
-    /**
-     * the main goal of that example is to show how pattern matching plays with lists
-     * <p>
-     * primarily we want to show that below use case could be rewritten
-     * with pattern matching:
-     * <p>
-     * if predicate is hold for at least one object in the list - do something
-     * if other predicate is hold for at least one object in the list - do something else
-     * otherwise do default
-     * <p>
-     * below method converts sequence of int tries into Either in such a way:
-     * if there is at least one failure - returns Either.left(all failure's exceptions)
-     * if there is no failure - returns Either.right(all ints)
-     */
-    public static Either<Seq<Throwable>, Seq<Integer>> existsTest(@NonNull Seq<Try<Integer>> list) {
-        // Match(list).of
-        return list.exists(Try::isFailure)
-                // Case($(exists(Try::isFailure)), tries -> ...
-                ? Either.left(list.filter(Try::isFailure).map(Try::getCause))
-                : Either.right(list.map(Try::get));
-    }
-
-    /**
-     * the main goal of this example is to show how pattern matching plays with lists
-     * <p>
-     * primarily we want to show that below use case
-     * could be rewritten with pattern matching:
-     * <p>
-     * if predicate is hold for every object in the list - do something
-     * if other predicate is hold for every object in the list - do something else
-     * otherwise do default
-     * <p>
-     * below method converts sequence of int tries into Either in such a way:
-     * if there are only successes - returns Either.right(all ints)
-     * if there is no success - returns Either.left(all failure's exceptions)
-     */
-    public static Either<Seq<Throwable>, Seq<Integer>> forAllTest(@NonNull Seq<Try<Integer>> list) {
-        // Match(list).of
-        return list.forAll(Try::isSuccess)
-                // Case($(forAll(Try::isSuccess)), tries -> ...
-                ? Either.right(list.map(Try::get))
-                : Either.left(list.filter(Try::isFailure).map(Try::getCause));
     }
 
     /**
@@ -403,7 +358,7 @@ public class Workshop {
     }
 
     /**
-     * we often need to perform some actions that depends on the class of some objects
+     * we often need to perform some actions that depends on the class of the objects
      * it leads into many if statements with instanceof
      * <p>
      * if (x instance of X1)
